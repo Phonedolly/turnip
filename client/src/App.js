@@ -2,6 +2,8 @@ import axios from 'axios'
 import { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Header from './Components/Header'
+import Art from './Components/Art'
 
 function App() {
   const callAPI = async () => {
@@ -13,20 +15,8 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Art />
     </div>
   );
 }
