@@ -4,6 +4,8 @@ import React from "react";
 import ReactMarkDown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import "./Art.scss";
+
 export default class Art extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +17,7 @@ export default class Art extends React.Component {
   componentDidMount() {
     axios
       .get(
-        "https://raw.githubusercontent.com/Phonedolly/news2atc/master/README.md"
+        "https://raw.githubusercontent.com/Phonedolly/turnip/master/client/README.md"
       )
       .then((res) => {
         console.log(res);
@@ -27,41 +29,9 @@ export default class Art extends React.Component {
     const { md } = this.state;
     return (
       <ReactMarkDown
+        className="article"
         children={md}
         remarkPlugins={[remarkGfm]}
-        components={{
-          p({ node, children, ...props }) {
-            return (
-              <div
-                style={{
-                  lineHeight: "1.7em",
-                }}
-              >
-                {children}
-              </div>
-            );
-          },
-          table({ node, children, ...props }) {
-            return (
-              <div style={{ background: "#f0f0f0", padding: "1px 15px" }}>
-                {children}
-              </div>
-            );
-          },
-          blockquote({ node, children, ...props }) {
-            return (
-              <div
-                style={{
-                  background: "#f0f0f0",
-                  padding: "1em 2em",
-                }}
-                {...props}
-              >
-                {children}
-              </div>
-            );
-          },
-        }}
       />
     );
   }

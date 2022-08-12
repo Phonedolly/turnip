@@ -6,12 +6,6 @@ import Header from './Components/Header'
 import Art from './Components/Art'
 
 function App() {
-  const callAPI = async () => {
-    axios.get('/api').then((res) => console.log(res.data.test))
-  };
-  useEffect(() => {
-    callAPI();
-  }, []);
 
   return (
     <div className="App">
