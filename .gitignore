@@ -1,3 +1,6 @@
+# Data and build files
+data/
+
 # Logs
 logs
 *.log
