@@ -5,9 +5,9 @@
   "repository": "https://github.com/Phonedolly/turnip.git",
   "license": "MIT",
   "scripts": {
-    "server": "cd server && nodemon server",
+    "dev_server": "cd server && cross-env NODE_ENV=dev nodemon server",
     "client": "cd client && yarn start",
-    "start": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "dev": "concurrently --kill-others-on-fail \"yarn dev_server\" \"yarn client\""
   },
   "dependencies": {
     "body-parser": "^1.20.0",
