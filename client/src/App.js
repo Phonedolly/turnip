@@ -15,7 +15,6 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Header />
-        <Link to="/writer">go to writer</Link>
         <Routes>
           <Route path="/" element={<Curator />}></Route>
           <Route path="/art" element={<Art />}></Route>

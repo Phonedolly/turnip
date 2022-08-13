@@ -1,4 +1,23 @@
 @import url("./Components/Font.scss");
+@import url("./Components/Color.scss");
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  height: 30%;
+  background: red;
+
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: rgba(122, 0, 0, 0.15); /*스크롤바 뒷 배경 색상*/
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 0, 0, 0.5);
+}
 
 .App {
   padding-left: 10%;
