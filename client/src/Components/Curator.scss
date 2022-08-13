@@ -42,14 +42,16 @@
 .postThumb {
   margin: 0 auto;
   border-radius: 25px;
+
+  img {
+    width: 500px;
+    height: 300px;
+    overflow: hidden;
+    background-position: center;
+    object-fit: cover;
+  }
 }
-img {
-  width: 500px;
-  height: 300px;
-  overflow: hidden;
-  background-position: center;
-  object-fit: cover;
-}
+
 .postTitle {
   margin: 0 auto;
   line-height: 2em;
