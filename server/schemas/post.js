@@ -12,6 +12,11 @@ const postSchema = new Schema({
         required: false,
         unique: false
     },
+    thumbnailURL: {
+        type: String,
+        required: false,
+        unique: false,
+    },
     createdAt: {
         type: Date,
         default: Date.now

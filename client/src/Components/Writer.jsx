@@ -11,7 +11,8 @@ import "./Writer.scss";
 
 export default function Writer() {
   const [titleValue, setTitleValue] = useState("");
-  const [mdValue, setMdValue] = useState("");
+  const [thumbURL, setThumbURL] = useState("");
+  const [md, setMd] = useState("");
   const navigate = useNavigate();
   return (
     <>
@@ -27,7 +28,11 @@ export default function Writer() {
           <button
             onClick={async () => {
               axios
-                .post("/api/publish", { title: titleValue, content: mdValue })
+                .post("/api/publish", {
+                  title: titleValue,
+                  content: md,
+                  thumbnailURL: thumbURL,
+                })
                 .then(
                   (res) => {},
                   (err) => {
@@ -40,17 +45,31 @@ export default function Writer() {
             업로드
           </button>
         </Flex>
-
+        <textarea
+          placeholder="썸네일 URL"
+          className="inputThumbnailArea"
+          valud={thumbURL}
+          onInput={(e) => {
+            setThumbURL(e.target.value);
+          }}
+        />
+        <div>
+          <img src={thumbURL}></img>
+        </div>
         <Flex flexDirection="row">
           <textarea
+            placeholder="내용을 입력하세요"
             className="inputTextArea"
-            value={mdValue}
+            value={md}
             onInput={(e) => {
-              setMdValue(e.target.value);
+              setMd(e.target.value);
             }}
           />
           <div className="showTextArea">
-            <ReactMarkDown children={mdValue} remarkPlugins={[remarkGfm]} />
+            <ReactMarkDown
+              children={md ? md : "내용을 입력하세요"}
+              remarkPlugins={[remarkGfm]}
+            />
           </div>
         </Flex>
       </Flex>
