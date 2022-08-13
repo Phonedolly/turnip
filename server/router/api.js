@@ -1,6 +1,26 @@
 const express = require('express')
 const router = express.Router();
+const AWS = require('aws-sdk')
+const multer = require('multer')
+const multerS3 = require('multer-s3')
 const Post = require('../schemas/post')
+
+AWS.config.update({
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+});
+
+const upload = multer({
+    storage: multerS3({
+        s3: new AWS.S3(),
+        bucket: process.env.S3_BUCKET,
+        key: function (req, file, cb) {
+            cb(null, Date.now().toString);
+        },
+    }),
+});
+
 
 router.get('/', (req, res) => {
     res.send({ test: 'hi' })
@@ -18,6 +38,11 @@ router.get('/getArtTitleList', async (req, res) => {
             res.statusMessage = "get title error";
             res.send();
         })
+});
+
+router.post('/uploadImage', upload.single('file'), (req, res) => {
+    console.log(req.file.location);
+    res.json({ location: req.file.location })
 })
 
 router.post('/publish', async (req, res) => {
