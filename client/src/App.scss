@@ -1,5 +1,7 @@
 @import url("./Components/Font.scss");
 @import url("./Components/Color.scss");
+@import url("./Components/Variable.scss");
+
 body::-webkit-scrollbar {
   width: 8px;
 }
@@ -20,8 +22,10 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .App {
+  max-width: var(--document-width-desktop);
   padding-left: 10%;
   padding-right: 10%;
+  margin: 0 auto;
 }
 
 // .App-logo {

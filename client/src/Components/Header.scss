@@ -1,7 +1,8 @@
 @import url("./Font.scss");
-
+@import url("./Variable.scss");
 #header {
   font-family: "IBMFlexSansKRBold";
+  max-width: 30rem;
   width: 100%;
   height: 5em;
   //   background-color: #faac6a; // https://color.adobe.com/color-theme_スクリーンショット-2022-07-25-13-color-theme-20369388

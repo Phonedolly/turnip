@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./Curator.scss";
+import Nothing from "./nothing.jpg";
 
 export default function Curator() {
   const [artList, setArtList] = useState([]);
@@ -18,12 +19,19 @@ export default function Curator() {
       }
     );
   }, []);
+
   return (
     <>
       <div className="container">
         {artList.map((each) => {
           console.log(each);
-          return <Card title={each} key={each} />;
+          return (
+            <Card
+              title={each.title}
+              image={each.thumbnailURL}
+              key={each.title}
+            />
+          );
         })}
       </div>
     </>
@@ -33,12 +41,22 @@ export default function Curator() {
 const Card = (props) => (
   <>
     <Flex column className="box">
-      {/* <img src={props.image} className="postThumb"></img> */}
-      <div className="postTitle">
-        <Link to="/art">
-          <h2>{props.title}</h2>
-        </Link>
-      </div>
+      <Link to="/art">
+        <img src={props.image ?? Nothing} className="postThumb"></img>
+
+        <h2 className="postTitle">{props.title}</h2>
+      </Link>
     </Flex>
+
+    {/* <Flex column className="box">
+      <Link to="/art">
+        <div className="postThumb">
+          <img src={props.image ?? Nothing}></img>
+        </div>
+        <div className="postTitle">
+          <h2>{props.title}</h2>
+        </div>
+      </Link>
+    </Flex> */}
   </>
 );
