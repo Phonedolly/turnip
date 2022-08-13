@@ -25,7 +25,9 @@
 .box {
   // width: 40%;
   // max-width: 30em;
-  margin: 0 auto;
+  margin: 2em 1.5em;
+  border-radius: 10px;
+  background-color: var(--gray-400);
 
   @media (min-width: 768px) {
     padding-left: 1em;
@@ -62,11 +64,11 @@ img {
     }
 
     @media (min-width: 768px) {
-      font-size: 1.1em;
+      font-size: 0.8em;
     }
 
     @media (min-width: 1024px) {
-      font-size: 1.2em;
+      font-size: 0.9em;
     }
     @media (min-width: 1200px) {
     }
@@ -77,6 +79,7 @@ img {
     color: var(--gray-800);
   }
   a:visited {
-    color: var(--gray-600);
+    // color: var(--gray-600);
+    color: black;
   }
 }
