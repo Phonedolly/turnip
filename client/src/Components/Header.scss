@@ -1,23 +1,20 @@
-@font-face {
-  font-family: "IBMFlexSansKRBold";
-  font-weight: bold;
-  src: url("../Fonts/IBMPlexSansKR-Bold.ttf");
-}
+@import url("./Font.scss");
 
-.header {
+#header {
+  font-family: "IBMFlexSansKRBold";
   width: 100%;
   height: 5em;
   //   background-color: #faac6a; // https://color.adobe.com/color-theme_スクリーンショット-2022-07-25-13-color-theme-20369388
   text-decoration-line: none;
 
-  .headerText {
+  #headerText {
     color: black;
     font-size: 3em;
     font-family: "IBMFlexSansKRBold";
     padding-top: 0.5em;
     padding-bottom: 0.5em;
 
-    .underLine {
+    #underLine {
       width: 0.4em;
       height: 0.4em;
       background-color: red;

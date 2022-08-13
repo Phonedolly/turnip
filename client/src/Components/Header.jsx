@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <Link className="header" to="/">
-      <Flex className="headerText" flexDirection="row" justifyContent="start">
+    <Link id="header" to="/">
+      <Flex id="headerText" flexDirection="row" justifyContent="start">
         <div>Stardue</div>
-        <div className="underLine" />
+        <div id="underLine" />
       </Flex>
     </Link>
   );

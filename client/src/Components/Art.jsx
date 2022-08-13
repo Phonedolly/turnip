@@ -17,7 +17,7 @@ export default class Art extends React.Component {
   componentDidMount() {
     axios
       .get(
-        "https://raw.githubusercontent.com/Phonedolly/turnip/master/client/README.md"
+        "https://raw.githubusercontent.com/Phonedolly/news2atc/master/README.md"
       )
       .then((res) => {
         console.log(res);

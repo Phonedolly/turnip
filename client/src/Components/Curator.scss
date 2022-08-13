@@ -1,0 +1,82 @@
+@import url("./Font.scss");
+@import url("./Color.scss");
+@import url("Variable.scss");
+
+.container {
+  display: grid;
+
+  @media (min-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1024px) {
+    max-width: --document-width-desktop;
+    margin: 0 auto;
+  }
+  @media (min-width: 1200px) {
+  }
+  @media (min-width: 1850px) {
+  }
+}
+.box {
+  // width: 40%;
+  // max-width: 30em;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+
+  @media (min-width: 1024px) {
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+}
+.postThumb {
+  margin: 0 auto;
+  border-radius: 25px;
+}
+img {
+  width: 500px;
+  height: 300px;
+  overflow: hidden;
+  background-position: center;
+  object-fit: cover;
+}
+.postTitle {
+  margin: 0 auto;
+  line-height: 2em;
+  text-decoration-color: black;
+
+  a {
+    font-family: "IBMFlexSansKRBold";
+    text-decoration-line: none;
+    font-size: 0.85em;
+    @media (min-width: 480px) {
+      font-size: 0.9em;
+    }
+
+    @media (min-width: 768px) {
+      font-size: 1.1em;
+    }
+
+    @media (min-width: 1024px) {
+      font-size: 1.2em;
+    }
+    @media (min-width: 1200px) {
+    }
+    @media (min-width: 1850px) {
+    }
+  }
+  a:hover {
+    color: var(--gray-800);
+  }
+  a:visited {
+    color: var(--gray-600);
+  }
+}
