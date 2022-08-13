@@ -75,8 +75,9 @@ td:last-child {
 blockquote {
   background-color: var(--gray-300);
   border-radius: 8px;
-  padding: 1em 1.5em 1em 5em;
+  padding: 0.3em 1em 0.3em 5em;
   margin-left: 0;
+  margin-right: 0;
   background-image: url("./quote.svg");
   background-repeat: no-repeat;
   background-position-x: 1em;
