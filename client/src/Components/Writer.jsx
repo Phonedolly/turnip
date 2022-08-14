@@ -18,36 +18,13 @@ export default function Writer() {
   const handleImageInput = async (e) => {
     console.log(111);
     const image = e.target.files[0];
+    console.log(image);
     const formData = new FormData();
-    formData.append("file", image);
+    formData.append("file", e.target.files[0]);
 
     const res = await axios.post("/api/uploadImage", formData);
     console.log(res);
   };
-
-  // const handleImageInput = async (e) => {
-  //   console.log(e.target.files[0]);
-  //   const file = e.target.files[0];
-
-  //   s3.upload({
-  //     params: {
-  //       Bucket: bucket,
-  //       Key: file.name + "_" + Date.now() + ".png",
-  //       Body: file,
-  //     },
-  //   }).promise();
-
-  //   s3.then(
-  //     (res) => {
-  //       console.log(res);
-  //       console.log("업로드 성공!");
-  //     },
-  //     (err) => {
-  //       console.error(err);
-  //       console.error("image 업로드 실패");
-  //     }
-  //   );
-  // };
 
   return (
     <>
