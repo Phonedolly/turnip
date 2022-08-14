@@ -33,16 +33,12 @@ router.get('/', (req, res) => {
     res.send({ test: 'hi' })
 });
 
-router.delete('/deleteImage', (req, res) => {
-
-
-})
 
 router.get('/getArtTitleList', async (req, res) => {
     Post.find({})
         .then((result) => {
             console.log('result: ' + result)
-            res.send(result.map((each) => Object.assign({}, { title: each.title, thumbnailURL: each.thumbnailURL ?? null, link: each.link })))
+            res.send(result.map((each) => Object.assign({}, { title: each.title, thumbnailURL: each.thumbnailURL ?? null, postURL: each.postURL })))
         }, (err) => {
             console.error(err);
             console.error("get title error");
@@ -55,6 +51,18 @@ router.get('/getArtTitleList', async (req, res) => {
 router.post('/uploadImage', upload.single('img'), function (req, res, next) {
 
     res.json({ imageLocation: req.file.location, imageName: req.file.key })
+})
+
+router.get('/post/:postURL', async (req, res) => {
+    console.log(req.params.postURL)
+    Post.find({ postURL: req.params.postURL })
+        .then((result) => {
+            console.log(result)
+            res.send(result)
+        }, (error) => {
+            console.error(error)
+            res.status(500).send();
+        })
 })
 
 
@@ -94,7 +102,7 @@ router.post('/publish', async (req, res) => {
     const post = await Post.create({
         title: req.body.title,
         content: req.body.content,
-        postURL: req.body.title.replace(/ /gi, '-').replace(/\./gi, ''),
+        postURL: req.body.title.replace(/ /gi, '-').replace(/\./gi, '').replace(/'/gi, ''),
         thumbnailURL: req.body.thumbnailURL ? req.body.thumbnailURL : null,
     })
 

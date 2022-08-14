@@ -29,6 +29,7 @@ export default function Curator() {
             <Card
               title={each.title}
               image={each.thumbnailURL}
+              url={"/post/" + each.postURL}
               key={each.title}
             />
           );
@@ -41,8 +42,12 @@ export default function Curator() {
 const Card = (props) => (
   <>
     <Flex column className="box">
-      <Link to="/art">
-        <img src={props.image ?? Nothing} className="postThumb"></img>
+      <Link to={props.url}>
+        <img
+          src={props.image ?? Nothing}
+          alt="썸네일"
+          className="postThumb"
+        ></img>
 
         <h2 className="postTitle">{props.title}</h2>
       </Link>

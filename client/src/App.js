@@ -1,6 +1,3 @@
-import axios from 'axios'
-import { useEffect } from 'react';
-import logo from './logo.svg';
 import './App.scss';
 import Header from './Components/Header'
 import Art from './Components/Art'
@@ -17,7 +14,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Curator />}></Route>
-          <Route path="/art" element={<Art />}></Route>
+          <Route path="/post/:postURL" element={<Art />}></Route>
           <Route path="/writer" element={<Writer />}></Route>
         </Routes>
 

@@ -15,6 +15,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 const api = require('./router/api');
+const post = require('./router/post')
 
 const connect = require('./schemas');
 connect();
@@ -23,6 +24,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/api", api);
+app.use('/post', post)
+
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
 })

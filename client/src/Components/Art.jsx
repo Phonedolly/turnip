@@ -1,38 +1,35 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import React from "react";
 import ReactMarkDown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import "./Art.scss";
 
-export default class Art extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      md: null,
-    };
-  }
+export default function Art() {
+  const params = useParams();
+  const [md, setMd] = useState(null);
 
-  componentDidMount() {
-    axios
-      .get(
-        "https://raw.githubusercontent.com/Phonedolly/news2atc/master/README.md"
-      )
-      .then((res) => {
+  useEffect(() => {
+    axios.get("/api/post/" + params.postURL).then(
+      (res) => {
         console.log(res);
-        this.setState({ md: res.data });
-      });
-  }
+        setMd(res.data[0].content);
+      },
+      (err) => {
+        setMd("ERROR");
+      }
+    );
+  }, [params]);
 
-  render() {
-    const { md } = this.state;
-    return (
+  return (
+    <>
       <ReactMarkDown
         className="article"
         children={md}
         remarkPlugins={[remarkGfm]}
       />
-    );
-  }
+    </>
+  );
 }
