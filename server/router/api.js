@@ -1,30 +1,38 @@
 const express = require('express')
 const router = express.Router();
-const AWS = require('@aws-sdk/client-s3')
-const { S3Client, AbortMultipartUploadCommand } = require("@aws-sdk/client-s3");
+const { S3Client, S3 } = require('@aws-sdk/client-s3')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
-const Post = require('../schemas/post')
+const Post = require('../schemas/post');
 
-const s3Client = new S3Client();
 
-const s3Params = {}
-
+const s3 = new S3Client({
+    credentials: {
+        accessKeyId: process.env.S3_ACCESS_KEY_ID,
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    },
+    region: process.env.AWS_REGION
+});
 
 const upload = multer({
     storage: multerS3({
-        s3: s3Client,
-        bucket: 'stardue',
-        key: function (req, file, cb) {
-            console.log(req)
-            let dir = req.body.dir;
-            let datetime = Date.now()
-            cb(null, dir + datetime + "_" + file.originalname);  // 저장되는 파일명
-            console.log(13)
+        s3: s3,
+        bucket: process.env.S3_BUCKET,
+        metadata: function (req, file, cb) {
+            cb(null, { fieldName: file.fieldname });
         },
-    }),
+        key: function (req, file, cb) {
+            cb(null, Date.now().toString() + '_' + file.originalname)
+        },
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        // acl: 'public-read'
+    })
 })
 
+
+router.post('/uploadImage', upload.single('img'), function (req, res, next) {
+    res.json({ filelocation: req.file.location })
+})
 
 router.get('/', (req, res) => {
     res.send({ test: 'hi' })
@@ -44,10 +52,6 @@ router.get('/getArtTitleList', async (req, res) => {
         })
 });
 
-router.post('/uploadImage', upload.single('file'), (req, res) => {
-    console.log(req.file.location);
-    res.json({ location: req.file.location })
-})
 
 router.post('/publish', async (req, res) => {
     const isDuplicated = !!await Post.findOne({ title: req.body.title });

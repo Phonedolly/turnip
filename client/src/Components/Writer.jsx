@@ -17,13 +17,38 @@ export default function Writer() {
 
   const handleImageInput = async (e) => {
     console.log(111);
-    const image = e.target.files[0];
-    console.log(image);
     const formData = new FormData();
-    formData.append("file", e.target.files[0]);
+    formData.append("img", e.target.files[0]);
 
-    const res = await axios.post("/api/uploadImage", formData);
-    console.log(res);
+    // fetch("/api/uploadImage", {
+    //   method: "POST",
+    //   body: formData,
+    //   redirect: "follow",
+    //   headers: { "Content-Type": "multipart/form-data" },
+    // })
+    //   .then((response) => response.text())
+    //   .then((result) => console.log(result));
+
+    axios
+      .post("/api/uploadImage", formData, {
+        // redirect: "follow",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        // transformRequest: (data, headers) => {
+        //   return formData;
+        // },
+      })
+      .then(
+        (res) => {
+          console.log(res);
+          console.log("이미지 업로드 성공!!");
+        },
+        (err) => {
+          console.log(err);
+          console.log("이미지 업로드 실패");
+        }
+      );
   };
 
   return (
