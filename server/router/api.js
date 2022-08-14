@@ -42,7 +42,7 @@ router.get('/getArtTitleList', async (req, res) => {
     Post.find({})
         .then((result) => {
             console.log('result: ' + result)
-            res.send(result.map((each) => Object.assign({}, { title: each.title, thumbnailURL: each.thumbnailURL ?? null })))
+            res.send(result.map((each) => Object.assign({}, { title: each.title, thumbnailURL: each.thumbnailURL ?? null, link: each.link })))
         }, (err) => {
             console.error(err);
             console.error("get title error");
@@ -94,7 +94,8 @@ router.post('/publish', async (req, res) => {
     const post = await Post.create({
         title: req.body.title,
         content: req.body.content,
-        thumbnailURL: req.body.thumbnailURL ? req.body.thumbnailURL : null
+        postURL: req.body.title.replace(/ /gi, '-').replace(/\./gi, ''),
+        thumbnailURL: req.body.thumbnailURL ? req.body.thumbnailURL : null,
     })
 
     console.log(post);
