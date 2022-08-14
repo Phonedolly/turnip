@@ -1,5 +1,6 @@
 import Flex from "@react-css/flex";
 import axios from "axios";
+import { nanoid } from "nanoid";
 
 import { useState } from "react";
 import ReactMarkDown from "react-markdown";
@@ -29,9 +30,6 @@ export default function Writer() {
       })
       .then(
         (res) => {
-          // console.log(res);
-          console.log("이미지 업로드 성공!!");
-          // console.log(images);
           setImages((images) => {
             const newCond = images.concat({
               imageLocation: res.data.imageLocation,
@@ -49,6 +47,27 @@ export default function Writer() {
           console.log("이미지 업로드 실패");
         }
       );
+  };
+
+  const handleThumb = (e) => {
+    const srcUrl = e.target.src;
+    images.forEach((eachImage, n) => {
+      if (eachImage.isThumb) {
+        setImages((original) => {
+          const newCond = [].concat(original);
+          newCond[n].isThumb = false;
+          return newCond;
+        });
+      }
+      if (eachImage.imageLocation === srcUrl) {
+        setImages((original) => {
+          const newCond = [].concat(original);
+          newCond[n].isThumb = true;
+          return newCond;
+        });
+      }
+    });
+    console.log(images);
   };
 
   return (
@@ -85,46 +104,24 @@ export default function Writer() {
         <textarea
           placeholder="썸네일 URL"
           className="inputThumbnailArea"
-          valud={thumbURL}
+          value={thumbURL}
           onInput={(e) => {
             setThumbURL(e.target.value);
           }}
         />
         <div>
           <div className="imageGroup">
-            {images.map((each, n) => (
-              <>
-                <Flex column className="uploadedImageBox">
-                  <img
-                    src={each.imageLocation}
-                    className="uploadedImage"
-                    key={n}
-                    alt={n}
-                    onClick={(e) => {
-                      const srcUrl = e.target.src;
-                      images.forEach((eachImage, n) => {
-                        if (eachImage.isThumb) {
-                          setImages((original) => {
-                            const newCond = [].concat(original);
-                            newCond[n].isThumb = false;
-                            return newCond;
-                          });
-                        }
-                        if (eachImage.imageLocation === srcUrl) {
-                          setImages((original) => {
-                            const newCond = [].concat(original);
-                            newCond[n].isThumb = true;
-                            return newCond;
-                          });
-                        }
-                      });
-                      console.log(images);
-                    }}
-                  />
-                  <pre disabled>{each.imageLocation}</pre>
-                  {each.isThumb && <div key={n + "_"}>대표</div>}
-                </Flex>
-              </>
+            {images.map((eachImage) => (
+              <Flex column key={nanoid()} className="uploadedImageBox">
+                <img
+                  src={eachImage.imageLocation}
+                  className="uploadedImage"
+                  alt={eachImage.imageLocation}
+                  onClick={handleThumb}
+                />
+                <pre disabled>{eachImage.imageLocation}</pre>
+                {eachImage.isThumb && <p>대표</p>}
+              </Flex>
             ))}
           </div>
         </div>
