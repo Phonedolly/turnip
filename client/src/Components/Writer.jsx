@@ -13,6 +13,7 @@ export default function Writer() {
   const [titleValue, setTitleValue] = useState("");
   const [thumbURL, setThumbURL] = useState("");
   const [md, setMd] = useState("");
+  const [images, setImages] = useState([]);
   const navigate = useNavigate();
 
   const handleImageInput = async (e) => {
@@ -20,29 +21,28 @@ export default function Writer() {
     const formData = new FormData();
     formData.append("img", e.target.files[0]);
 
-    // fetch("/api/uploadImage", {
-    //   method: "POST",
-    //   body: formData,
-    //   redirect: "follow",
-    //   headers: { "Content-Type": "multipart/form-data" },
-    // })
-    //   .then((response) => response.text())
-    //   .then((result) => console.log(result));
-
     axios
       .post("/api/uploadImage", formData, {
-        // redirect: "follow",
         headers: {
           "Content-Type": "multipart/form-data",
         },
-        // transformRequest: (data, headers) => {
-        //   return formData;
-        // },
       })
       .then(
         (res) => {
-          console.log(res);
+          // console.log(res);
           console.log("이미지 업로드 성공!!");
+          // console.log(images);
+          setImages((images) => {
+            const newCond = images.concat({
+              imageLocation: res.data.imageLocation,
+              isThumb: images.length === 0 ? true : false,
+            });
+            if (images.length === 0) {
+              setThumbURL(res.data.imageLocation);
+            }
+            return newCond;
+          });
+          console.log(images);
         },
         (err) => {
           console.log(err);
@@ -91,7 +91,42 @@ export default function Writer() {
           }}
         />
         <div>
-          <img src={thumbURL}></img>
+          <div className="imageGroup">
+            {images.map((each, n) => (
+              <>
+                <Flex column className="uploadedImageBox">
+                  <img
+                    src={each.imageLocation}
+                    className="uploadedImage"
+                    key={n}
+                    alt={n}
+                    onClick={(e) => {
+                      const srcUrl = e.target.src;
+                      images.forEach((eachImage, n) => {
+                        if (eachImage.isThumb) {
+                          setImages((original) => {
+                            const newCond = [].concat(original);
+                            newCond[n].isThumb = false;
+                            return newCond;
+                          });
+                        }
+                        if (eachImage.imageLocation === srcUrl) {
+                          setImages((original) => {
+                            const newCond = [].concat(original);
+                            newCond[n].isThumb = true;
+                            return newCond;
+                          });
+                        }
+                      });
+                      console.log(images);
+                    }}
+                  />
+                  <pre disabled>{each.imageLocation}</pre>
+                  {each.isThumb && <div key={n + "_"}>대표</div>}
+                </Flex>
+              </>
+            ))}
+          </div>
         </div>
         <input type="file" accept="image/*" onChange={handleImageInput} />
         <Flex flexDirection="row">

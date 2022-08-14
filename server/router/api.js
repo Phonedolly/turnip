@@ -29,11 +29,6 @@ const upload = multer({
     })
 })
 
-
-router.post('/uploadImage', upload.single('img'), function (req, res, next) {
-    res.json({ filelocation: req.file.location })
-})
-
 router.get('/', (req, res) => {
     res.send({ test: 'hi' })
 });
@@ -51,6 +46,10 @@ router.get('/getArtTitleList', async (req, res) => {
             res.send();
         })
 });
+
+router.post('/uploadImage', upload.single('img'), function (req, res, next) {
+    res.json({ imageLocation: req.file.location })
+})
 
 
 router.post('/publish', async (req, res) => {

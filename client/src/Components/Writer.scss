@@ -48,3 +48,28 @@ input:focus {
   margin-top: 1em;
   margin-left: 1em;
 }
+
+.imageGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.uploadedImageBox {
+  background-color: var(--gray-300);
+  margin: 0.3em;
+  border-radius: 10px;
+  padding: 1em;
+  width: 10em;
+}
+.uploadedImageBox > pre {
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.uploadedImage {
+  width: 10em;
+  height: 10em;
+  margin: 0 auto;
+  overflow: hidden;
+  background-position: center;
+  object-fit: cover;
+}
