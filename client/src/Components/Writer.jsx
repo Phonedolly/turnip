@@ -18,7 +18,6 @@ export default function Writer() {
   const navigate = useNavigate();
 
   const handleImageInput = async (e) => {
-    console.log(111);
     const formData = new FormData();
     formData.append("img", e.target.files[0]);
 
@@ -33,6 +32,7 @@ export default function Writer() {
           setImages((images) => {
             const newCond = images.concat({
               imageLocation: res.data.imageLocation,
+              imageName: res.data.imageName,
               isThumb: images.length === 0 ? true : false,
             });
             if (images.length === 0) {
@@ -40,13 +40,13 @@ export default function Writer() {
             }
             return newCond;
           });
-          console.log(images);
         },
         (err) => {
           console.log(err);
           console.log("이미지 업로드 실패");
         }
       );
+    console.log(images);
   };
 
   const handleThumb = (e) => {
@@ -65,9 +65,10 @@ export default function Writer() {
           newCond[n].isThumb = true;
           return newCond;
         });
+        setThumbURL(eachImage.imageLocation);
       }
     });
-    console.log(images);
+    // console.log(images);
   };
 
   return (
@@ -83,11 +84,24 @@ export default function Writer() {
           />
           <button
             onClick={async () => {
+              const blacklist = [];
+              images.forEach((eachImage) => {
+                if (
+                  !md.includes(eachImage.imageLocation) &&
+                  !thumbURL.includes(eachImage.imageLocation)
+                ) {
+                  console.log(eachImage.imageLocation + ": 포함 안됨");
+                  blacklist.push({ Key: eachImage.imageName });
+                }
+              });
+
+              console.log(blacklist);
               axios
                 .post("/api/publish", {
                   title: titleValue,
                   content: md,
                   thumbnailURL: thumbURL,
+                  blacklist: blacklist,
                 })
                 .then(
                   (res) => {},

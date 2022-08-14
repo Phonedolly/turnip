@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const { S3Client, S3 } = require('@aws-sdk/client-s3')
+const { S3Client, DeleteObjectsCommand } = require('@aws-sdk/client-s3')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
 const Post = require('../schemas/post');
@@ -33,6 +33,11 @@ router.get('/', (req, res) => {
     res.send({ test: 'hi' })
 });
 
+router.delete('/deleteImage', (req, res) => {
+
+
+})
+
 router.get('/getArtTitleList', async (req, res) => {
     Post.find({})
         .then((result) => {
@@ -48,7 +53,8 @@ router.get('/getArtTitleList', async (req, res) => {
 });
 
 router.post('/uploadImage', upload.single('img'), function (req, res, next) {
-    res.json({ imageLocation: req.file.location })
+
+    res.json({ imageLocation: req.file.location, imageName: req.file.key })
 })
 
 
@@ -63,6 +69,27 @@ router.post('/publish', async (req, res) => {
         res.send({ isSuccessfullyPosted: false });
         return
     }
+    console.log(11)
+    console.log(req.body.blacklist)
+    console.log(11)
+    const params = {
+        Bucket: process.env.S3_BUCKET,
+        Delete: {
+            Objects: req.body.blacklist
+        },
+        // Quiet: false
+    }
+
+    const deleteCommand = new DeleteObjectsCommand(params);
+    console.log('222')
+    s3.send(deleteCommand)
+        .then((res) => {
+            console.log('성공')
+            console.log(res)
+        }, (err) => {
+            console.error('에러')
+            console.error(err)
+        })
 
     const post = await Post.create({
         title: req.body.title,
