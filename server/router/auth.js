@@ -84,7 +84,9 @@ router.post('/login', async (req, res) => {
 
 
 router.get('/silentRefresh', (req, res) => {
-  console.log(req.headers)
+  if (!req.cookies.refreshToken) {
+    return res.status(500).send("refresh Token 없음")
+  }
   jwt.verify(req.cookies.refreshToken, process.env.REFRESH_TOKEN_SECRET,
     (error, decoded) => {
       if (error) {
@@ -117,6 +119,7 @@ router.get('/logout', isLoggedIn, async (req, res) => {
   console.log(req.headers.authorization.split(" ")[1])
 
   await redisClient.setEx(req.headers.authorization.split(" ")[1], 1800000, 'logout')
+  res.clearCookie('refreshToken');
   return res.status(200).send();
 
 

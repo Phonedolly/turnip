@@ -19,10 +19,13 @@ function App({ history }) {
 
   useEffect(() => {
 
-    onSilentRefresh()
-
+    async function on() {
+      await onSilentRefresh()
+    }
+    on()
     onGetAuth()
-      .then(setLoggedIn(true), setLoggedIn(false))
+      .then(setLoggedIn(true)
+        , setLoggedIn(false))
     console.log('직전:' + axios.defaults.headers.common["Authorization"])
 
   }, [])

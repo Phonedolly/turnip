@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const JWT_EXPIRY_TIME = process.env.REACT_APP_JWT_EXPIRY_TIME;
 
-export const onSilentRefresh = () => {
+export const onSilentRefresh = async () => {
     axios
         .get("/auth/silentRefresh")
         .then((res) => { console.log("silentRefresh 성공"); onLoginSuccess(res) })

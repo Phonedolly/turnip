@@ -11,7 +11,6 @@ export const Login = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [isLoggedIn, setLoggedIn] = useState(false);
-  const [s, setS] = useState("");
 
   useEffect(() => {
     console.log(window.location.href);
@@ -24,7 +23,7 @@ export const Login = () => {
         setLoggedIn(false);
       }
     );
-  }, [s]);
+  }, []);
   const onLogin = () => {
     const data = {
       id,
@@ -66,14 +65,6 @@ export const Login = () => {
       ) : (
         <>
           <Link to="/login">로그인</Link>
-          <div>
-            <input
-              type="text"
-              onChange={(e) => {
-                setS((ss) => ss + e.target.value);
-              }}
-            />
-          </div>
         </>
       )}
     </>
