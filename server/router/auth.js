@@ -3,49 +3,87 @@ const router = express.Router()
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const redis = require('redis')
+const crypto = require('crypto')
 
-const { isLoggedIn, isNotLoggedIn } = require('./middlewares')
+const User = require('../schemas/user')
 
 const redisClient = redis.createClient({ url: process.env.REDIS_URL });
 redisClient.connect();
 
 
+const makePasswordHashed = (userId, plainPassword, res) =>
+  new Promise(async (resolve, reject) => {
+    console.log(userId, plainPassword);
+    const salt = await User.findOne({ id: userId })
+      .then((result) => {
+        console.log(result);
+        if (!result) {
+          console.error("없는 정보")
 
-
-router.post('/login', isNotLoggedIn, (req, res, next) => {
-  try {
-    passport.authenticate('local', async (passportError, user, info) => {
-      if (passportError || !user) {
-        console.log(info)
-        return res.status(400).json({ message: info.reason ?? "" })
-      }
-
-      req.login(user, { session: false }, (loginError) => {
-        if (loginError) {
-          return res.send(loginError)
+          return "NOT_VALID"
         }
-      })
-      const accessToken = jwt.sign(
-        { id: user.id },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '30m' }
-      )
-      const refreshToken = jwt.sign(
-        { id: user.id },
-        process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: '3h' }
-      )
-      await redisClient.set(refreshToken, user.id);
-      res.cookie('refreshToken', refreshToken)
-      res.json({ accessToken })
-    })(req, res);
-  } catch (error) {
-    console.error(error);
-    next(error);
+        return result.salt
+      });
+    console.log(salt)
+    crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
+      if (err) reject(err);
+      resolve(key.toString('base64'));
+    });
+  });
+
+
+const isLoggedIn = async (req, res, next) => {
+  console.log(111111)
+  if (!req.headers.authorization) {
+    return res.status(500).send("!req.headers.authorization");
   }
+
+  if ((await redisClient.get(req.headers.authorization.split(" ")[1])) === 'logout') {
+    return res.status(500).send("blacklisted");
+  }
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
+    if (error) {
+      console.error(error)
+      return res.status(500).json({ JWTisValid: false })
+    } else {
+      console.log("verify sucess");
+      next()
+    }
+  })
+}
+
+router.post('/login', async (req, res) => {
+
+  const hashed = (await makePasswordHashed(req.body.id, req.body.password, res))
+  const origin = await User.findOne({ id: req.body.id })
+    .then(res => res?.password,
+      (err) => { console.error("비밀번호 에러"); })
+
+  const compareResult = hashed === origin
+
+  if (!compareResult || !hashed || !origin) {
+    return res.status(500).send("Login Failed")
+  }
+
+  const accessToken = jwt.sign(
+    { id: req.body.id },
+    process.env.ACCESS_TOKEN_SECRET,
+    { expiresIn: '30m' }
+  )
+  const refreshToken = jwt.sign(
+    { id: req.body.id },
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: '300m' }
+  )
+
+  console.log('aaasdasdff')
+  await redisClient.setEx(refreshToken, 1800000, req.body.id);
+  res.cookie('refreshToken', refreshToken)
+  res.json({ accessToken })
 })
 
-router.get('/silentRefresh', (req, res) => {
+
+router.get('/silentRefresh', isLoggedIn, (req, res) => {
   console.log(req.headers)
   jwt.verify(req.cookies.refreshToken, process.env.REFRESH_TOKEN_SECRET,
     (error, decoded) => {
@@ -62,56 +100,27 @@ router.get('/silentRefresh', (req, res) => {
   const refreshToken = jwt.sign(
     { id: redisClient.get(req.cookies.refreshToken) },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: '3h' }
+    { expiresIn: '300m' }
   )
   res.cookie('refreshToken', refreshToken)
   res.send({ accessToken })
 })
 
-router.get('/', async (req, res, next) => {
-  if (!req.headers.authorization) {
-    return res.status(500).send();
-  }
-  jwt.verify(req.headers.authorization.split(" ")[1], process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
-    if (error) {
-      console.error(error)
-      return res.status(500).json({ JWTisValid: false })
-    }
-  })
 
-  res.send({ isOk: true })
+
+router.get('/check', isLoggedIn, (req, res) => {
+  res.status(200).send("로그인 되어있음")
 })
 
-router.post('/test', passport.authenticate('jwt', { session: false }),
-  async (req, res, next) => {
-    try {
-      console.log(req)
-      res.json({ isLoggedIn: true });
-    } catch (error) {
-      console.error(error);
-      res.json({ isLoggedIn: false })
-      next(error);
-    }
-  });
-// router.get('/', passport.authenticate('jwt',{session:false}), as(req, res) => {
-//   res.send("로그인했음")
-// })
 
-// return res.send({
-//     accessToken: jwt.sign({
-//         id: user.id
-//     }, process.env.ACCESS_TOKEN_SECRET, {
-//         expiresIn: '30m',
-//         issuer: 'me'
-//     }),
-//     message: '토큰이 발급되었습니다'
-// })
+router.get('/logout', isLoggedIn, async (req, res) => {
+  console.log(req.headers.authorization.split(" ")[1])
 
-router.get('/logout', isLoggedIn, (req, res) => {
-  // req.logout();
-  // req.session.destroy();
-  // res.redirect('/');
-  return res.clearCookie('user').end()
+  await redisClient.setEx(req.headers.authorization.split(" ")[1], 1800000, 'logout')
+  return res.status(200).send();
+
+
 });
+
 
 module.exports = router;

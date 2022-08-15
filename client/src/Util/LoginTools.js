@@ -5,7 +5,7 @@ const JWT_EXPIRY_TIME = process.env.REACT_APP_JWT_EXPIRY_TIME;
 export const onSilentRefresh = () => {
     axios
         .get("/auth/silentRefresh")
-        .then(onLoginSuccess)
+        .then((res) => { console.log("silentRefresh 성공"); onLoginSuccess(res) })
         .catch((error) => {
             console.error(error);
         });
@@ -14,9 +14,10 @@ export const onSilentRefresh = () => {
 export const onLoginSuccess = (response) => {
     console.log(response);
     const { accessToken } = response.data;
+    console.log(accessToken)
 
     // accessToken 설정
-    axios.defaults.headers.common["buthorization"] = `Bearer ${accessToken}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     console.log(axios.defaults.headers.common["Authorization"])
 
     // refreshToken 설정
@@ -28,7 +29,7 @@ export const onLoginSuccess = (response) => {
 
 export const onGetAuth = () =>
     new Promise((resolve, reject) => {
-        axios.get('/auth')
+        axios.get('/auth/check')
             .then((res) => {
                 console.log(res.data)
                 console.log("정보 가져오기 성공")

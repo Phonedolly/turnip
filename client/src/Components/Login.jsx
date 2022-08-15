@@ -34,7 +34,7 @@ export const Login = () => {
       .post("/auth/login", data)
       .then((res) => {
         onLoginSuccess(res);
-        //navigate("/");
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);
