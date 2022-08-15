@@ -1,29 +1,38 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const JWT_EXPIRY_TIME = process.env.REACT_APP_JWT_EXPIRY_TIME;
-
-const onSlientRefresh = (data) => {
-  axios
-    .post("/api/silent_refresh", data)
-    .then(onLoginSuccess)
-    .catch((error) => {});
-};
-
-const onLoginSuccess = (response) => {
-  console.log(response.data);
-  const { accessToken } = response.data;
-
-  // accessToken 설정
-  axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
-  // accessToken 만료하기 1분 전에 로그인 연장
-  setTimeout(onSlientRefresh, JWT_EXPIRY_TIME - 60000);
-};
 
 export const Login = () => {
   const [id, setID] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies([]);
+
+  const onSilentRefresh = () => {
+    axios
+      .post("/auth/silentRefresh", { refreshToken: cookies.refreshToken })
+      .then(onLoginSuccess)
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const onLoginSuccess = (response) => {
+    console.log(22);
+    const { accessToken, refreshToken } = response.data;
+
+    // accessToken 설정
+    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+    // refreshToken 설정
+    setCookie("refreshToken", refreshToken);
+
+    // accessToken 만료하기 1분 전에 로그인 연장
+    setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+  };
 
   const onLogin = () => {
     const data = {
@@ -32,7 +41,10 @@ export const Login = () => {
     };
     axios
       .post("/auth/login", data)
-      .then(onLoginSuccess)
+      .then((res) => {
+        onLoginSuccess(res);
+        navigate("/");
+      })
       .catch((error) => {});
   };
 
@@ -53,8 +65,7 @@ export const Login = () => {
         required
       ></input>
       <button onClick={onLogin} />
+      <button onClick={onSilentRefresh} />
     </>
   );
 };
-
-export const requestLogin = async (id, password) => {};

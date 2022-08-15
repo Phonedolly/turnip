@@ -43,7 +43,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    httpOnly: true
+    httpOnly: false
   }
 }));
 app.use(passport.initialize());
