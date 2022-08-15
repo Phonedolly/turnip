@@ -1,9 +1,11 @@
 const express = require('express')
 const router = express.Router();
+const crypto = require('crypto')
 const { S3Client, DeleteObjectsCommand } = require('@aws-sdk/client-s3')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
 const Post = require('../schemas/post');
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares')
 
 
 const s3 = new S3Client({
@@ -28,6 +30,16 @@ const upload = multer({
         // acl: 'public-read'
     })
 })
+
+
+
+
+// router.post('/login',
+//     passport.authenticate('local', { failureRedireact: '/' }),
+//     (req, res) => {
+//         console.log("req.user : " + req.user)
+//     });
+
 
 router.get('/', (req, res) => {
     res.send({ test: 'hi' })
@@ -110,5 +122,41 @@ router.post('/publish', async (req, res) => {
     res.statusCode = 200;
     res.send();
 })
+
+const { verifyToken } = require('./jwt')
+const User = require('../schemas/user');
+const passport = require('../passport');
+
+router.post('/createUser', async (req, res) => {
+    passwordHashed = await createHashedPassword(req.body.password)
+    User.create({ id: req.body.id, password: passwordHashed.password, salt: passwordHashed.salt })
+        .then(result => {
+            console.log("유저 생성 성공");
+            console.log(result);
+            res.send("sucesss")
+        },
+            (error) => {
+                console.error("유저 생성 실패")
+                console.error(error);
+                res.send("error")
+            })
+})
+
+const createSalt = () =>
+    new Promise((resolve, reject) => {
+        crypto.randomBytes(64, (err, buf) => {
+            if (err) reject(err);
+            resolve(buf.toString('base64'));
+        });
+    });
+
+const createHashedPassword = (plainPassword) =>
+    new Promise(async (resolve, reject) => {
+        const salt = await createSalt();
+        crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
+            if (err) reject(err);
+            resolve({ password: key.toString('base64'), salt });
+        });
+    });
 
 module.exports = router;

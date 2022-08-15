@@ -10,7 +10,12 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
-        unique: false
+        unique: true
+    },
+    salt: {
+        type: String,
+        required: true,
+        unique: false,
     },
     joinedAt: {
         type: Date,

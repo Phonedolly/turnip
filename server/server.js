@@ -1,5 +1,10 @@
 const path = require('path')
 const dotenv = require('dotenv')
+const bodyParser = require('body-parser');
+const passport = require('passport')
+const express = require('express');
+const session = require('express-session')
+const cookieParser = require('cookie-parser');
 
 if (process.env.NODE_ENV === 'production') {
     dotenv.config({ path: path.join(__dirname, '../.env.production') });
@@ -11,20 +16,46 @@ if (process.env.NODE_ENV === 'production') {
     throw new Error('process.env.NDOE_ENV is not set');
 }
 
-const bodyParser = require('body-parser');
-const express = require('express');
+
 const app = express();
+
+const cors = require('cors')
+const passportConfig = require('./passport')
 const api = require('./router/api');
 const post = require('./router/post')
+const auth = require('./router/auth')
+
+
+
 
 const connect = require('./schemas');
 connect();
 
+app.use(cookieParser(process.env.JWT_SECRET));
+//passportConfig()
+
+
+app.use(cors({ credentials: true }))
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+app.use(session({
+    secret: process.env.JWT_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true
+    }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use("/api", api);
-app.use('/post', post)
+// app.use('/post', post)
+app.use('/auth', auth)
 
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));

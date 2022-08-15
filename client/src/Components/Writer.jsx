@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import { useState } from "react";
 import ReactMarkDown from "react-markdown";
 import { useNavigate } from "react-router-dom";
+import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
 import "./Art.scss";
@@ -149,10 +150,10 @@ export default function Writer() {
               setMd(e.target.value);
             }}
           />
-          <div className="showTextArea">
+          <div className="showTextArea article">
             <ReactMarkDown
               children={md ? md : "내용을 입력하세요"}
-              remarkPlugins={[remarkGfm]}
+              remarkPlugins={[remarkGfm, rehypeRaw]}
             />
           </div>
         </Flex>
