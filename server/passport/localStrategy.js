@@ -7,8 +7,8 @@ const User = require('../schemas/user')
 
 const makePasswordHashed = (userId, plainPassword) =>
     new Promise(async (resolve, reject) => {
-        const salt = await User.find({ id: userId })
-            .then((result) => { console.log(result); return result[0].salt });
+        const salt = await User.findOne({ id: userId })
+            .then((result) => { console.log(result); return result.salt });
         console.log(salt)
         crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
             if (err) reject(err);
@@ -23,8 +23,9 @@ module.exports = () => {
     }, async (id, password, done) => {
         try {
             const exUser = await User.findOne({ where: { id } });
+            console.log(id + password)
             if (exUser) {
-                const result = (await makePasswordHashed(id, password)) === await User.find({ id: req.body.id }).then(res => res[0].password)
+                const result = (await makePasswordHashed(id, password)) === await User.find({ id: id }).then(res => res[0].password)
                 if (result) {
                     done(null, exUser);
                 } else {

@@ -32,15 +32,12 @@ const connect = require('./schemas');
 connect();
 
 app.use(cookieParser(process.env.JWT_SECRET));
-//passportConfig()
+passportConfig()
 
 
 app.use(cors({ credentials: true }))
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
-
 app.use(session({
     secret: process.env.JWT_SECRET,
     resave: false,
@@ -49,7 +46,6 @@ app.use(session({
         httpOnly: true
     }
 }));
-
 app.use(passport.initialize());
 app.use(passport.session());
 

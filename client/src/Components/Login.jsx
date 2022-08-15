@@ -11,6 +11,7 @@ const onSlientRefresh = (data) => {
 };
 
 const onLoginSuccess = (response) => {
+  console.log(response.data);
   const { accessToken } = response.data;
 
   // accessToken 설정
@@ -30,7 +31,7 @@ export const Login = () => {
       password,
     };
     axios
-      .post("/api/login", data)
+      .post("/auth/login", data)
       .then(onLoginSuccess)
       .catch((error) => {});
   };
