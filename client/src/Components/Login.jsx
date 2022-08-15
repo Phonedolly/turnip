@@ -1,39 +1,30 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-
-const JWT_EXPIRY_TIME = process.env.REACT_APP_JWT_EXPIRY_TIME;
+import { onSilentRefresh, onLoginSuccess, onGetAuth } from "../Util/LoginTools";
+import { useEffect } from "react";
 
 export const Login = () => {
   const [id, setID] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [s, setS] = useState("");
 
-  const onSilentRefresh = () => {
-    axios
-      .post("/auth/silentRefresh", { refreshToken: cookies.refreshToken })
-      .then(onLoginSuccess)
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  const onLoginSuccess = (response) => {
-    console.log(22);
-    const { accessToken, refreshToken } = response.data;
-
-    // accessToken 설정
-    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
-    // refreshToken 설정
-    setCookie("refreshToken", refreshToken);
-
-    // accessToken 만료하기 1분 전에 로그인 연장
-    setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
-  };
-
+  useEffect(() => {
+    console.log(window.location.href);
+    onSilentRefresh();
+    onGetAuth().then(
+      () => {
+        setLoggedIn(true);
+      },
+      () => {
+        setLoggedIn(false);
+      }
+    );
+  }, [s]);
   const onLogin = () => {
     const data = {
       id,
@@ -43,9 +34,11 @@ export const Login = () => {
       .post("/auth/login", data)
       .then((res) => {
         onLoginSuccess(res);
-        navigate("/");
+        //navigate("/");
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -66,6 +59,23 @@ export const Login = () => {
       ></input>
       <button onClick={onLogin} />
       <button onClick={onSilentRefresh} />
+      <button onClick={onGetAuth} />
+
+      {isLoggedIn ? (
+        <div>dd</div>
+      ) : (
+        <>
+          <Link to="/login">로그인</Link>
+          <div>
+            <input
+              type="text"
+              onChange={(e) => {
+                setS((ss) => ss + e.target.value);
+              }}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };

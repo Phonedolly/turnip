@@ -69,7 +69,6 @@ router.get('/post/:postURL', async (req, res) => {
     console.log(req.params.postURL)
     Post.find({ postURL: req.params.postURL })
         .then((result) => {
-            console.log(result)
             res.send(result)
         }, (error) => {
             console.error(error)

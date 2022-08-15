@@ -10,6 +10,8 @@ const redisClient = redis.createClient({ url: process.env.REDIS_URL });
 redisClient.connect();
 
 
+
+
 router.post('/login', isNotLoggedIn, (req, res, next) => {
   try {
     passport.authenticate('local', async (passportError, user, info) => {
@@ -34,10 +36,8 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
         { expiresIn: '3h' }
       )
       await redisClient.set(refreshToken, user.id);
-      res.json({
-        accessToken,
-        refreshToken
-      })
+      res.cookie('refreshToken', refreshToken)
+      res.json({ accessToken })
     })(req, res);
   } catch (error) {
     console.error(error);
@@ -45,9 +45,9 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
   }
 })
 
-router.post('/silentRefresh', (req, res) => {
-  console.log(req.body)
-  jwt.verify(req.body.refreshToken, process.env.REFRESH_TOKEN_SECRET,
+router.get('/silentRefresh', (req, res) => {
+  console.log(req.headers)
+  jwt.verify(req.cookies.refreshToken, process.env.REFRESH_TOKEN_SECRET,
     (error, decoded) => {
       if (error) {
         console.error(error)
@@ -55,29 +55,44 @@ router.post('/silentRefresh', (req, res) => {
       }
     })
   const accessToken = jwt.sign(
-    { id: redisClient.get(req.body.refreshToken) },
+    { id: redisClient.get(req.cookies.refreshToken) },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: '30m' }
   )
   const refreshToken = jwt.sign(
-    { id: redisClient.get(req.body.refreshToken) },
+    { id: redisClient.get(req.cookies.refreshToken) },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: '3h' }
   )
-  res.send({ accessToken, refreshToken })
+  res.cookie('refreshToken', refreshToken)
+  res.send({ accessToken })
 })
 
-// router.post('/', passport.authenticate('jwt', { session: false }),
-//   async (req, res, next) => {
-//     try {
-//       console.log(req)
-//       res.json({ isLoggedIn: true });
-//     } catch (error) {
-//       console.error(error);
-//       res.json({ isLoggedIn: false })
-//       next(error);
-//     }
-//   });
+router.get('/', async (req, res, next) => {
+  if (!req.headers.authorization) {
+    return res.status(500).send();
+  }
+  jwt.verify(req.headers.authorization.split(" ")[1], process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
+    if (error) {
+      console.error(error)
+      return res.status(500).json({ JWTisValid: false })
+    }
+  })
+
+  res.send({ isOk: true })
+})
+
+router.post('/test', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    try {
+      console.log(req)
+      res.json({ isLoggedIn: true });
+    } catch (error) {
+      console.error(error);
+      res.json({ isLoggedIn: false })
+      next(error);
+    }
+  });
 // router.get('/', passport.authenticate('jwt',{session:false}), as(req, res) => {
 //   res.send("로그인했음")
 // })

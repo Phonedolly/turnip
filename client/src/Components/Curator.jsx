@@ -11,7 +11,6 @@ export default function Curator() {
   useEffect(() => {
     axios.get("/api/getArtTitleList").then(
       (res) => {
-        console.log(res.data);
         setArtList(res.data);
       },
       (err) => {
@@ -24,7 +23,6 @@ export default function Curator() {
     <>
       <div className="container">
         {artList.map((each) => {
-          console.log(each);
           return (
             <Card
               title={each.title}
