@@ -6,19 +6,21 @@ import Writer from './Components/Writer';
 import Curator from './Components/Curator';
 import { useEffect, useState } from 'react';
 import { Login } from './Components/Login';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { useCookies } from "react-cookie";
 import { onGetAuth, onSilentRefresh, onLoginSuccess } from './Util/LoginTools';
 
+
 const JWT_EXPIRY_TIME = process.env.REACT_APP_JWT_EXPIRY_TIME;
 
-function App() {
+function App({ history }) {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
 
     onSilentRefresh()
+
     onGetAuth()
       .then(setLoggedIn(true), setLoggedIn(false))
     console.log('직전:' + axios.defaults.headers.common["Authorization"])
@@ -35,8 +37,13 @@ function App() {
           onGetAuth().then(() => alert("성공"), () => alert("실패"))
         }} />
         <button onClick={async () => {
-          axios.get('/auth/logout').then((res) => console.log(res),
-            (err) => console.log(err))
+          axios.get('/auth/logout')
+            .then((res) => {
+              console.log(res); setLoggedIn(false)
+            }, (err) => console.log(err))
+
+
+
         }} />
         <Routes>
           <Route path="/" element={<Curator />}></Route>

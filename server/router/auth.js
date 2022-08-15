@@ -83,7 +83,7 @@ router.post('/login', async (req, res) => {
 })
 
 
-router.get('/silentRefresh', isLoggedIn, (req, res) => {
+router.get('/silentRefresh', (req, res) => {
   console.log(req.headers)
   jwt.verify(req.cookies.refreshToken, process.env.REFRESH_TOKEN_SECRET,
     (error, decoded) => {

@@ -1,9 +1,6 @@
 import "./Header.scss";
 import Flex from "@react-css/flex";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { useEffect } from "react";
-import { onGetAuth, onSilentRefresh } from "../Util/LoginTools";
 
 export default function Header(props) {
   return (
