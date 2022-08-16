@@ -6,7 +6,11 @@ const crypto = require('crypto')
 
 const User = require('../schemas/user')
 
-const redisClient = redis.createClient({ url: process.env.REDIS_URL });
+const redisClient = redis.createClient({
+  host: process.env.REDIS_URL,
+  port: 6379,
+  password: process.env.REDIS_PASSWORD
+});
 redisClient.connect();
 
 

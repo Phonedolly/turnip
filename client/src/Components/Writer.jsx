@@ -6,12 +6,15 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ReactMarkDown from "react-markdown";
 import { useNavigate, Navigate, useParams } from "react-router-dom";
-import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import SyntaxHighlighter from "react-syntax-highlighter";
+
+import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 import { onGetAuth, onSilentRefresh, onLoginSuccess } from "../Util/LoginTools";
 
-import "./Art.scss";
+//import "./Art.scss";
 import "./Writer.scss";
 
 export default function Writer(props) {
@@ -152,6 +155,25 @@ export default function Writer(props) {
     });
     // console.log(images);
   };
+
+  const handleSetValue = (e) => {
+    setMd(e.target.value);
+  };
+
+  const handleSetTab = (e) => {
+    console.log(e.keyCode);
+    if (e.keyCode === 9) {
+      e.preventDefault();
+      let val = e.target.value;
+      let start = e.target.selectionStart;
+      let end = e.target.selectionEnd;
+      e.target.value = val.substring(0, start) + "\t" + val.substring(end);
+      e.target.selectionStart = e.target.selectionEnd = start + 1;
+      handleSetValue(e);
+      return false; //  prevent focus
+    }
+  };
+
   if (isLoggedIn === "NO") {
     return <Navigate replace to="/" />;
   } else if (isLoggedIn === "PENDING") {
@@ -159,7 +181,7 @@ export default function Writer(props) {
   } else {
     return (
       <>
-        <Flex column>
+        <Flex column className="container">
           <Flex row justifySpaceBetween>
             <input
               placeholder="제목"
@@ -253,15 +275,39 @@ export default function Writer(props) {
               placeholder="내용을 입력하세요"
               className="inputTextArea"
               value={md}
-              onInput={(e) => {
-                setMd(e.target.value);
-              }}
+              // onInput={(e) => {
+              //   setMd(e.target.value);
+              // }}
+              onChange={(e) => handleSetValue(e)}
+              onKeyDown={(e) => handleSetTab(e)}
             />
             <div className="showTextArea article">
               <ReactMarkDown
-                children={md ? md : "내용을 입력하세요"}
+                className="markdown-body"
+                children={md}
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[rehypeRaw]}
+                components={{
+                  code({ inline, className, children, ...props }) {
+                    const match = /language-(\w+)/.exec(className || "");
+                    return !inline && match ? (
+                      <SyntaxHighlighter
+                        language={match[1]}
+                        PreTag="div"
+                        {...props}
+                        style={github}
+                        showLineNumbers={true}
+                        wrapLongLines={true}
+                      >
+                        {String(children).replace(/\n$/, "")}
+                      </SyntaxHighlighter>
+                    ) : (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    );
+                  },
+                }}
               />
             </div>
           </Flex>

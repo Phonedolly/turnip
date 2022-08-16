@@ -1,9 +1,11 @@
 @import url("./Color.scss");
-@import url("./Art.scss");
-
+//@import url("./Art.scss");
+.container {
+  width: 70vw;
+}
 .inputTextArea {
   width: 50%;
-  height: 100vh;
+  // height: 100vh;
   border: none;
   padding: 1em;
   border-radius: 7px;
@@ -11,6 +13,8 @@
   resize: none;
   margin-top: 1em;
   margin-right: 1em;
+  font-size: 16px;
+  line-height: 1.5;
 }
 input {
   width: 100%;

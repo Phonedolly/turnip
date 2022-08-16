@@ -1,5 +1,6 @@
 .article {
   max-width: 60em;
+  width: 100%;
   margin: 0 auto;
 
   font-family: "IBMFlexSansKRRegular";
@@ -25,6 +26,7 @@
     border-collapse: collapse;
     border-spacing: 2px;
     border-radius: 8px;
+    overflow: scroll;
     thead {
       border: 0 solid;
       border-color: inherit;
@@ -87,22 +89,23 @@
     line-height: 2em;
   }
 
-  code {
-    background-color: var(--gray-300);
-    border-radius: 8px;
-    padding: 0.3em;
-  }
+  // code {
+  //   background-color: var(--gray-300);
+  //   border-radius: 8px;
+  //   padding: 0.3em;
+  //   // overflow: hidden;
+  // }
 
-  pre {
-    background-color: var(--gray-300);
-    border-radius: 8px;
-    padding: 1em;
-    white-space: pre-wrap;
-    overflow: auto;
-    code {
-      line-height: 1.7em;
-    }
-  }
+  // pre {
+  //   background-color: var(--gray-300);
+  //   border-radius: 8px;
+  //   padding: 1em;
+  //   white-space: pre-wrap;
+  //   overflow: auto;
+  //   code {
+  //     line-height: 1.7em;
+  //   }
+  // }
 
   p > img {
     display: block;
