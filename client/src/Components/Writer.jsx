@@ -4,14 +4,14 @@ import { nanoid } from "nanoid";
 
 import { useState } from "react";
 import ReactMarkDown from "react-markdown";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
 import "./Art.scss";
 import "./Writer.scss";
 
-export default function Writer() {
+export default function Writer(props) {
   const [titleValue, setTitleValue] = useState("");
   const [thumbURL, setThumbURL] = useState("");
   const [md, setMd] = useState("");
@@ -71,7 +71,9 @@ export default function Writer() {
     });
     // console.log(images);
   };
-
+  if (!props.isLoggedIn) {
+    return <Navigate replace to="/" />;
+  }
   return (
     <>
       <Flex column>
@@ -153,7 +155,8 @@ export default function Writer() {
           <div className="showTextArea article">
             <ReactMarkDown
               children={md ? md : "내용을 입력하세요"}
-              remarkPlugins={[remarkGfm, rehypeRaw]}
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
             />
           </div>
         </Flex>

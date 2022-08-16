@@ -1,4 +1,3 @@
-const randToken = require('rand-token');
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.ACCESS_TOKEN_SECRET;
 

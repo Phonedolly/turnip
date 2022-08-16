@@ -4,8 +4,13 @@ const crypto = require('crypto')
 const { S3Client, DeleteObjectsCommand } = require('@aws-sdk/client-s3')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
+
 const Post = require('../schemas/post');
+const User = require('../schemas/user');
+
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares')
+const { verifyToken } = require('./jwt')
+
 
 
 const s3 = new S3Client({
@@ -122,9 +127,7 @@ router.post('/publish', async (req, res) => {
     res.send();
 })
 
-const { verifyToken } = require('./jwt')
-const User = require('../schemas/user');
-const passport = require('../passport');
+
 
 router.post('/createUser', async (req, res) => {
     passwordHashed = await createHashedPassword(req.body.password)

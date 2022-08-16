@@ -1,45 +1,36 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { createBrowserHistory } from "history";
 import { useCookies } from "react-cookie";
 import { onSilentRefresh, onLoginSuccess, onGetAuth } from "../Util/LoginTools";
 import { useEffect } from "react";
 
-export const Login = () => {
+export const Login = (props) => {
   const [id, setID] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies([]);
-  const [isLoggedIn, setLoggedIn] = useState(false);
 
-  useEffect(() => {
-    console.log(window.location.href);
-    onSilentRefresh();
-    onGetAuth().then(
-      () => {
-        setLoggedIn(true);
-      },
-      () => {
-        setLoggedIn(false);
-      }
-    );
-  }, []);
   const onLogin = () => {
     const data = {
       id,
       password,
     };
-    axios
-      .post("/auth/login", data)
-      .then((res) => {
+    axios.post("/auth/login", data).then(
+      (res) => {
         onLoginSuccess(res);
         navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        navigate(0);
+      },
+      (err) => {
+        alert("로그인 정보가 맞지 않습니다.");
+        console.log(err);
+      }
+    );
   };
-
+  if (props.isLoggedIn) {
+    return <></>;
+  }
   return (
     <>
       <input
@@ -60,7 +51,7 @@ export const Login = () => {
       <button onClick={onSilentRefresh} />
       <button onClick={onGetAuth} />
 
-      {isLoggedIn ? (
+      {props.isLoggedIn ? (
         <div>dd</div>
       ) : (
         <>

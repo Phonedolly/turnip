@@ -8,11 +8,6 @@ export default function Header(props) {
       <Flex id="headerText" flexDirection="row" justifyContent="start">
         <div>Stardue</div>
         <div id="underLine" />
-        {props.isLoggedIn ? (
-          <div>ㅇㅇㅇㅇㅇ</div>
-        ) : (
-          <Link to="/login">로그인</Link>
-        )}
       </Flex>
     </Link>
   );

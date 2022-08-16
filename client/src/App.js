@@ -1,58 +1,65 @@
+import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+import { onGetAuth, onSilentRefresh, onLoginSuccess } from './Util/LoginTools';
+
 import './App.scss';
 import Header from './Components/Header'
 import Art from './Components/Art'
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+
 import Writer from './Components/Writer';
 import Curator from './Components/Curator';
-import { useEffect, useState } from 'react';
+
 import { Login } from './Components/Login';
-import axios, { AxiosRequestConfig } from 'axios';
-import { useCookies } from "react-cookie";
-import { onGetAuth, onSilentRefresh, onLoginSuccess } from './Util/LoginTools';
+import axios from 'axios';
+
+
 
 
 const JWT_EXPIRY_TIME = process.env.REACT_APP_JWT_EXPIRY_TIME;
 
 function App({ history }) {
-  const [cookies, setCookie, removeCookie] = useCookies([]);
   const [isLoggedIn, setLoggedIn] = useState(false);
+
 
   useEffect(() => {
 
-    async function on() {
+    async function setLoginInfo() {
       await onSilentRefresh()
+      onGetAuth()
+        .then(
+          () => {
+            setLoggedIn(true);
+            console.log("isLoggedIn" + isLoggedIn)
+          }
+          , () => {
+            setLoggedIn(false)
+            console.log('isLoggedIn' + isLoggedIn)
+          })
     }
-    on()
-    onGetAuth()
-      .then(setLoggedIn(true)
-        , setLoggedIn(false))
-    console.log('직전:' + axios.defaults.headers.common["Authorization"])
+    setLoginInfo();
 
   }, [])
 
+  const logout = async () => {
+    await axios.get('/auth/logout');
+    setLoggedIn(false);
+  }
 
   return (
     <div className="App">
       <BrowserRouter>
         <Header isLoggedIn={isLoggedIn} />
-        <button onClick={() => {
-
-          onGetAuth().then(() => alert("성공"), () => alert("실패"))
-        }} />
-        <button onClick={async () => {
-          axios.get('/auth/logout')
-            .then((res) => {
-              console.log(res); setLoggedIn(false)
-            }, (err) => console.log(err))
-
-
-
-        }} />
+        {isLoggedIn ?
+          <>
+            <Link to="/writer"><button>글쓰기</button></Link>
+            <button onClick={logout}>로그아웃</button>
+          </> : <></>}
         <Routes>
           <Route path="/" element={<Curator />}></Route>
-          <Route path="/login" element={<Login />}></Route>
+          <Route path="/login" element={<Login isLoggedIn={isLoggedIn} />}></Route>
           <Route path="/post/:postURL" element={<Art />}></Route>
-          <Route path="/writer" element={<Writer />}></Route>
+          <Route path="/writer" element={<Writer isLoggedIn={isLoggedIn} />} ></Route>
         </Routes>
 
       </BrowserRouter>

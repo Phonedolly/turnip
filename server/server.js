@@ -20,7 +20,6 @@ if (process.env.NODE_ENV === 'production') {
 const app = express();
 
 
-// const passportConfig = require('./passport')
 const api = require('./router/api');
 // const post = require('./router/post')
 const auth = require('./router/auth')
