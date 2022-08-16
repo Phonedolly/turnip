@@ -3,12 +3,9 @@ const { S3Client, DeleteObjectsCommand } = require('@aws-sdk/client-s3')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
 
-
-
-const router = express.Router();
 const Post = require('../schemas/post');
 
-
+const router = express.Router();
 
 const s3 = new S3Client({
     credentials: {
@@ -17,7 +14,14 @@ const s3 = new S3Client({
     },
     region: process.env.AWS_REGION
 });
+const getToday = () => {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = ("0" + (1 + date.getMonth())).slice(-2);
+    var day = ("0" + date.getDate()).slice(-2);
 
+    return year + month + day;
+}
 const upload = multer({
     storage: multerS3({
         s3: s3,
@@ -26,13 +30,13 @@ const upload = multer({
             cb(null, { fieldName: file.fieldname });
         },
         key: function (req, file, cb) {
-            cb(null, Date.now().toString() + '_' + file.originalname)
+            console.log(req.body)
+            cb(null, getToday() + "/" + Date.now().toString() + '_' + file.originalname)
         },
         contentType: multerS3.AUTO_CONTENT_TYPE,
         // acl: 'public-read'
     })
 })
-
 
 const isPostExists = async (req, res, next) => {
     req.isPostExists = !!await Post.findOne({ title: req.body.title })
@@ -40,7 +44,6 @@ const isPostExists = async (req, res, next) => {
 }
 
 router.post('/uploadImage', upload.single('img'), function (req, res, next) {
-
     res.json({ imageLocation: req.file.location, imageName: req.file.key })
 })
 

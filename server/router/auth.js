@@ -81,7 +81,6 @@ router.post('/login', async (req, res) => {
   res.json({ accessToken })
 })
 
-
 router.get('/silentRefresh', (req, res) => {
   if (!req.cookies.refreshToken) {
     return res.status(500).send("refresh Token 없음")
@@ -107,12 +106,9 @@ router.get('/silentRefresh', (req, res) => {
   res.send({ accessToken })
 })
 
-
-
 router.get('/check', isLoggedIn, (req, res) => {
   res.status(200).send("로그인 되어있음")
 })
-
 
 router.get('/logout', isLoggedIn, async (req, res) => {
   console.log(req.headers.authorization.split(" ")[1])

@@ -1,4 +1,4 @@
-import { BrowserRouter, Link, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import { onGetAuth, onSilentRefresh, onLoginSuccess } from './Util/LoginTools';
@@ -13,14 +13,8 @@ import Curator from './Components/Curator';
 import { Login } from './Components/Login';
 import axios from 'axios';
 
-
-
-
-const JWT_EXPIRY_TIME = process.env.REACT_APP_JWT_EXPIRY_TIME;
-
 function App({ history }) {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
-
 
   useEffect(() => {
 
@@ -44,6 +38,7 @@ function App({ history }) {
   const logout = async () => {
     await axios.get('/auth/logout');
     setLoggedIn(false);
+    window.location.reload()
   }
 
   return (
@@ -58,8 +53,8 @@ function App({ history }) {
         <Routes>
           <Route path="/" element={<Curator />}></Route>
 
-          <Route path="/login" element={<Login isLoggedIn={isLoggedIn} />}></Route>
-          <Route path="/post/:postURL" element={<Art isLoggedIn={isLoggedIn} />}>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/post/:postURL" element={<Art />}>
           </Route>
           <Route path="/post/:postURL/edit" element={<Writer isEdit={true} />} />
           <Route path="/writer" element={<Writer />} ></Route>

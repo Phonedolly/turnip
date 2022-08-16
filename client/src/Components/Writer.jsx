@@ -56,16 +56,11 @@ export default function Writer(props) {
           setThumbURL(() => res.data.thumbnailURL);
 
           res.data.images?.map((eachImage) => {
-            console.log("eachImage.imagelocation:" + eachImage.imageLocation);
-            console.log("res.data.thumb:" + res.data.thumbnailURL);
-
             const imageData = {
               imageLocation: eachImage.imageLocation,
               imageName: eachImage.imageName,
               isThumb: eachImage.imageLocation === res.data.thumbnailURL,
             };
-            // console.log(imageData);
-            // console.log(images);
 
             setImages((images) => {
               const newCond = images.concat(imageData);
@@ -77,12 +72,10 @@ export default function Writer(props) {
           let thereIsThumbAndMd = false; // 썸네일과 본문에 동시에 쓰인 이미지는 없을 것이다
           res.data.images.forEach((eachImage) => {
             if (eachImage.imageLocation === res.data.thumbnailURL) {
-              thereIsThumbAndMd = true; // 그런 이미지를 발견했다
-              console.log("발견");
+              thereIsThumbAndMd = true; // 썸네일이지만 본문에 쓰인 이미지를 발견했다
             }
           });
-          if (thereIsThumbAndMd === false) {
-            console.log("thumbURL:" + thumbURL);
+          if (!thereIsThumbAndMd) {
             const token = res.data.thumbnailURL.split("/");
 
             setImages((images) => {

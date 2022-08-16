@@ -12,6 +12,23 @@ export const Login = (props) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    async function setLoginInfo() {
+      await onSilentRefresh();
+      onGetAuth().then(
+        () => {
+          setLoggedIn("YES");
+          console.log("isLoggedIn" + isLoggedIn);
+        },
+        () => {
+          setLoggedIn("NO");
+          console.log("isLoggedIn" + isLoggedIn);
+        }
+      );
+    }
+    setLoginInfo();
+  }, []);
+
   const onLogin = () => {
     const data = {
       id,
@@ -30,7 +47,7 @@ export const Login = (props) => {
     );
   };
   if (isLoggedIn === "YES") {
-    return <></>;
+    return <>이미 로그인되어 있습니다</>;
   }
   return (
     <>
@@ -51,14 +68,6 @@ export const Login = (props) => {
       <button onClick={onLogin} />
       <button onClick={onSilentRefresh} />
       <button onClick={onGetAuth} />
-
-      {isLoggedIn === "YES" ? (
-        <div>dd</div>
-      ) : (
-        <>
-          <Link to="/login">로그인</Link>
-        </>
-      )}
     </>
   );
 };

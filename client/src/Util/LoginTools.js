@@ -26,7 +26,7 @@ export const onLoginSuccess = (response) => {
 
   // accessToken 설정
   axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-  console.log(axios.defaults.headers.common["Authorization"])
+
 
   // refreshToken 설정
   // setCookie("refreshToken", refreshToken);

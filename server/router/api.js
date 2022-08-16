@@ -12,20 +12,9 @@ const { verifyToken } = require('./jwt')
 
 router.use('/publish', createdPost)
 
-
-
-
-// router.post('/login',
-//     passport.authenticate('local', { failureRedireact: '/' }),
-//     (req, res) => {
-//         console.log("req.user : " + req.user)
-//     });
-
-
 router.get('/', (req, res) => {
   res.send({ test: 'hi' })
 });
-
 
 router.get('/getArtTitleList', async (req, res) => {
   Post.find({})
@@ -52,12 +41,6 @@ router.get('/post/:postURL', async (req, res) => {
       res.status(500).send();
     })
 })
-
-
-
-
-
-
 
 router.post('/createUser', async (req, res) => {
   passwordHashed = await createHashedPassword(req.body.password)
