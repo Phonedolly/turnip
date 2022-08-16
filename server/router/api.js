@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/getArtTitleList', async (req, res) => {
-  Post.find({})
+  Post.find({}).sort({ createdAt: -1 })
     .then((result) => {
       console.log('result: ' + result)
       res.send(result.map((each) => Object.assign({}, { title: each.title, thumbnailURL: each.thumbnailURL ?? null, postURL: each.postURL })))
