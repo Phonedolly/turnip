@@ -19,7 +19,7 @@ import axios from 'axios';
 const JWT_EXPIRY_TIME = process.env.REACT_APP_JWT_EXPIRY_TIME;
 
 function App({ history }) {
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState("PENDING");
 
 
   useEffect(() => {
@@ -29,11 +29,11 @@ function App({ history }) {
       onGetAuth()
         .then(
           () => {
-            setLoggedIn(true);
+            setLoggedIn("YES");
             console.log("isLoggedIn" + isLoggedIn)
           }
           , () => {
-            setLoggedIn(false)
+            setLoggedIn("NO")
             console.log('isLoggedIn' + isLoggedIn)
           })
     }
@@ -50,7 +50,7 @@ function App({ history }) {
     <div className="App">
       <BrowserRouter>
         <Header isLoggedIn={isLoggedIn} />
-        {isLoggedIn ?
+        {isLoggedIn == "YES" ?
           <>
             <Link to="/writer"><button>글쓰기</button></Link>
             <button onClick={logout}>로그아웃</button>
@@ -61,8 +61,8 @@ function App({ history }) {
           <Route path="/login" element={<Login isLoggedIn={isLoggedIn} />}></Route>
           <Route path="/post/:postURL" element={<Art isLoggedIn={isLoggedIn} />}>
           </Route>
-          <Route path="/post/:postURL/edit" element={<Writer isLoggedIn={isLoggedIn} isEdit={true} />} />
-          <Route path="/writer" element={<Writer isLoggedIn={isLoggedIn} />} ></Route>
+          <Route path="/post/:postURL/edit" element={<Writer isEdit={true} />} />
+          <Route path="/writer" element={<Writer />} ></Route>
 
         </Routes>
 

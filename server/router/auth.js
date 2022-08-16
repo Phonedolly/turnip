@@ -117,7 +117,8 @@ router.get('/check', isLoggedIn, (req, res) => {
 router.get('/logout', isLoggedIn, async (req, res) => {
   console.log(req.headers.authorization.split(" ")[1])
 
-  await redisClient.setEx(req.headers.authorization.split(" ")[1], 1800000, 'logout')
+  await redisClient.setEx(req.headers.authorization.split(" ")[1],
+    process.env.ACCESS_TOKEN_BLACKLIST_EXPIRE_TIME, 'logout')
   res.clearCookie('refreshToken');
   return res.status(200).send();
 

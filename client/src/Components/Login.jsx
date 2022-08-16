@@ -7,6 +7,7 @@ import { onSilentRefresh, onLoginSuccess, onGetAuth } from "../Util/LoginTools";
 import { useEffect } from "react";
 
 export const Login = (props) => {
+  const [isLoggedIn, setLoggedIn] = useState("PENDING");
   const [id, setID] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export const Login = (props) => {
       }
     );
   };
-  if (props.isLoggedIn) {
+  if (isLoggedIn === "YES") {
     return <></>;
   }
   return (
@@ -51,7 +52,7 @@ export const Login = (props) => {
       <button onClick={onSilentRefresh} />
       <button onClick={onGetAuth} />
 
-      {props.isLoggedIn ? (
+      {isLoggedIn === "YES" ? (
         <div>dd</div>
       ) : (
         <>

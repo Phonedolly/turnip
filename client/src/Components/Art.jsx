@@ -5,14 +5,38 @@ import React from "react";
 import ReactMarkDown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import { onGetAuth, onSilentRefresh, onLoginSuccess } from "../Util/LoginTools";
+
 import "./Art.scss";
 
 export default function Art(props) {
+  const [isLoggedIn, setLoggedIn] = useState("PENDING");
   const params = useParams();
   const [md, setMd] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    async function setLoginInfo() {
+      await onSilentRefresh().then(
+        () => {},
+        () => {
+          setLoggedIn("NO");
+          return;
+        }
+      );
+      onGetAuth().then(
+        () => {
+          setLoggedIn("YES");
+          console.log("isLoggedIn" + isLoggedIn);
+        },
+        () => {
+          setLoggedIn("NO");
+          console.log("isLoggedIn" + isLoggedIn);
+        }
+      );
+    }
+    setLoginInfo();
+
     axios.get("/api/post/" + params.postURL).then(
       (res) => {
         console.log(res);
@@ -26,7 +50,7 @@ export default function Art(props) {
 
   return (
     <>
-      {props.isLoggedIn && (
+      {isLoggedIn === "YES" && (
         <button
           onClick={() => {
             navigate("/post/" + params.postURL + "/edit");
