@@ -57,9 +57,13 @@ function App({ history }) {
           </> : <></>}
         <Routes>
           <Route path="/" element={<Curator />}></Route>
+
           <Route path="/login" element={<Login isLoggedIn={isLoggedIn} />}></Route>
-          <Route path="/post/:postURL" element={<Art />}></Route>
+          <Route path="/post/:postURL" element={<Art isLoggedIn={isLoggedIn} />}>
+          </Route>
+          <Route path="/post/:postURL/edit" element={<Writer isLoggedIn={isLoggedIn} isEdit={true} />} />
           <Route path="/writer" element={<Writer isLoggedIn={isLoggedIn} />} ></Route>
+
         </Routes>
 
       </BrowserRouter>

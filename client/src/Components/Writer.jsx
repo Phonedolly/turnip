@@ -1,10 +1,11 @@
 import Flex from "@react-css/flex";
 import axios from "axios";
 import { nanoid } from "nanoid";
+import { useEffect } from "react";
 
 import { useState } from "react";
 import ReactMarkDown from "react-markdown";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useParams } from "react-router-dom";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 
@@ -12,12 +13,43 @@ import "./Art.scss";
 import "./Writer.scss";
 
 export default function Writer(props) {
+  const [_id, set_id] = useState("");
   const [titleValue, setTitleValue] = useState("");
+  const [newTitleValue, setNewTitleValue] = useState("");
   const [thumbURL, setThumbURL] = useState("");
   const [md, setMd] = useState("");
   const [images, setImages] = useState([]);
   const navigate = useNavigate();
-
+  const params = useParams();
+  useEffect(() => {
+    async function getMd() {
+      await axios.get("/api/post/" + params.postURL).then(
+        (res) => {
+          console.log(res);
+          console.log(params);
+          set_id(res.data._id);
+          setTitleValue(res.data.title);
+          setNewTitleValue(res.data.title);
+          setMd(res.data.content);
+          setThumbURL(res.thumbnailURL);
+          res.data.images.map((eachImage) => {
+            setImages((images) => {
+              const newCond = images.concat({
+                imageLocation: eachImage.imageLocation,
+                imageName: eachImage.imageName,
+                isThumb: eachImage.imageLoation === res.data.thumbnailURL,
+              });
+              return newCond;
+            });
+          });
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
+    }
+    getMd();
+  }, []);
   const handleImageInput = async (e) => {
     const formData = new FormData();
     formData.append("img", e.target.files[0]);
@@ -72,7 +104,7 @@ export default function Writer(props) {
     // console.log(images);
   };
   if (!props.isLoggedIn) {
-    return <Navigate replace to="/" />;
+    // return <Navigate replace to="/" />;
   }
   return (
     <>
@@ -80,31 +112,51 @@ export default function Writer(props) {
         <Flex row justifySpaceBetween>
           <input
             placeholder="제목"
-            value={titleValue}
+            value={props.isEdit ? newTitleValue : titleValue}
             onInput={(e) => {
-              setTitleValue(e.target.value);
+              if (props.isEdit) {
+                setNewTitleValue(e.target.value);
+              } else {
+                setTitleValue(e.target.value);
+              }
             }}
           />
           <button
             onClick={async () => {
-              const blacklist = [];
+              const imageBlacklist = [];
+              const imageWhitelist = [];
               images.forEach((eachImage) => {
+                console.log("md:" + md.includes(" "));
+                console.log(md.includes(eachImage.imageLocation));
                 if (
-                  !md.includes(eachImage.imageLocation) &&
-                  !thumbURL.includes(eachImage.imageLocation)
+                  md &&
+                  !md?.includes(eachImage.imageLocation) &&
+                  !thumbURL === eachImage.imageLocation
                 ) {
                   console.log(eachImage.imageLocation + ": 포함 안됨");
-                  blacklist.push({ Key: eachImage.imageName });
+                  imageBlacklist.push({ Key: eachImage.imageName });
+                } else {
+                  console.log(eachImage.imageLocation + "포함됨");
+                  imageWhitelist.push({
+                    imageLocation: eachImage.imageLocation,
+                    imageName: eachImage.imageName,
+                  });
                 }
               });
-
-              console.log(blacklist);
+              console.log(imageBlacklist);
+              console.log(imageWhitelist);
+              console.log(
+                "uplodURL:" + `/api/publish/${props.isEdit ? "edit" : ""}`
+              );
               axios
-                .post("/api/publish", {
+                .post(`/api/publish/${props.isEdit ? "edit" : ""}`, {
+                  _id: _id,
                   title: titleValue,
+                  newTitle: props.isEdit ? newTitleValue : null,
                   content: md,
                   thumbnailURL: thumbURL,
-                  blacklist: blacklist,
+                  imageWhitelist: imageWhitelist,
+                  imageBlacklist: imageBlacklist,
                 })
                 .then(
                   (res) => {},

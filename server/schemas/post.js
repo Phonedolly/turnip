@@ -17,6 +17,11 @@ const postSchema = new Schema({
         required: true,
         unique: true,
     },
+    images: {
+        type: Array,
+        required: true,
+        unique: false,
+    },
     thumbnailURL: {
         type: String,
         required: false,
