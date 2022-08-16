@@ -32,7 +32,7 @@ export default function Writer(props) {
           setNewTitleValue(res.data.title);
           setMd(res.data.content);
           setThumbURL(res.thumbnailURL);
-          res.data.images.map((eachImage) => {
+          res.data.images?.map((eachImage) => {
             setImages((images) => {
               const newCond = images.concat({
                 imageLocation: eachImage.imageLocation,
@@ -55,7 +55,7 @@ export default function Writer(props) {
     formData.append("img", e.target.files[0]);
 
     axios
-      .post("/api/uploadImage", formData, {
+      .post("/api/publish/uploadImage", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -159,7 +159,10 @@ export default function Writer(props) {
                   imageBlacklist: imageBlacklist,
                 })
                 .then(
-                  (res) => {},
+                  (res) => {
+                    console.log("포스트 업로드 완료");
+                    navigate("/");
+                  },
                   (err) => {
                     console.error(err);
                     console.error("ERROR");

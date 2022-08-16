@@ -44,12 +44,18 @@ router.post('/uploadImage', upload.single('img'), function (req, res, next) {
     res.json({ imageLocation: req.file.location, imageName: req.file.key })
 })
 
-const titleLinkManufacturer = (req, res, nect) => {
+const titleLinkManufacturer = (req, res, next) => {
     try {
-        req.body.postURL = req.body.title.replace(/ /gi, '-').replace(/\./gi, '').replace(/'/gi, '').replace(/“/gi, '"').replace(/”/gi, '"').replace(/‘/gi, "'").replace(/’/gi, "'")
+        if (req.body.newTitle) {
+            req.body.postURL = req.body.newTitle.replace(/ /gi, '-').replace(/\./gi, '').replace(/'/gi, '').replace(/“/gi, '"').replace(/”/gi, '"').replace(/‘/gi, "'").replace(/’/gi, "'")
+
+        } else {
+            req.body.postURL = req.body.title.replace(/ /gi, '-').replace(/\./gi, '').replace(/'/gi, '').replace(/“/gi, '"').replace(/”/gi, '"').replace(/‘/gi, "'").replace(/’/gi, "'")
+        }
         next()
     } catch (error) {
         console.log("Title has a problem")
+        console.error(error)
         res.status(500).send("Title has a problem")
     }
 }
