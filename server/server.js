@@ -31,6 +31,7 @@ app.use(cookieParser(process.env.JWT_SECRET));
 // passportConfig()
 
 app.use(cors({ credentials: true }))
+server.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
@@ -48,8 +49,8 @@ app.use("/api", api);
 // app.use('/post', post)
 app.use('/auth', auth)
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+app.get("/", (req, res) => {
+  res.send(express.static(path.join(__dirname, '../client/bulid/index.html')))
 })
 const PORT = 5000;
 
