@@ -31,7 +31,7 @@ app.use(cookieParser(process.env.JWT_SECRET));
 // passportConfig()
 
 app.use(cors({ credentials: true }))
-server.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
