@@ -49,7 +49,7 @@ app.use("/api", api);
 // app.use('/post', post)
 app.use('/auth', auth)
 
-app.get("/", (req, res) => {
+app.get("*", (req, res) => {
   res.send(express.static(path.join(__dirname, '../client/bulid/index.html')))
 })
 const PORT = 5000;
