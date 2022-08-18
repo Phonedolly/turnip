@@ -31,11 +31,9 @@ export default function Art(props) {
       onGetAuth().then(
         () => {
           setLoggedIn("YES");
-          console.log("isLoggedIn" + isLoggedIn);
         },
         () => {
           setLoggedIn("NO");
-          console.log("isLoggedIn" + isLoggedIn);
         }
       );
     }

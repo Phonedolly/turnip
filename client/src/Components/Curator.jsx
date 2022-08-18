@@ -9,14 +9,9 @@ import Nothing from "./nothing.jpg";
 export default function Curator() {
   const [artList, setArtList] = useState([]);
   useEffect(() => {
-    axios.get("/api/getArtTitleList").then(
-      (res) => {
-        setArtList(res.data);
-      },
-      (err) => {
-        console.error(err.data);
-      }
-    );
+    axios.get("/api/getArtTitleList").then((res) => {
+      setArtList(res.data);
+    });
   }, []);
 
   return (

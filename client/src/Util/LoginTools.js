@@ -5,12 +5,10 @@ export const onSilentRefresh = () => {
     axios
       .get("/api/auth/silentRefresh")
       .then((res) => {
-        console.log("silentRefresh 성공");
         onLoginSuccess(res)
         resolve()
       })
       .catch((error) => {
-        console.error(error);
         reject()
       });
   })
@@ -18,9 +16,7 @@ export const onSilentRefresh = () => {
 };
 
 export const onLoginSuccess = (response) => {
-  console.log(response);
   const { accessToken } = response.data;
-  console.log(accessToken)
 
   // accessToken 설정
   axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
@@ -37,12 +33,8 @@ export const onGetAuth = () =>
   new Promise((resolve, reject) => {
     axios.get('/api/auth/check')
       .then((res) => {
-        console.log(res.data)
-        console.log("정보 가져오기 성공")
         resolve()
       }, (err) => {
-        console.log(err)
-        console.error('정보 가져오기 실패')
         reject()
       })
   })

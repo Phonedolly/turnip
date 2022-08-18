@@ -39,11 +39,9 @@ export default function Writer(props) {
       onGetAuth().then(
         () => {
           setLoggedIn("YES");
-          console.log("isLoggedIn" + isLoggedIn);
         },
         () => {
           setLoggedIn("NO");
-          console.log("isLoggedIn" + isLoggedIn);
         }
       );
     }
@@ -51,7 +49,6 @@ export default function Writer(props) {
     async function getMd() {
       await axios.get("/api/post/" + params.postURL).then(
         (res) => {
-          console.log(res);
           set_id(res.data._id);
           setTitleValue(res.data.title);
           setNewTitleValue(res.data.title);
@@ -126,12 +123,9 @@ export default function Writer(props) {
           });
         },
         (err) => {
-          console.log(err);
-          console.log("이미지 업로드 실패");
           alert("이미지 업로드 실패");
         }
       );
-    console.log(images);
   };
 
   const handleThumb = (e) => {
@@ -153,7 +147,6 @@ export default function Writer(props) {
         setThumbURL(eachImage.imageLocation);
       }
     });
-    // console.log(images);
   };
 
   const handleSetValue = (e) => {
@@ -203,21 +196,14 @@ export default function Writer(props) {
                     !md.includes(eachImage.imageLocation) &&
                     thumbURL !== eachImage.imageLocation
                   ) {
-                    console.log(eachImage.imageLocation + ": 포함 안됨");
                     imageBlacklist.push({ Key: eachImage.imageName });
                   } else {
-                    console.log(eachImage.imageLocation + "포함됨");
                     imageWhitelist.push({
                       imageLocation: eachImage.imageLocation,
                       imageName: eachImage.imageName,
                     });
                   }
                 });
-                console.log(imageBlacklist);
-                console.log(imageWhitelist);
-                console.log(
-                  "uplodURL:" + `/api/publish/${props.isEdit ? "edit" : ""}`
-                );
                 axios
                   .post(`/api/publish/${props.isEdit ? "edit" : ""}`, {
                     _id: _id,
@@ -230,7 +216,6 @@ export default function Writer(props) {
                   })
                   .then(
                     (res) => {
-                      console.log("포스트 업로드 완료");
                       navigate("/");
                     },
                     (err) => {

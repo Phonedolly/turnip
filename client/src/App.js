@@ -9,11 +9,13 @@ import Art from './Components/Art'
 
 import Writer from './Components/Writer';
 import Curator from './Components/Curator';
-
 import { Login } from './Components/Login';
+import NotFound from './Components/NotFound';
+
 import axios from 'axios';
 
-function App({ history }) {
+
+function App() {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
 
   useEffect(() => {
@@ -24,11 +26,9 @@ function App({ history }) {
         .then(
           () => {
             setLoggedIn("YES");
-            console.log("isLoggedIn" + isLoggedIn)
           }
           , () => {
             setLoggedIn("NO")
-            console.log('isLoggedIn' + isLoggedIn)
           })
     }
     setLoginInfo();
@@ -52,13 +52,11 @@ function App({ history }) {
           </> : <></>}
         <Routes>
           <Route path="/" element={<Curator />}></Route>
-
           <Route path="/login" element={<Login />}></Route>
-          <Route path="/post/:postURL" element={<Art />}>
-          </Route>
+          <Route path="/post/:postURL" element={<Art />}></Route>
           <Route path="/post/:postURL/edit" element={<Writer isEdit={true} />} />
           <Route path="/writer" element={<Writer />} ></Route>
-
+          <Route path='*' element={<NotFound />} />
         </Routes>
 
       </BrowserRouter>

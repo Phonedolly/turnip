@@ -18,11 +18,9 @@ export const Login = (props) => {
       onGetAuth().then(
         () => {
           setLoggedIn("YES");
-          console.log("isLoggedIn" + isLoggedIn);
         },
         () => {
           setLoggedIn("NO");
-          console.log("isLoggedIn" + isLoggedIn);
         }
       );
     }
