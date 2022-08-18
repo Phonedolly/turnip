@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import "./Curator.scss";
 import Header from "./Header";
+import Footer from "./Footer";
 import Nothing from "./nothing.jpg";
 
 export default function Curator() {
@@ -30,6 +31,7 @@ export default function Curator() {
           );
         })}
       </div>
+      <Footer />
     </>
   );
 }
