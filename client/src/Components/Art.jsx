@@ -41,7 +41,6 @@ export default function Art(props) {
 
     axios.get("/api/post/" + params.postURL).then(
       (res) => {
-        console.log(res);
         setMd(res.data.content);
       },
       (err) => {
