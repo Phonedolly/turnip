@@ -33,7 +33,7 @@ export const onGetAuth = () =>
   new Promise((resolve, reject) => {
     axios.get('/api/auth/check')
       .then((res) => {
-        if (res.data.isAuthSucess) {
+        if (res.data.isAuthSuccess) {
           resolve()
         } else {
           reject()

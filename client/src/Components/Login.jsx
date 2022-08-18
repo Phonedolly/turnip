@@ -14,7 +14,10 @@ export const Login = (props) => {
 
   useEffect(() => {
     async function setLoginInfo() {
-      await onSilentRefresh();
+      await onSilentRefresh().then(
+        () => {},
+        () => {}
+      );
       onGetAuth().then(
         () => {
           setLoggedIn("YES");
@@ -35,11 +38,21 @@ export const Login = (props) => {
     axios.post("/api/auth/login", data).then(
       (res) => {
         onLoginSuccess(res);
+        alert("로그인 성공");
         navigate("/");
         navigate(0);
       },
       (err) => {
         alert("로그인 정보가 맞지 않습니다.");
+      }
+    );
+  };
+
+  const onLogout = () => {
+    axios.get("/api/auth/logout").then(
+      () => alert("로그아웃 되었습니다"),
+      () => {
+        alert("로그아웃 실패");
       }
     );
   };
@@ -62,9 +75,10 @@ export const Login = (props) => {
         onChange={(e) => setPassword(e.target.value)}
         required
       ></input>
-      <button onClick={onLogin} />
-      <button onClick={onSilentRefresh} />
-      <button onClick={onGetAuth} />
+      <button onClick={onLogin}>로그인</button>
+      {/* <button onClick={onSilentRefresh} />
+      <button onClick={onGetAuth} /> */}
+      <button onClick={onLogout}>로그아웃</button>
     </>
   );
 };

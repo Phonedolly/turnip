@@ -58,12 +58,12 @@ const isLoggedIn = async (req, res, next) => {
   }
 
   if ((await redisClient.get(req.headers.authorization.split(" ")[1])) === 'logout') {
-    return res.status(500).send("blacklisted");
+    return res.status(200).send({ isAuthSuccess: false });
   }
   jwt.verify(req.headers.authorization.split(" ")[1], process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
     if (error) {
       console.error(error)
-      return res.status(500).json({ JWTisValid: false })
+      return res.status(200).send({ isAuthSuccess: false });
     } else {
       console.log("verify sucess");
       next()
@@ -101,12 +101,13 @@ router.post('/login', async (req, res) => {
 
 router.get('/silentRefresh', (req, res) => {
   if (!req.cookies.refreshToken) {
+    console.error("refreshToken Not Found")
     return res.status(200).json({ isSilentRefreshSucess: false })
   }
   jwt.verify(req.cookies.refreshToken, process.env.REFRESH_TOKEN_SECRET,
     (error, decoded) => {
       if (error) {
-        console.error(error)
+        console.error("refreshToken verify failed")
         res.status(200).json({ isSilentRefreshSucess: false })
       }
     })
@@ -121,7 +122,8 @@ router.get('/silentRefresh', (req, res) => {
     { expiresIn: '300m' }
   )
   res.cookie('refreshToken', refreshToken, { httpOnly: true })
-  res.send({ accessToken, isSilentRefreshSucess: true })
+  res.send({ accessToken, isSilentRefreshSuccess: true })
+  console.log("success refresh tokens")
 })
 
 router.get('/check', isLoggedIn, (req, res) => {

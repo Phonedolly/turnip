@@ -22,16 +22,18 @@ function App() {
   useEffect(() => {
     document.querySelector("title").innerHTML = "Stardue64"
     async function setLoginInfo() {
-      await onSilentRefresh().then(() => { }, () => { })
+      await onSilentRefresh().then(() => {
+        onGetAuth()
+          .then(
+            () => {
+              setLoggedIn("YES");
+            }
+            , () => {
+              setLoggedIn("NO")
+            })
+      })
 
-      onGetAuth()
-        .then(
-          () => {
-            setLoggedIn("YES");
-          }
-          , () => {
-            setLoggedIn("NO")
-          })
+
     }
     setLoginInfo();
 
@@ -56,11 +58,6 @@ function App() {
           </Routes>
         </BrowserRouter>
       </div>
-      <BrowserRouter>
-        <Routes>
-
-        </Routes>
-      </BrowserRouter>
     </>
 
   );

@@ -36,18 +36,19 @@ export default function Art(props) {
 
     async function setLoginInfo() {
       onSilentRefresh().then(
-        () => {},
         () => {
-          setLoggedIn("NO");
-          return;
-        }
-      );
-      onGetAuth().then(
-        () => {
-          setLoggedIn("YES");
+          onGetAuth().then(
+            () => {
+              setLoggedIn("YES");
+            },
+            () => {
+              setLoggedIn("NO");
+            }
+          );
         },
         () => {
           setLoggedIn("NO");
+          return;
         }
       );
     }
@@ -58,15 +59,6 @@ export default function Art(props) {
   return (
     <>
       <Header />
-      {isLoggedIn === "YES" && (
-        <button
-          onClick={() => {
-            navigate("/post/" + params.postURL + "/edit");
-          }}
-        >
-          수정하기
-        </button>
-      )}
       <div className="markdown-container">
         <ReactMarkDown
           className="markdown-body"
@@ -96,6 +88,15 @@ export default function Art(props) {
           }}
         />
       </div>
+      {isLoggedIn === "YES" && (
+        <button
+          onClick={() => {
+            navigate("/post/" + params.postURL + "/edit");
+          }}
+        >
+          수정하기
+        </button>
+      )}
       <Footer />
     </>
   );
