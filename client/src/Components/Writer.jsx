@@ -96,7 +96,9 @@ export default function Writer(props) {
       );
     }
     setLoginInfo();
-    getMd();
+    if (params.postURL) {
+      getMd();
+    }
   }, []);
   const handleImageInput = async (e) => {
     const formData = new FormData();
