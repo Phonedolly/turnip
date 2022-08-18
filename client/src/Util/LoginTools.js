@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-const JWT_EXPIRY_TIME = process.env.REACT_APP_JWT_EXPIRY_TIME;
-
 export const onSilentRefresh = () => {
   return new Promise((resolve, reject) => {
     axios
@@ -32,7 +30,7 @@ export const onLoginSuccess = (response) => {
   // setCookie("refreshToken", refreshToken);
 
   // accessToken 만료하기 1분 전에 로그인 연장
-  setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+  setTimeout(onSilentRefresh, process.env.REACT_APP_JWT_EXPIRY_TIME - 60000);
 };
 
 export const onGetAuth = () =>
