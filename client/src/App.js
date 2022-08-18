@@ -22,11 +22,7 @@ function App() {
   useEffect(() => {
     document.querySelector("title").innerHTML = "Stardue64"
     async function setLoginInfo() {
-      try {
-        await onSilentRefresh()
-      } catch (e) {
-        console.error(e)
-      }
+      await onSilentRefresh().then(() => { }, () => { })
 
       onGetAuth()
         .then(
