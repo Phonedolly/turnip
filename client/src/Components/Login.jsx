@@ -34,7 +34,7 @@ export const Login = (props) => {
       id,
       password,
     };
-    axios.post("/auth/login", data).then(
+    axios.post("/api/auth/login", data).then(
       (res) => {
         onLoginSuccess(res);
         navigate("/");

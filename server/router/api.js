@@ -2,15 +2,18 @@ const express = require('express')
 const router = express.Router();
 const crypto = require('crypto')
 
-
+const auth = require('./auth')
 const createdPost = require('./publish')
 
 const Post = require('../schemas/post');
 const User = require('../schemas/user');
 
+
 const { verifyToken } = require('./jwt')
 
+router.use('/auth', auth)
 router.use('/publish', createdPost)
+
 
 router.get('/', (req, res) => {
   res.send({ test: 'hi' })

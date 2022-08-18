@@ -21,7 +21,6 @@ const app = express();
 
 const api = require('./router/api');
 // const post = require('./router/post')
-const auth = require('./router/auth')
 
 const connect = require('./schemas');
 connect();
@@ -44,7 +43,6 @@ app.use(session({
 
 app.use("/api", api);
 // // app.use('/post', post)
-app.use('/auth', auth)
 
 
 app.get("*", (req, res) => {

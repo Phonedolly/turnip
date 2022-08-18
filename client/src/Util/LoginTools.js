@@ -5,7 +5,7 @@ const JWT_EXPIRY_TIME = process.env.REACT_APP_JWT_EXPIRY_TIME;
 export const onSilentRefresh = () => {
   return new Promise((resolve, reject) => {
     axios
-      .get("/auth/silentRefresh")
+      .get("/api/auth/silentRefresh")
       .then((res) => {
         console.log("silentRefresh 성공");
         onLoginSuccess(res)
@@ -37,7 +37,7 @@ export const onLoginSuccess = (response) => {
 
 export const onGetAuth = () =>
   new Promise((resolve, reject) => {
-    axios.get('/auth/check')
+    axios.get('/api/auth/check')
       .then((res) => {
         console.log(res.data)
         console.log("정보 가져오기 성공")
