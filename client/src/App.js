@@ -20,9 +20,14 @@ function App() {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
 
   useEffect(() => {
-
+    document.querySelector("title").innerHTML = "Stardue64"
     async function setLoginInfo() {
-      await onSilentRefresh()
+      try {
+        await onSilentRefresh()
+      } catch (e) {
+        console.error(e)
+      }
+
       onGetAuth()
         .then(
           () => {

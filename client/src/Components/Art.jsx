@@ -22,8 +22,20 @@ export default function Art(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    function getContent() {
+      axios.get("/api/post/" + params.postURL).then(
+        (res) => {
+          setMd(res.data.content);
+          document.querySelector("title").innerHTML = res.data.title;
+        },
+        (err) => {
+          setMd("ERROR");
+        }
+      );
+    }
+
     async function setLoginInfo() {
-      await onSilentRefresh().then(
+      onSilentRefresh().then(
         () => {},
         () => {
           setLoggedIn("NO");
@@ -39,16 +51,8 @@ export default function Art(props) {
         }
       );
     }
+    getContent();
     setLoginInfo();
-
-    axios.get("/api/post/" + params.postURL).then(
-      (res) => {
-        setMd(res.data.content);
-      },
-      (err) => {
-        setMd("ERROR");
-      }
-    );
   }, [params]);
 
   return (
