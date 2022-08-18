@@ -12,7 +12,6 @@ export default function Curator() {
   const [artList, setArtList] = useState([]);
   useEffect(() => {
     axios.get("/api/getArtTitleList").then((res) => {
-      console.log(res.data);
       setArtList(res.data);
     });
   }, []);
