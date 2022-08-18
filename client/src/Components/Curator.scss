@@ -30,6 +30,10 @@
   background-color: var(--gray-200);
   box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 16px 0px;
 
+  @media (prefers-color-scheme: dark) {
+    background-color: #30363d;
+  }
+
   a {
     text-decoration-color: black;
     text-decoration-line: none;
@@ -92,6 +96,10 @@
     display: -webkit-box;
     -webkit-line-clamp: 3; /* 라인수 */
     -webkit-box-orient: vertical;
+
+    @media (prefers-color-scheme: dark) {
+      color: #c9d1d9;
+    }
 
     @media (min-width: 480px) {
       font-size: 1.3em;
