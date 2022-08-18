@@ -40,7 +40,6 @@ export const Login = (props) => {
       },
       (err) => {
         alert("로그인 정보가 맞지 않습니다.");
-        console.log(err);
       }
     );
   };
