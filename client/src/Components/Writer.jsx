@@ -174,7 +174,7 @@ export default function Writer(props) {
   } else {
     return (
       <>
-        <Flex column className="container">
+        <Flex column className="writer-container">
           <Flex row justifySpaceBetween>
             <input
               placeholder="제목"

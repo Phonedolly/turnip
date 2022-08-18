@@ -12,6 +12,8 @@ import { onGetAuth, onSilentRefresh, onLoginSuccess } from "../Util/LoginTools";
 
 // import "./Art.scss";
 import "./GitHubMarkdownToMe.scss";
+import Header from "./Header";
+import Footer from "./Footer";
 
 export default function Art(props) {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
@@ -51,6 +53,7 @@ export default function Art(props) {
 
   return (
     <>
+      <Header />
       {isLoggedIn === "YES" && (
         <button
           onClick={() => {
@@ -60,33 +63,36 @@ export default function Art(props) {
           수정하기
         </button>
       )}
-      <ReactMarkDown
-        className="markdown-body"
-        children={md}
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw]}
-        components={{
-          code({ inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || "");
-            return !inline && match ? (
-              <SyntaxHighlighter
-                language={match[1]}
-                PreTag="div"
-                {...props}
-                style={github}
-                showLineNumbers={true}
-                wrapLongLines={true}
-              >
-                {String(children).replace(/\n$/, "")}
-              </SyntaxHighlighter>
-            ) : (
-              <code className={className} {...props}>
-                {children}
-              </code>
-            );
-          },
-        }}
-      />
+      <div className="markdown-container">
+        <ReactMarkDown
+          className="markdown-body"
+          children={md}
+          remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw]}
+          components={{
+            code({ inline, className, children, ...props }) {
+              const match = /language-(\w+)/.exec(className || "");
+              return !inline && match ? (
+                <SyntaxHighlighter
+                  language={match[1]}
+                  PreTag="div"
+                  {...props}
+                  style={github}
+                  showLineNumbers={true}
+                  wrapLongLines={true}
+                >
+                  {String(children).replace(/\n$/, "")}
+                </SyntaxHighlighter>
+              ) : (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
+            },
+          }}
+        />
+      </div>
+      <Footer />
     </>
   );
 }

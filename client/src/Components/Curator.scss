@@ -7,6 +7,7 @@
   grid-template-columns: 1fr;
   column-gap: 2em;
   text-decoration-line: none;
+  margin: 0 auto;
   @media (min-width: 480px) {
   }
 
@@ -22,11 +23,10 @@
   }
 }
 .box {
-  width: 90%;
+  width: 100%;
   max-width: 30em;
   margin: 1em auto;
   border-radius: 10px;
-  padding: 0 0;
   background-color: var(--gray-200);
   box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 16px 0px;
 
@@ -53,18 +53,33 @@
   .postThumb {
     padding: 0 0;
     width: 100%;
-    height: 15rem;
+    height: 8rem;
     overflow: hidden;
     object-fit: cover;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     background-position: center;
+
+    @media (min-width: 480px) {
+      height: 12em;
+    }
+
+    @media (min-width: 768px) {
+      height: 15em;
+    }
+
+    @media (min-width: 1024px) {
+    }
+    @media (min-width: 1200px) {
+    }
+    @media (min-width: 1850px) {
+    }
   }
 
   .postTitle {
     font-family: "IBMFlexSansKRBold";
     text-decoration-line: none;
-    font-size: 1.1em;
+    font-size: 0.7em;
     color: black;
 
     padding-left: 1rem;
@@ -79,9 +94,11 @@
     -webkit-box-orient: vertical;
 
     @media (min-width: 480px) {
+      font-size: 0.9em;
     }
 
     @media (min-width: 768px) {
+      font-size: 1.2em;
     }
 
     @media (min-width: 1024px) {

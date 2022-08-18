@@ -13,6 +13,7 @@ import { Login } from './Components/Login';
 import NotFound from './Components/NotFound';
 
 import axios from 'axios';
+import Footer from './Components/Footer';
 
 
 function App() {
@@ -42,25 +43,25 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <>
+      <div className="App">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Curator />}></Route>
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="/post/:postURL" element={<Art />}></Route>
+            <Route path="/post/:postURL/edit" element={<Writer isEdit={true} />} />
+            <Route path="/writer" element={<Writer />} ></Route>
+          </Routes>
+        </BrowserRouter>
+      </div>
       <BrowserRouter>
-        <Header isLoggedIn={isLoggedIn} />
-        {isLoggedIn == "YES" ?
-          <>
-            <Link to="/writer"><button>글쓰기</button></Link>
-            <button onClick={logout}>로그아웃</button>
-          </> : <></>}
         <Routes>
-          <Route path="/" element={<Curator />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/post/:postURL" element={<Art />}></Route>
-          <Route path="/post/:postURL/edit" element={<Writer isEdit={true} />} />
-          <Route path="/writer" element={<Writer />} ></Route>
-          <Route path='*' element={<NotFound />} />
-        </Routes>
 
+        </Routes>
       </BrowserRouter>
-    </div>
+    </>
+
   );
 }
 

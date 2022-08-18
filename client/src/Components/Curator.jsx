@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./Curator.scss";
+import Header from "./Header";
 import Nothing from "./nothing.jpg";
 
 export default function Curator() {
@@ -16,6 +17,7 @@ export default function Curator() {
 
   return (
     <>
+      <Header />
       <div className="container">
         {artList.map((each) => {
           return (
