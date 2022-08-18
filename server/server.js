@@ -45,6 +45,11 @@ app.use("/api", api);
 // // app.use('/post', post)
 
 
+app.get("/robots.txt", (req, res) => {
+  res.type("text/plain");
+  res.sendFile(path.join(__dirname, '../client/build/robots.txt'))
+});
+
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'))
 })
