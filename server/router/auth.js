@@ -142,23 +142,24 @@ router.get('/logout', isLoggedIn, async (req, res) => {
 
 });
 
-if (process.env.NODE_ENV !== 'production') {
-  router.post('/createUser', async (req, res) => {
-    passwordHashed = await createHashedPassword(req.body.password)
-    User.create({ id: req.body.id, password: passwordHashed.password, salt: passwordHashed.salt })
-      .then(result => {
-        console.log("유저 생성 성공");
-        console.log(result);
-        res.send("sucesss")
-      },
-        (error) => {
-          console.error("유저 생성 실패")
-          console.error(error);
-          res.send("error")
-        })
-  })
+router.post('/createUser', async (req, res) => {
+  if (req.body.token !== process.env.ACCOUNT_CREATION_TOKEN) {
+    res.status(404).send()
+  }
+  passwordHashed = await createHashedPassword(req.body.password)
+  User.create({ id: req.body.id, password: passwordHashed.password, salt: passwordHashed.salt })
+    .then(result => {
+      console.log("유저 생성 성공");
+      console.log(result);
+      res.send("sucesss")
+    },
+      (error) => {
+        console.error("유저 생성 실패")
+        console.error(error);
+        res.send("error")
+      })
+})
 
-}
 
 
 
