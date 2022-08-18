@@ -79,3 +79,22 @@ input:focus {
   background-position: center;
   object-fit: cover;
 }
+
+.inputAndMd {
+  display: grid;
+  column-gap: 0;
+  grid-template-columns: 1fr;
+  @media (min-width: 480px) {
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1024px) {
+  }
+  @media (min-width: 1200px) {
+  }
+  @media (min-width: 1850px) {
+  }
+}

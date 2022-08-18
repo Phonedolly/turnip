@@ -255,7 +255,7 @@ export default function Writer(props) {
             </div>
           </div>
           <input type="file" accept="image/*" onChange={handleImageInput} />
-          <Flex flexDirection="row">
+          <div className="inputAndMd" flexDirection="row">
             <textarea
               placeholder="내용을 입력하세요"
               className="inputTextArea"
@@ -295,7 +295,7 @@ export default function Writer(props) {
                 }}
               />
             </div>
-          </Flex>
+          </div>
         </Flex>
       </>
     );
