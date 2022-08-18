@@ -123,7 +123,7 @@ router.get('/silentRefresh', (req, res) => {
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: '300m' }
   )
-  res.cookie('refreshToken', refreshToken)
+  res.cookie('refreshToken', refreshToken, { httpOnly: true })
   res.send({ accessToken })
 })
 
