@@ -4,4 +4,7 @@
   font-family: "IBMFlexSansKRBold";
   text-align: center;
   padding: 3em;
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
 }
