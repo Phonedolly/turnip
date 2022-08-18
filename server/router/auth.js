@@ -98,7 +98,7 @@ router.post('/login', async (req, res) => {
 
   console.log('aaasdasdff')
   await redisClient.setEx(refreshToken, 1800000, req.body.id);
-  res.cookie('refreshToken', refreshToken)
+  res.cookie('refreshToken', refreshToken, { httpOnly: true })
   res.json({ accessToken })
 })
 
