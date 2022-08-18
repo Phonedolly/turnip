@@ -1,7 +1,6 @@
 const path = require('path')
 const dotenv = require('dotenv')
 const bodyParser = require('body-parser');
-// const passport = require('passport')
 const express = require('express');
 const session = require('express-session')
 const cookieParser = require('cookie-parser');
@@ -42,15 +41,14 @@ app.use(session({
     httpOnly: false
   }
 }));
-// app.use(passport.initialize());
-// app.use(passport.session());
 
 app.use("/api", api);
-// app.use('/post', post)
+// // app.use('/post', post)
 app.use('/auth', auth)
 
+
 app.get("*", (req, res) => {
-  res.send(express.static(path.join(__dirname, '../client/bulid/index.html')))
+  res.sendFile(path.join(__dirname, '../client/build/index.html'))
 })
 const PORT = 5000;
 
@@ -61,9 +59,10 @@ app.use((req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
+  console.log(err)
   res.locals.message = err.message;
   res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
-  res.status(err.status || 500);
+  res.status(err.status || 500).send()
 
 })
 
