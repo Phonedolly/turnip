@@ -8,6 +8,9 @@
   text-decoration-line: none;
   #headerText {
     color: black;
+    @media (prefers-color-scheme: dark) {
+      color: white;
+    }
     font-size: 3em;
     font-family: "IBMFlexSansKRBold";
     padding-top: 0.5em;
