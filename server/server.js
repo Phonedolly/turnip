@@ -32,14 +32,14 @@ app.use(cors({ credentials: true }))
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({
-  secret: process.env.JWT_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true
-  }
-}));
+// app.use(session({
+//   secret: process.env.JWT_SECRET,
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     httpOnly: true
+//   }
+// }));
 
 app.use("/api", api);
 // // app.use('/post', post)
