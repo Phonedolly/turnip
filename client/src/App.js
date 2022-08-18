@@ -36,7 +36,7 @@ function App({ history }) {
   }, [])
 
   const logout = async () => {
-    await axios.get('/auth/logout');
+    await axios.get('/api/auth/logout');
     setLoggedIn(false);
     window.location.reload()
   }
