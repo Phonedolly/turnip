@@ -1,7 +1,6 @@
 # Data and build files
 data/
-.env.dev
-.env.production
+.env*
 ecosystem.config.js
 
 # Logs
