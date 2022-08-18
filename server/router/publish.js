@@ -85,7 +85,6 @@ const deleteBlacklist = async (imageBlacklist) => {
         .then((res) => {
             console.log('성공')
             console.log(res)
-            resolve()
         }, (err) => {
             console.error('에러')
             console.error(err)
@@ -105,6 +104,7 @@ router.post('/edit', isPostExists, async (req, res) => {
         title: req.body.newTitle,
         content: req.body.content,
         postURL: req.body.postURL,
+        images: req.body.imageWhitelist,
         thumbnailURL: req.body.thumbnailURL ?? null,
 
     })

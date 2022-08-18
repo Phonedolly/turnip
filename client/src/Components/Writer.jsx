@@ -199,11 +199,9 @@ export default function Writer(props) {
                 const imageBlacklist = [];
                 const imageWhitelist = [];
                 images.forEach((eachImage) => {
-                  console.log("md:" + md.includes(" "));
-                  console.log(md.includes(eachImage.imageLocation));
                   if (
-                    !md?.includes(eachImage.imageLocation) &&
-                    !thumbURL === eachImage.imageLocation
+                    !md.includes(eachImage.imageLocation) &&
+                    thumbURL !== eachImage.imageLocation
                   ) {
                     console.log(eachImage.imageLocation + ": 포함 안됨");
                     imageBlacklist.push({ Key: eachImage.imageName });
