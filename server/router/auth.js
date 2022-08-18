@@ -53,9 +53,8 @@ const makePasswordHashed = (userId, plainPassword, res) =>
 
 
 const isLoggedIn = async (req, res, next) => {
-  console.log(111111)
   if (!req.headers.authorization) {
-    return res.status(500).send("!req.headers.authorization");
+    return res.status(200).send({ isAuthSuccess: false });
   }
 
   if ((await redisClient.get(req.headers.authorization.split(" ")[1])) === 'logout') {
@@ -95,8 +94,6 @@ router.post('/login', async (req, res) => {
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: '300m' }
   )
-
-  console.log('aaasdasdff')
   await redisClient.setEx(refreshToken, 1800000, req.body.id);
   res.cookie('refreshToken', refreshToken, { httpOnly: true })
   res.json({ accessToken })
@@ -104,13 +101,13 @@ router.post('/login', async (req, res) => {
 
 router.get('/silentRefresh', (req, res) => {
   if (!req.cookies.refreshToken) {
-    return res.status(500).send("refresh Token 없음")
+    return res.status(200).json({ isSilentRefreshSucess: false })
   }
   jwt.verify(req.cookies.refreshToken, process.env.REFRESH_TOKEN_SECRET,
     (error, decoded) => {
       if (error) {
         console.error(error)
-        res.status(500).json({ JWTisValid: false })
+        res.status(200).json({ isSilentRefreshSucess: false })
       }
     })
   const accessToken = jwt.sign(
@@ -124,11 +121,11 @@ router.get('/silentRefresh', (req, res) => {
     { expiresIn: '300m' }
   )
   res.cookie('refreshToken', refreshToken, { httpOnly: true })
-  res.send({ accessToken })
+  res.send({ accessToken, isSilentRefreshSucess: true })
 })
 
 router.get('/check', isLoggedIn, (req, res) => {
-  res.status(200).send("로그인 되어있음")
+  res.status(200).send({ isAuthSuccess: true })
 })
 
 router.get('/logout', isLoggedIn, async (req, res) => {

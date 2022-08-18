@@ -5,14 +5,15 @@ export const onSilentRefresh = () => {
     axios
       .get("/api/auth/silentRefresh")
       .then((res) => {
-        onLoginSuccess(res)
-        resolve()
+        console.log(res.data)
+        if (res.data.isSilentRefreshSuccess) {
+          onLoginSuccess(res)
+          resolve()
+        } else {
+          reject()
+        }
       })
-      .catch((error) => {
-        reject()
-      });
   })
-
 };
 
 export const onLoginSuccess = (response) => {
@@ -33,8 +34,10 @@ export const onGetAuth = () =>
   new Promise((resolve, reject) => {
     axios.get('/api/auth/check')
       .then((res) => {
-        resolve()
-      }, (err) => {
-        reject()
+        if (res.data.isAuthSucess) {
+          resolve()
+        } else {
+          reject()
+        }
       })
   })
