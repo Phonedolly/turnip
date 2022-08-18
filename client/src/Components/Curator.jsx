@@ -12,6 +12,7 @@ export default function Curator() {
   const [artList, setArtList] = useState([]);
   useEffect(() => {
     axios.get("/api/getArtTitleList").then((res) => {
+      console.log(res.data);
       setArtList(res.data);
     });
   }, []);
@@ -26,6 +27,7 @@ export default function Curator() {
               title={each.title}
               image={each.thumbnailURL}
               url={"/post/" + each.postURL}
+              postDate={each.postDate.split("T")[0]}
               key={each.title}
             />
           );
@@ -45,20 +47,9 @@ const Card = (props) => (
           alt="썸네일"
           className="postThumb"
         ></img>
-
         <h2 className="postTitle">{props.title}</h2>
+        <p className="postTitle postDate">{props.postDate}</p>
       </Link>
     </Flex>
-
-    {/* <Flex column className="box">
-      <Link to="/art">
-        <div className="postThumb">
-          <img src={props.image ?? Nothing}></img>
-        </div>
-        <div className="postTitle">
-          <h2>{props.title}</h2>
-        </div>
-      </Link>
-    </Flex> */}
   </>
 );
