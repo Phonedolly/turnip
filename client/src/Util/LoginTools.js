@@ -5,7 +5,6 @@ export const onSilentRefresh = () => {
     axios
       .get("/api/auth/silentRefresh")
       .then((res) => {
-        console.log(res.data)
         if (res.data.isSilentRefreshSuccess) {
           onLoginSuccess(res)
           resolve()
