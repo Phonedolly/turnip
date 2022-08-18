@@ -2,7 +2,6 @@ const path = require('path')
 const dotenv = require('dotenv')
 const bodyParser = require('body-parser');
 const express = require('express');
-const session = require('express-session')
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
@@ -20,7 +19,6 @@ const app = express();
 
 
 const api = require('./router/api');
-// const post = require('./router/post')
 
 const connect = require('./schemas');
 connect();
@@ -32,17 +30,8 @@ app.use(cors({ credentials: true }))
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(session({
-//   secret: process.env.JWT_SECRET,
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie: {
-//     httpOnly: true
-//   }
-// }));
 
 app.use("/api", api);
-// // app.use('/post', post)
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'))
