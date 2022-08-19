@@ -7,10 +7,6 @@ const createdPost = require('./publish')
 
 const Post = require('../schemas/post');
 
-
-const { verifyToken } = require('./jwt');
-const { AnalyticsExportDestinationFilterSensitiveLog } = require('@aws-sdk/client-s3');
-
 router.use('/auth', auth)
 router.use('/publish', createdPost)
 
@@ -27,7 +23,6 @@ router.get('/getArtTitleList', async (req, res) => {
       const parse = JSON.parse(each)
       return Object.assign({}, { title: parse.title, thumbnailURL: parse.thumbnailURL ?? null, postURL: parse.postURL, postDate: parse.createdAt })
     }))
-
   }
 
   Post.find({}).sort({ createdAt: -1 })
@@ -53,7 +48,6 @@ router.get('/getArtTitleList', async (req, res) => {
       res.statusMessage = "get title error";
       res.send();
     })
-
 });
 
 router.get('/post/:postURL', async (req, res) => {
@@ -75,8 +69,6 @@ router.get('/post/:postURL', async (req, res) => {
       console.error(error)
       res.status(500).send();
     })
-
-
 })
 
 module.exports = router;
