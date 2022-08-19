@@ -1,19 +1,14 @@
 const express = require('express')
-const { S3Client, DeleteObjectsCommand } = require('@aws-sdk/client-s3')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
+
+const { s3 } = require('../server')
 
 const Post = require('../schemas/post');
 
 const router = express.Router();
 
-const s3 = new S3Client({
-    credentials: {
-        accessKeyId: process.env.S3_ACCESS_KEY_ID,
-        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-    },
-    region: process.env.AWS_REGION
-});
+
 const getToday = () => {
     var date = new Date();
     var year = date.getFullYear();

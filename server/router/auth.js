@@ -4,15 +4,9 @@ const jwt = require('jsonwebtoken')
 const redis = require('redis')
 const crypto = require('crypto')
 
+const { redisClient } = require('../server')
+
 const User = require('../schemas/user')
-
-const redisClient = redis.createClient({
-  host: process.env.REDIS_URL,
-  port: 6379,
-  password: process.env.REDIS_PASSWORD
-});
-redisClient.connect();
-
 
 const createSalt = () =>
   new Promise((resolve, reject) => {
