@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 router.get('/getArtTitleList', async (req, res) => {
   /* redis에서 캐시가 있는지 확인 */
   const cache = await redisClient.lRange('artTitleListCache', 0, -1)
-  if (cache) {
+  if (cache?.length !== 0) {
     return res.send(cache.map((each) => {
       const parse = JSON.parse(each)
       return Object.assign({}, { title: parse.title, thumbnailURL: parse.thumbnailURL ?? null, postURL: parse.postURL, postDate: parse.createdAt })
