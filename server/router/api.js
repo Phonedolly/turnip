@@ -25,12 +25,11 @@ router.get('/getArtTitleList', async (req, res) => {
   /* redis에서 캐시가 있는지 확인 */
   const cache = await redisClient.lRange('artTitleListCache', 0, -1)
   if (cache) {
-    console.log(222)
-    const parsedCache = []
-    cache.forEach((eachItem) => {
-      parsedCache.push(JSON.parse(eachItem))
-    })
-    return res.send(parsedCache.map((each) => Object.assign({}, { title: each.title, thumbnailURL: each.thumbnailURL ?? null, postURL: each.postURL, postDate: each.createdAt })))
+    return res.send(cache.map((each) => {
+      const parse = JSON.parse(each)
+      return Object.assign({}, { title: parse.title, thumbnailURL: parse.thumbnailURL ?? null, postURL: parse.postURL, postDate: parse.createdAt })
+    }))
+
   }
 
   Post.find({}).sort({ createdAt: -1 })
