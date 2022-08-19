@@ -43,6 +43,8 @@ const s3 = new S3Client({
 exports.s3 = s3;
 
 
+const sitemapGenarator = require('./tools/sitemapGenarator')
+const sitemapGeneratorTimerId = sitemapGenarator()
 
 /* initialize routers*/
 const api = require('./router/api');
