@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const crypto = require('crypto')
-
+const axios = require('axios')
 const { redisClient } = require('../server')
 
 const auth = require('./auth')
@@ -11,7 +10,8 @@ const Post = require('../schemas/post');
 const User = require('../schemas/user');
 
 
-const { verifyToken } = require('./jwt')
+const { verifyToken } = require('./jwt');
+const { AnalyticsExportDestinationFilterSensitiveLog } = require('@aws-sdk/client-s3');
 
 router.use('/auth', auth)
 router.use('/publish', createdPost)
@@ -46,8 +46,8 @@ router.get('/getArtTitleList', async (req, res) => {
       }
 
       multi.exec()
-        .then((r) => { console.log(r) },
-          (e) => { console.log(e) })
+        .then((multiResult) => { console.log(multiResult) },
+          (multiError) => { console.log(multiError) })
     }, (err) => {
       console.error(err);
       console.error("get title error");
@@ -58,16 +58,27 @@ router.get('/getArtTitleList', async (req, res) => {
 
 });
 
-
 router.get('/post/:postURL', async (req, res) => {
+  /* 캐시가 있는지 확인 */
+  const cache = await redisClient.get(req.params.postURL)
+
+  if (cache) {
+    return res.send(JSON.parse(cache))
+  }
+
   console.log(req.params.postURL)
   Post.findOne({ postURL: req.params.postURL })
     .then((result) => {
       res.send(result)
+
+      /* 보냈던 포스트를 캐싱 */
+      redisClient.set(req.params.postURL, JSON.stringify(result))
     }, (error) => {
       console.error(error)
       res.status(500).send();
     })
+
+
 })
 
 module.exports = router;
