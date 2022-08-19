@@ -1,13 +1,11 @@
 const express = require('express')
 const router = express.Router();
-const axios = require('axios')
 const { redisClient } = require('../server')
 
 const auth = require('./auth')
 const createdPost = require('./publish')
 
 const Post = require('../schemas/post');
-const User = require('../schemas/user');
 
 
 const { verifyToken } = require('./jwt');
