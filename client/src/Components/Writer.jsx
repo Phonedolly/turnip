@@ -10,11 +10,12 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import SyntaxHighlighter from "react-syntax-highlighter";
 
+import useUnload from "./BeforeUnload";
+
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 import { onGetAuth, onSilentRefresh, onLoginSuccess } from "../Util/LoginTools";
 
-//import "./Art.scss";
 import "./Writer.scss";
 
 export default function Writer(props) {
@@ -95,11 +96,18 @@ export default function Writer(props) {
         }
       );
     }
+
     setLoginInfo();
     if (params.postURL) {
       getMd();
     }
   }, []);
+
+  useUnload((e) => {
+    e.preventDefault();
+    e.returnValue = "";
+  });
+
   const handleImageInput = async (e) => {
     const formData = new FormData();
     formData.append("img", e.target.files[0]);
@@ -170,6 +178,10 @@ export default function Writer(props) {
   };
 
   const handleUpload = async () => {
+    if (!titleValue) {
+      alert("제목이 없습니다");
+      return;
+    }
     const imageBlacklist = [];
     const imageWhitelist = [];
     images.forEach((eachImage) => {
@@ -197,6 +209,7 @@ export default function Writer(props) {
       })
       .then(
         (res) => {
+          // removeBeforeUnload();
           navigate("/");
         },
         (err) => {
