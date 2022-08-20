@@ -9,17 +9,17 @@ body::-webkit-scrollbar {
 
 body::-webkit-scrollbar-thumb {
   height: 30%;
-  background: red;
+  background: rgb(118, 118, 118);
 
   border-radius: 10px;
 }
 
 body::-webkit-scrollbar-track {
-  background: rgba(122, 0, 0, 0.15); /*스크롤바 뒷 배경 색상*/
+  background: #c2c2c217; /*스크롤바 뒷 배경 색상*/
 }
 
 body::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 0, 0, 0.5);
+  background: rgb(113, 113, 113);
 }
 
 body {
@@ -29,46 +29,12 @@ body {
 }
 
 .App {
-  max-width: var(--document-width-desktop);
   margin: 0 auto;
+  max-width: var(--document-width-desktop);
   padding-left: 5vw;
   padding-right: 5vw;
+
   @media (prefers-color-scheme: dark) {
     background-color: #0d1117;
   }
 }
-
-// .App-logo {
-//   height: 40vmin;
-//   pointer-events: none;
-// }
-
-// @media (prefers-reduced-motion: no-preference) {
-//   .App-logo {
-//     animation: App-logo-spin infinite 20s linear;
-//   }
-// }
-
-// .App-header {
-//   background-color: #282c34;
-//   min-height: 100vh;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   font-size: calc(10px + 2vmin);
-//   color: white;
-// }
-
-// .App-link {
-//   color: #61dafb;
-// }
-
-// @keyframes App-logo-spin {
-//   from {
-//     transform: rotate(0deg);
-//   }
-//   to {
-//     transform: rotate(360deg);
-//   }
-// }
