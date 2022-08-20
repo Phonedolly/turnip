@@ -1,12 +1,13 @@
 @import url("./Color.scss");
 //@import url("./Art.scss");
 .writer-container {
-  width: 100%;
-  margin: 0;
+  width: 90%;
+  margin: 0 auto;
+  // margin: 1em;
 }
 .inputTextArea {
   width: 90%;
-  height: 100vh;
+
   border: none;
   padding: 1em;
   border-radius: 7px;
@@ -15,18 +16,20 @@
   margin-top: 1em;
   margin-right: 1em;
   font-size: 16px;
+  font-family: "Cascadia Mono", "맑은 고딕", monospace;
   line-height: 1.5;
 }
 input {
   height: 3em;
   font-size: 1em;
   border: none;
-  padding: 0 1em 0 1em;
+  // padding: 0 1em 0 1em;
+  width: 100%;
   border-radius: 7px;
   background-color: var(--gray-300);
   resize: none;
   margin-top: 1em;
-  margin-right: 1em;
+  // margin-right: 1em;
 }
 
 button {

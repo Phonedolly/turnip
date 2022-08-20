@@ -218,6 +218,17 @@ export default function Writer(props) {
         }
       );
   };
+  /* https://velog.io/@hwanieee/textarea-%EC%9E%90%EB%8F%99-%EB%86%92%EC%9D%B4-%EC%A1%B0%EC%A0%88
+   */
+  const autoResizeTextarea = () => {
+    let textarea = document.querySelector(".inputTextArea");
+
+    if (textarea) {
+      textarea.style.height = "auto";
+      let height = textarea.scrollHeight; // 높이
+      textarea.style.height = `${height + 8}px`;
+    }
+  };
 
   if (isLoggedIn === "NO") {
     return <Navigate replace to="/" />;
@@ -271,8 +282,14 @@ export default function Writer(props) {
               placeholder="내용을 입력하세요"
               className="inputTextArea"
               value={md}
-              onChange={(e) => handleSetValue(e)}
-              onKeyDown={(e) => handleSetTab(e)}
+              onChange={(e) => {
+                handleSetValue(e);
+                autoResizeTextarea();
+              }}
+              onKeyDown={(e) => {
+                handleSetTab(e);
+                autoResizeTextarea();
+              }}
             />
             <div className="showTextArea">
               <ReactMarkDown
