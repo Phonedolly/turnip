@@ -108,7 +108,10 @@ router.post('/edit', isPostExists, titleLinkManufacturer, async (req, res) => {
     images: req.body.imageWhitelist,
     thumbnailURL: req.body.thumbnailURL ?? null,
 
-  }).then(async () => updatePostToCache(await Post.findOne({ postURL: req.body.postURL })))
+  }).then(async () => {
+    updatePostToCache(await Post.findOne({ postURL: req.body.postURL }))
+    sitemapCacheUpdator(true)
+  })
   deleteBlacklist(req.body.imageBlacklist)
 
   res.status(200).send(post);
