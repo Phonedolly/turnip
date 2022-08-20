@@ -5,7 +5,7 @@
   margin: 0 auto;
   // margin: 1em;
 }
-.inputTextArea {
+.inputMdArea {
   width: 90%;
 
   border: none;
@@ -32,7 +32,7 @@ input {
   // margin-right: 1em;
 }
 
-button {
+.writer-button {
   width: 8em;
   margin: 1em;
   height: 3em;
@@ -42,12 +42,12 @@ button {
 
   background-color: var(--gray-600);
 }
-button:hover {
+.writer-button:hover {
   background: var(--gray-400);
 }
 
-textarea:focus,
-input:focus {
+.inputMdArea:focus,
+.writer-input:focus {
   outline: none;
 }
 

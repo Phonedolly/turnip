@@ -243,6 +243,7 @@ export default function Writer(props) {
           <Flex row justifySpaceBetween>
             <input
               placeholder="제목"
+              className="writer-input"
               value={props.isEdit ? newTitleValue : titleValue}
               onInput={(e) => {
                 if (props.isEdit) {
@@ -252,7 +253,9 @@ export default function Writer(props) {
                 }
               }}
             />
-            <button onClick={handleUpload}>업로드</button>
+            <button onClick={handleUpload} className="writer-button">
+              업로드
+            </button>
           </Flex>
           <textarea
             placeholder="썸네일 URL"
@@ -282,7 +285,7 @@ export default function Writer(props) {
           <div className="inputAndMd">
             <textarea
               placeholder="내용을 입력하세요"
-              className="inputTextArea"
+              className="inputMdArea"
               value={md}
               onChange={(e) => {
                 handleSetValue(e);
