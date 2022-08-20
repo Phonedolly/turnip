@@ -1,10 +1,11 @@
 @import url("./Color.scss");
 //@import url("./Art.scss");
 .writer-container {
-  width: 90vw;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
 }
 .inputTextArea {
+  width: 90%;
   height: 100vh;
   border: none;
   padding: 1em;
@@ -17,7 +18,6 @@
   line-height: 1.5;
 }
 input {
-  width: 100%;
   height: 3em;
   font-size: 1em;
   border: none;
@@ -49,7 +49,7 @@ input:focus {
 }
 
 .showTextArea {
-  width: 100%;
+  width: 90%;
   margin-top: 1em;
   margin-left: 1em;
 }
@@ -80,6 +80,7 @@ input:focus {
 }
 
 .inputAndMd {
+  width: 100%;
   display: grid;
   margin: 0;
   column-gap: 0;
