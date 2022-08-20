@@ -28,11 +28,7 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      console.log(req.body)
-      cb(null, getToday() + "/" + Date.now().toString() + '_' + encodeURI(file.originalname))
-      console.log("origin:" + decodeURI(file.originalname))
-      console.log("encode" + encodeURI(file.originalname))
-      console.log('decode' + decodeURI(encodeURI(file.originalname)))
+      cb(null, getToday() + "/" + Date.now().toString() + '_' + req.body.filename)
     },
     contentType: multerS3.AUTO_CONTENT_TYPE,
 
@@ -46,6 +42,7 @@ const isPostExists = async (req, res, next) => {
 }
 
 router.post('/uploadImage', upload.single('img'), function (req, res, next) {
+  console.log(req.body)
   res.json({ imageLocation: req.file.location, imageName: req.file.key })
 })
 

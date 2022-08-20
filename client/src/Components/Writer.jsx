@@ -110,8 +110,10 @@ export default function Writer(props) {
 
   const handleImageInput = async (e) => {
     const formData = new FormData();
+    formData.append("filename", e.target.files[0].name);
     formData.append("img", e.target.files[0]);
 
+    console.log(formData);
     axios
       .post("/api/publish/uploadImage", formData, {
         headers: {
@@ -277,7 +279,7 @@ export default function Writer(props) {
             </div>
           </div>
           <input type="file" accept="image/*" onChange={handleImageInput} />
-          <div className="inputAndMd" flexDirection="row">
+          <div className="inputAndMd">
             <textarea
               placeholder="내용을 입력하세요"
               className="inputTextArea"
