@@ -53,9 +53,7 @@ function App() {
           <Route path="/writer" element={<Writer />} ></Route>
         </Routes>
       </BrowserRouter>
-
     </>
-
   );
 }
 
