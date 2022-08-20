@@ -169,6 +169,43 @@ export default function Writer(props) {
     }
   };
 
+  const handleUpload = async () => {
+    const imageBlacklist = [];
+    const imageWhitelist = [];
+    images.forEach((eachImage) => {
+      if (
+        !md.includes(eachImage.imageLocation) &&
+        thumbURL !== eachImage.imageLocation
+      ) {
+        imageBlacklist.push({ Key: eachImage.imageName });
+      } else {
+        imageWhitelist.push({
+          imageLocation: eachImage.imageLocation,
+          imageName: eachImage.imageName,
+        });
+      }
+    });
+    axios
+      .post(`/api/publish/${props.isEdit ? "edit" : ""}`, {
+        _id: _id,
+        title: titleValue,
+        newTitle: props.isEdit ? newTitleValue : null,
+        content: md,
+        thumbnailURL: thumbURL,
+        imageWhitelist: imageWhitelist,
+        imageBlacklist: imageBlacklist,
+      })
+      .then(
+        (res) => {
+          navigate("/");
+        },
+        (err) => {
+          console.error(err);
+          console.error("ERROR");
+        }
+      );
+  };
+
   if (isLoggedIn === "NO") {
     return <Navigate replace to="/" />;
   } else if (isLoggedIn === "PENDING") {
@@ -189,46 +226,7 @@ export default function Writer(props) {
                 }
               }}
             />
-            <button
-              onClick={async () => {
-                const imageBlacklist = [];
-                const imageWhitelist = [];
-                images.forEach((eachImage) => {
-                  if (
-                    !md.includes(eachImage.imageLocation) &&
-                    thumbURL !== eachImage.imageLocation
-                  ) {
-                    imageBlacklist.push({ Key: eachImage.imageName });
-                  } else {
-                    imageWhitelist.push({
-                      imageLocation: eachImage.imageLocation,
-                      imageName: eachImage.imageName,
-                    });
-                  }
-                });
-                axios
-                  .post(`/api/publish/${props.isEdit ? "edit" : ""}`, {
-                    _id: _id,
-                    title: titleValue,
-                    newTitle: props.isEdit ? newTitleValue : null,
-                    content: md,
-                    thumbnailURL: thumbURL,
-                    imageWhitelist: imageWhitelist,
-                    imageBlacklist: imageBlacklist,
-                  })
-                  .then(
-                    (res) => {
-                      navigate("/");
-                    },
-                    (err) => {
-                      console.error(err);
-                      console.error("ERROR");
-                    }
-                  );
-              }}
-            >
-              업로드
-            </button>
+            <button onClick={handleUpload}>업로드</button>
           </Flex>
           <textarea
             placeholder="썸네일 URL"
@@ -260,13 +258,10 @@ export default function Writer(props) {
               placeholder="내용을 입력하세요"
               className="inputTextArea"
               value={md}
-              // onInput={(e) => {
-              //   setMd(e.target.value);
-              // }}
               onChange={(e) => handleSetValue(e)}
               onKeyDown={(e) => handleSetTab(e)}
             />
-            <div className="showTextArea article">
+            <div className="showTextArea">
               <ReactMarkDown
                 className="markdown-body"
                 children={md}
