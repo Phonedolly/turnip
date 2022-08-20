@@ -58,46 +58,48 @@ export default function Art(props) {
 
   return (
     <>
-      <Header />
-      <div className="markdown-container">
-        <ReactMarkDown
-          className="markdown-body"
-          children={md}
-          remarkPlugins={[remarkGfm]}
-          rehypePlugins={[rehypeRaw]}
-          components={{
-            code({ inline, className, children, ...props }) {
-              const match = /language-(\w+)/.exec(className || "");
-              return !inline && match ? (
-                <SyntaxHighlighter
-                  language={match[1]}
-                  PreTag="div"
-                  {...props}
-                  style={github}
-                  showLineNumbers={true}
-                  wrapLongLines={true}
-                >
-                  {String(children).replace(/\n$/, "")}
-                </SyntaxHighlighter>
-              ) : (
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              );
-            },
-          }}
-        />
+      <div className="App">
+        <Header />
+        <div className="markdown-container">
+          <ReactMarkDown
+            className="markdown-body"
+            children={md}
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+            components={{
+              code({ inline, className, children, ...props }) {
+                const match = /language-(\w+)/.exec(className || "");
+                return !inline && match ? (
+                  <SyntaxHighlighter
+                    language={match[1]}
+                    PreTag="div"
+                    {...props}
+                    style={github}
+                    showLineNumbers={true}
+                    wrapLongLines={true}
+                  >
+                    {String(children).replace(/\n$/, "")}
+                  </SyntaxHighlighter>
+                ) : (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                );
+              },
+            }}
+          />
+        </div>
+        {isLoggedIn === "YES" && (
+          <button
+            onClick={() => {
+              navigate("/post/" + params.postURL + "/edit");
+            }}
+          >
+            수정하기
+          </button>
+        )}
+        <Footer />
       </div>
-      {isLoggedIn === "YES" && (
-        <button
-          onClick={() => {
-            navigate("/post/" + params.postURL + "/edit");
-          }}
-        >
-          수정하기
-        </button>
-      )}
-      <Footer />
     </>
   );
 }

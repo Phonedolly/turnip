@@ -44,17 +44,16 @@ function App() {
 
   return (
     <>
-      <div className="App">
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Curator />}></Route>
-            <Route path="/login" element={<Login />}></Route>
-            <Route path="/post/:postURL" element={<Art />}></Route>
-            <Route path="/post/:postURL/edit" element={<Writer isEdit={true} />} />
-            <Route path="/writer" element={<Writer />} ></Route>
-          </Routes>
-        </BrowserRouter>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Curator />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/post/:postURL" element={<Art />}></Route>
+          <Route path="/post/:postURL/edit" element={<Writer isEdit={true} />} />
+          <Route path="/writer" element={<Writer />} ></Route>
+        </Routes>
+      </BrowserRouter>
+
     </>
 
   );

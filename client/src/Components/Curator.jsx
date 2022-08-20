@@ -14,25 +14,27 @@ export default function Curator() {
     axios.get("/api/getSitemap").then((res) => {
       setSitemap(res.data);
     });
-  }, []);
+  }, [sitemap]);
 
   return (
     <>
-      <Header />
-      <div className="container">
-        {sitemap.map((each) => {
-          return (
-            <Card
-              title={each.title}
-              image={each.thumbnailURL}
-              url={"/post/" + each.postURL}
-              postDate={each.postDate}
-              key={each.title}
-            />
-          );
-        })}
+      <div className="App">
+        <Header />
+        <div className="container">
+          {sitemap.map((each) => {
+            return (
+              <Card
+                title={each.title}
+                image={each.thumbnailURL}
+                url={"/post/" + each.postURL}
+                postDate={each.postDate}
+                key={each.title}
+              />
+            );
+          })}
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 }
