@@ -1,6 +1,7 @@
 const express = require('express')
 const multer = require('multer')
 const multerS3 = require('multer-s3')
+const { DeleteObjectsCommand } = require('@aws-sdk/client-s3')
 
 const { s3 } = require('../server')
 const { redisClient } = require('../server')
@@ -28,9 +29,13 @@ const upload = multer({
     },
     key: function (req, file, cb) {
       console.log(req.body)
-      cb(null, getToday() + "/" + Date.now().toString() + '_' + file.originalname)
+      cb(null, getToday() + "/" + Date.now().toString() + '_' + encodeURI(file.originalname))
+      console.log("origin:" + decodeURI(file.originalname))
+      console.log("encode" + encodeURI(file.originalname))
+      console.log('decode' + decodeURI(encodeURI(file.originalname)))
     },
     contentType: multerS3.AUTO_CONTENT_TYPE,
+
     // acl: 'public-read'
   })
 })
