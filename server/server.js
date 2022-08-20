@@ -42,16 +42,21 @@ const s3 = new S3Client({
 
 exports.s3 = s3;
 
-
-const sitemapGenarator = require('./tools/sitemapGenarator')
-const sitemapGeneratorTimerId = sitemapGenarator()
-
 /* initialize routers*/
 const api = require('./router/api');
 
 /* initialize mongoose */
 const connect = require('./schemas');
 connect();
+
+/* sitemapGenerator */
+const sitemapGenarator = require('./tools/sitemapGenarator')
+const sitemapGeneratorTimerId = sitemapGenarator()
+
+/* sitemapCacheUpdator */
+const sitemapCacheUpdator = require('./tools/sitemapCacheUpdator')
+sitemapCacheUpdator();
+
 
 app.use(cookieParser(process.env.JWT_SECRET));
 

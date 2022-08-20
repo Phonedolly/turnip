@@ -5,6 +5,7 @@ const { redisClient } = require('../server')
 
 const auth = require('./auth')
 const createdPost = require('./publish')
+const postTimeAlignmentor = require('../tools/postTimeAlilgnmentor')
 
 const Post = require('../schemas/post');
 
@@ -19,8 +20,9 @@ router.get('/', (req, res) => {
 router.get('/getSitemap', async (req, res) => {
   /* redis에서 캐시가 있는지 확인 */
   try {
-    const cache = await redisClient.lRange('getSitemap', 0, -1)
+    const cache = await redisClient.lRange('sitemapCache', 0, -1)
     if (cache?.length !== 0) {
+      console.log("Use Cache to getSitemap");
       return res.send(cache.map((each) => {
         const parse = JSON.parse(each)
         return Object.assign({}, { title: parse.title, thumbnailURL: parse.thumbnailURL ?? null, postURL: parse.postURL, postDate: parse.postDate })
@@ -31,11 +33,12 @@ router.get('/getSitemap', async (req, res) => {
     console.error('캐시 가져오기 오류')
   }
 
+  ("Not use Cache to getSitemap")
   Post.find({}).sort({ createdAt: -1 })
     .then((result) => {
 
       /* UTC(mongodb) to local time */
-      timeAlignedResult = result.map((each) => Object.assign({}, { title: each.title, thumbnailURL: each.thumbnailURL ?? null, postURL: each.postURL, postDate: format(utcToZonedTime(each.createdAt), 'yyyy-M-dd') }))
+      timeAlignedResult = postTimeAlignmentor(result)
 
       res.send(timeAlignedResult)
 
