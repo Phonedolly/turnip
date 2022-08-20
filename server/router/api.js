@@ -31,17 +31,14 @@ router.get('/getSitemap', async (req, res) => {
 
   console.log('캐시 가져오기 실패')
 
-
   console.log("Not use Cache to getSitemap")
-  Post.find({}).sort({ createdAt: -1 })
+  Post.find({}).sort({ "_id": -1 }).limit(20)
     .then((result) => {
-
       /* UTC(mongodb) to local time */
       timeAlignedResult = postTimeAlignmentor(result)
 
       res.send(timeAlignedResult)
 
-      /* 찾은 값을 15개까지 캐시에 저장 */
       sitemapCacheUpdator(true)
 
     }, (err) => {
@@ -51,6 +48,36 @@ router.get('/getSitemap', async (req, res) => {
       res.status(500).send();
     })
 });
+
+
+router.get('/getSitemap/more/:moreIndex', async (req, res) => {
+  const moreIndex = req.params.moreIndex;
+
+  /* 최신 순으로 한 요청당 20개씩. 20개 이상이 더 존재하는지 확인하기 위해 21개 조회 */
+  Post.find({}).sort({ "_id": -1 }).skip(20 * (moreIndex + 1)).limit(21)
+    .then((result) => {
+      let canMoreSitemap = true;
+      if (result.length <= 20) {
+        canMoreSitemap = false;
+        timeAlignedResult = postTimeAlignmentor(result)
+      }
+      else {
+        timeAlignedResult = postTimeAlignmentor(result.slice(0, 19))
+      }
+
+      /* UTC(mongodb) to local time */
+
+      res.send({ canMoreSitemap, morePosts: timeAlignedResult })
+
+    }, (err) => {
+      console.error(err);
+      console.error("get sitemap error");
+      res.statusCode = 500;
+      res.status(500).send();
+    })
+});
+
+
 
 router.get('/post/:postURL', async (req, res) => {
   /* 캐시가 있는지 확인 */

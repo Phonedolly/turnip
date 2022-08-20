@@ -115,6 +115,9 @@
     }
   }
 }
+.box:hover {
+  opacity: 0.8;
+}
 
 .postDate {
   font-size: 0.9em !important;
@@ -138,6 +141,14 @@
   }
 }
 
-.box:hover {
-  opacity: 0.8;
+.moreButton {
+  margin-top: 1.5em;
+  padding: 1em 2em 1em 2em;
+  font-size: 1em;
+  align-self: center;
+  border: none;
+  border-radius: 10px;
+}
+.moreButton:hover {
+  background-color: var(--gray-300);
 }

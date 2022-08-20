@@ -13,6 +13,8 @@ import Nothing from "./nothing.jpg";
 export default function Curator() {
   const location = useLocation();
   const [sitemap, setSitemap] = useState([]);
+  const [moreSitemapCount, setMoreSitemapCount] = useState(0);
+  const [canMoreSitemap, setCanMoreSitemap] = useState(true);
   const { scrollY } = getState("Feed") ?? 0;
 
   useEffect(() => {
@@ -43,6 +45,27 @@ export default function Curator() {
     return () => document.removeEventListener("scroll", save);
   }, []);
 
+  const handleMorePosts = () => {
+    if (!canMoreSitemap) {
+      return;
+    }
+    axios.get("/api/getSitemap/more/" + moreSitemapCount).then(
+      (res) => {
+        const morePosts = res.data.morePosts;
+        setMoreSitemapCount(() => moreSitemapCount + 1);
+        setSitemap((prev) => {
+          return prev.concat(morePosts);
+        });
+        if (res.data.canMoreSitemap === false) {
+          setCanMoreSitemap(() => false);
+        }
+      },
+      () => {
+        alert("데이터 로드 실패");
+      }
+    );
+  };
+
   return (
     <>
       <div className="App">
@@ -60,6 +83,13 @@ export default function Curator() {
             );
           })}
         </div>
+        {canMoreSitemap && (
+          <Flex column>
+            <button className="moreButton" onClick={handleMorePosts}>
+              더보기
+            </button>
+          </Flex>
+        )}
         <Footer />
       </div>
     </>
