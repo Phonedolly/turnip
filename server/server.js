@@ -5,7 +5,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const redis = require('redis')
-const { S3Client, DeleteObjectsCommand } = require('@aws-sdk/client-s3')
+const { S3Client } = require('@aws-sdk/client-s3')
 
 if (process.env.NODE_ENV === 'production') {
   dotenv.config({ path: path.join(__dirname, '../.env.production') });
