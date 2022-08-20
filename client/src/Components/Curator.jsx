@@ -9,10 +9,10 @@ import Footer from "./Footer";
 import Nothing from "./nothing.jpg";
 
 export default function Curator() {
-  const [artList, setArtList] = useState([]);
+  const [sitemap, setSitemap] = useState([]);
   useEffect(() => {
-    axios.get("/api/getArtTitleList").then((res) => {
-      setArtList(res.data);
+    axios.get("/api/getSitemap").then((res) => {
+      setSitemap(res.data);
     });
   }, []);
 
@@ -20,13 +20,13 @@ export default function Curator() {
     <>
       <Header />
       <div className="container">
-        {artList.map((each) => {
+        {sitemap.map((each) => {
           return (
             <Card
               title={each.title}
               image={each.thumbnailURL}
               url={"/post/" + each.postURL}
-              postDate={each.postDate.split("T")[0]}
+              postDate={each.postDate}
               key={each.title}
             />
           );
