@@ -102,7 +102,7 @@ router.get('/silentRefresh', (req, res) => {
     (error, decoded) => {
       if (error) {
         console.error("refreshToken verify failed")
-        res.status(200).json({ isSilentRefreshSucess: false })
+        return res.status(200).json({ isSilentRefreshSucess: false })
       }
     })
   const accessToken = jwt.sign(
