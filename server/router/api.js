@@ -31,7 +31,6 @@ router.get('/getSitemap', async (req, res) => {
     console.error('캐시 가져오기 오류')
   }
 
-
   Post.find({}).sort({ createdAt: -1 })
     .then((result) => {
 
@@ -40,10 +39,10 @@ router.get('/getSitemap', async (req, res) => {
 
       res.send(timeAlignedResult)
 
-      /* 찾은 값을 30개까지 캐시에 저장 */
+      /* 찾은 값을 15개까지 캐시에 저장 */
       const multi = redisClient.multi()
 
-      timeAlignedslicedResult = timeAlignedResult.slice(0, result.length >= 30 ? 29 : result.length)
+      timeAlignedslicedResult = timeAlignedResult.slice(0, result.length >= 15 ? 14 : result.length)
       redisClient.del('sitemapCache')
       for (let i = 0; i < timeAlignedslicedResult.length; i++) {
         multi.rPush("sitemapCache", JSON.stringify(timeAlignedslicedResult[i]))
