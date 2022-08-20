@@ -6,6 +6,7 @@ const { s3 } = require('../server')
 const { redisClient } = require('../server')
 
 const Post = require('../schemas/post');
+const sitemapCacheUpdator = require('../tools/sitemapCacheUpdator')
 
 const router = express.Router();
 
@@ -133,7 +134,10 @@ router.post('/', isPostExists, titleLinkManufacturer, async (req, res) => {
     postURL: req.body.postURL,
     images: req.body.imageWhitelist,
     thumbnailURL: req.body.thumbnailURL ? req.body.thumbnailURL : null,
-  }).then((post) => updatePostToCache(post))
+  }).then((post) => {
+    updatePostToCache(post);
+    sitemapCacheUpdator(true);
+  })
 
   console.log(post);
   res.status(200).send();

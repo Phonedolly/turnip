@@ -6,6 +6,7 @@ const { redisClient } = require('../server')
 const auth = require('./auth')
 const createdPost = require('./publish')
 const postTimeAlignmentor = require('../tools/postTimeAlilgnmentor')
+const sitemapCacheUpdator = require('../tools/sitemapCacheUpdator')
 
 const Post = require('../schemas/post');
 
@@ -19,21 +20,19 @@ router.get('/', (req, res) => {
 
 router.get('/getSitemap', async (req, res) => {
   /* redis에서 캐시가 있는지 확인 */
-  try {
-    const cache = await redisClient.lRange('sitemapCache', 0, -1)
-    if (cache?.length !== 0) {
-      console.log("Use Cache to getSitemap");
-      return res.send(cache.map((each) => {
-        const parse = JSON.parse(each)
-        return Object.assign({}, { title: parse.title, thumbnailURL: parse.thumbnailURL ?? null, postURL: parse.postURL, postDate: parse.postDate })
-      }))
-    }
-  } catch (e) {
-    console.error(e)
-    console.error('캐시 가져오기 오류')
+  const cache = await redisClient.lRange('sitemapCache', 0, -1)
+  if (cache?.length !== 0) {
+    console.log("Use Cache to getSitemap");
+    return res.send(cache.map((each) => {
+      const parse = JSON.parse(each)
+      return Object.assign({}, { title: parse.title, thumbnailURL: parse.thumbnailURL ?? null, postURL: parse.postURL, postDate: parse.postDate })
+    }))
   }
 
-  ("Not use Cache to getSitemap")
+  console.log('캐시 가져오기 실패')
+
+
+  console.log("Not use Cache to getSitemap")
   Post.find({}).sort({ createdAt: -1 })
     .then((result) => {
 
@@ -43,23 +42,13 @@ router.get('/getSitemap', async (req, res) => {
       res.send(timeAlignedResult)
 
       /* 찾은 값을 15개까지 캐시에 저장 */
-      const multi = redisClient.multi()
+      sitemapCacheUpdator(true)
 
-      timeAlignedslicedResult = timeAlignedResult.slice(0, result.length >= 15 ? 14 : result.length)
-      redisClient.del('sitemapCache')
-      for (let i = 0; i < timeAlignedslicedResult.length; i++) {
-        multi.rPush("sitemapCache", JSON.stringify(timeAlignedslicedResult[i]))
-      }
-
-      multi.exec()
-        .then((multiResult) => { console.log(multiResult) },
-          (multiError) => { console.log(multiError) })
     }, (err) => {
       console.error(err);
-      console.error("get title error");
+      console.error("get sitemap error");
       res.statusCode = 500;
-      res.statusMessage = "get title error";
-      res.send();
+      res.status(500).send();
     })
 });
 
