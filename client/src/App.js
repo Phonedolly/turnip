@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { onGetAuth, onSilentRefresh, onLoginSuccess } from './Util/LoginTools';
 
 import './App.scss';
-import Header from './Components/Header'
 import Art from './Components/Art'
 
 import Writer from './Components/Writer';
@@ -13,7 +12,7 @@ import { Login } from './Components/Login';
 import NotFound from './Components/NotFound';
 
 import axios from 'axios';
-import Footer from './Components/Footer';
+
 
 
 function App() {
@@ -31,9 +30,7 @@ function App() {
             , () => {
               setLoggedIn("NO")
             })
-      })
-
-
+      }, () => { })
     }
     setLoginInfo();
 
