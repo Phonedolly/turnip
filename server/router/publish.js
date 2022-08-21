@@ -3,7 +3,7 @@ const multer = require('multer')
 const multerS3 = require('multer-s3')
 const { DeleteObjectsCommand } = require('@aws-sdk/client-s3')
 
-const { s3 } = require('../server')
+const { s3, now } = require('../server')
 const { redisClient } = require('../server')
 
 const Post = require('../schemas/post');
@@ -13,10 +13,10 @@ const router = express.Router();
 
 
 const getToday = () => {
-  var date = new Date();
-  var year = date.getFullYear();
-  var month = ("0" + (1 + date.getMonth())).slice(-2);
-  var day = ("0" + date.getDate()).slice(-2);
+  let date = new Date();
+  let year = date.getFullYear();
+  let month = ("0" + (1 + date.getMonth())).slice(-2);
+  let day = ("0" + date.getDate()).slice(-2);
 
   return year + month + day;
 }
@@ -55,7 +55,7 @@ const titleLinkManufacturer = (req, res, next) => {
     }
     next()
   } catch (error) {
-    console.log("Title has a problem")
+    console.error(now() + "Title has a problem")
     console.error(error)
     res.status(500).send("Title has a problem")
   }
@@ -80,7 +80,7 @@ const deleteBlacklist = async (imageBlacklist) => {
       console.log('성공')
       console.log(res)
     }, (err) => {
-      console.error('에러')
+      console.error(now() + '에러')
       console.error(err)
 
     })
@@ -115,8 +115,8 @@ router.post('/edit', isPostExists, titleLinkManufacturer, async (req, res) => {
 router.post('/', isPostExists, titleLinkManufacturer, async (req, res) => {
   const isDuplicated = req.isPostExists;
   if (isDuplicated) {
-    console.error('duplicated title!')
-    console.error('title:' + req.body.title)
+    console.error(now() + 'duplicated title!')
+    console.error(now() + 'title:' + req.body.title)
     res.status(500).send('duplicated title');
     return
   }
@@ -124,7 +124,7 @@ router.post('/', isPostExists, titleLinkManufacturer, async (req, res) => {
   deleteBlacklist(req.body.imageBlacklist)
     .then(() => console.log("이미지 삭제 성공"),
       (err) => {
-        console.log("이미지 삭제 실패")
+        console.error(now() + "이미지 삭제 실패")
         return res.status(500).send(err)
       })
 
@@ -139,7 +139,7 @@ router.post('/', isPostExists, titleLinkManufacturer, async (req, res) => {
     sitemapCacheUpdator(true);
   })
 
-  console.log(post);
+  console.log(now() + post);
   res.status(200).send();
 })
 

@@ -13,11 +13,11 @@ const runner = async () => {
 
   fs.writeFile(path.join(__dirname, '../../client/build/sitemap.txt'), content, (err) => {
     if (err) {
-      console.error('file open error')
+      console.error(now() + 'file open error')
       console.error(err)
     }
   })
-  if (process.env.NDOE_ENV === 'dev') {
+  if (process.env.NODE_ENV === 'dev') {
     console.log("sitemap refreshed")
   }
 }

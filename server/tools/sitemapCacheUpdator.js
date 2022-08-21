@@ -25,6 +25,7 @@ const runner = () => {
           }
         },
           (multiError) => {
+            console.error(now() + 'multiError');
             console.error(multiError)
           })
 

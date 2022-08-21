@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const redis = require('redis')
 const crypto = require('crypto')
 
-const { redisClient } = require('../server')
+const { redisClient, now } = require('../server')
 
 const User = require('../schemas/user')
 
@@ -30,7 +30,7 @@ const makePasswordHashed = (userId, plainPassword, res) =>
     const salt = await User.findOne({ id: userId })
       .then((result) => {
         if (!result) {
-          console.error("없는 정보")
+          console.error(now() + "없는 정보")
 
           return "NOT_VALID"
         }
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
   const hashed = (await makePasswordHashed(req.body.id, req.body.password, res))
   const origin = await User.findOne({ id: req.body.id })
     .then(res => res?.password,
-      (err) => { console.error("비밀번호 에러"); })
+      (err) => { console.error(now() + "비밀번호 에러"); })
 
   const compareResult = hashed === origin
 
@@ -91,13 +91,13 @@ router.post('/login', async (req, res) => {
 
 router.get('/silentRefresh', (req, res) => {
   if (!req.cookies.refreshToken) {
-    console.error("refreshToken Not Found")
+    console.error(now() + "refreshToken Not Found")
     return res.status(200).json({ isSilentRefreshSucess: false })
   }
   jwt.verify(req.cookies.refreshToken, process.env.REFRESH_TOKEN_SECRET,
     (error, decoded) => {
       if (error) {
-        console.error("refreshToken verify failed")
+        console.error(now() + "refreshToken verify failed")
         return res.status(200).json({ isSilentRefreshSucess: false })
       }
     })
@@ -113,7 +113,10 @@ router.get('/silentRefresh', (req, res) => {
   )
   res.cookie('refreshToken', refreshToken, { httpOnly: true })
   res.send({ accessToken, isSilentRefreshSuccess: true })
-  console.log("success refresh tokens")
+  if (process.env.NODE_ENV === 'dev') {
+    console.log("success refresh tokens")
+  }
+
 })
 
 router.get('/check', isLoggedIn, (req, res) => {
@@ -143,7 +146,7 @@ router.post('/createUser', async (req, res) => {
       (error) => {
         console.error("유저 생성 실패")
         console.error(error);
-        res.send("error")
+        res.send("error creating user")
       })
 })
 

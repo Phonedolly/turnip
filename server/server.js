@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const redis = require('redis')
 const { S3Client } = require('@aws-sdk/client-s3')
+const { format } = require('date-fns-tz');
 
 if (process.env.NODE_ENV === 'production') {
   dotenv.config({ path: path.join(__dirname, '../.env.production') });
@@ -41,6 +42,9 @@ const s3 = new S3Client({
 });
 
 exports.s3 = s3;
+
+/* initialize date function */
+exports.now = () => format(Date.now(), "yyyy-MM-dd hh:mm.ss");
 
 /* initialize routers*/
 const api = require('./router/api');

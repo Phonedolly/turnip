@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const { utcToZonedTime, format } = require('date-fns-tz')
-const { redisClient } = require('../server')
+const { redisClient, now } = require('../server')
 
 const auth = require('./auth')
 const createdPost = require('./publish')
@@ -43,7 +43,7 @@ router.get('/getSitemap', async (req, res) => {
 
     }, (err) => {
       console.error(err);
-      console.error("get sitemap error");
+      console.error(now() + "get sitemap error");
       res.statusCode = 500;
       res.status(500).send();
     })
@@ -71,7 +71,7 @@ router.get('/getSitemap/more/:moreIndex', async (req, res) => {
 
     }, (err) => {
       console.error(err);
-      console.error("get sitemap error");
+      console.error(now() + "get sitemap error");
       res.statusCode = 500;
       res.status(500).send();
     })
