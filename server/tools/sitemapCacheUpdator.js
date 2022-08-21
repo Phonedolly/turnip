@@ -28,7 +28,9 @@ const runner = () => {
             console.error(multiError)
           })
 
-      console.log("sitemapCache updated");
+      if (process.env.NODE_ENV === 'dev') {
+        console.log("sitemapCache updated");
+      }
     })
 }
 
@@ -36,7 +38,7 @@ const runner = () => {
 function sitemapCacheUpdator(useInstantRun) {
   if (useInstantRun) {
     runner()
-    if (process.env.NDOE_ENV === 'dev') {
+    if (process.env.NODE_ENV === 'dev') {
       console.log("sitemap instantly updated")
     }
   } else {
