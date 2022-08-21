@@ -9,8 +9,7 @@ import { useNavigate, Navigate, useParams } from "react-router-dom";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import SyntaxHighlighter from "react-syntax-highlighter";
-
-import useUnload from "./BeforeUnload";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
@@ -102,11 +101,6 @@ export default function Writer(props) {
       getMd();
     }
   }, [params.postURL]);
-
-  useUnload((e) => {
-    e.preventDefault();
-    e.returnValue = "";
-  });
 
   const handleImageInput = async (e) => {
     const formData = new FormData();
@@ -220,6 +214,19 @@ export default function Writer(props) {
         }
       );
   };
+
+  const mdErrorHandler = ({ error, resetErrorBoundary }) => {
+    return (
+      <div role="alert">
+        <p>지원하지 않는 동작입니다.</p>
+        <p>마지막으로 입력한 문자: {md[md.length - 1]}</p>
+        <button className="writer-button" onClick={() => resetErrorBoundary()}>
+          다시 시도
+        </button>
+      </div>
+    );
+  };
+
   /* https://velog.io/@hwanieee/textarea-%EC%9E%90%EB%8F%99-%EB%86%92%EC%9D%B4-%EC%A1%B0%EC%A0%88
    */
   const autoResizeTextarea = () => {
@@ -297,33 +304,40 @@ export default function Writer(props) {
               }}
             />
             <div className="showTextArea">
-              <ReactMarkDown
-                className="markdown-body"
-                children={md}
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw]}
-                components={{
-                  code({ inline, className, children, ...props }) {
-                    const match = /language-(\w+)/.exec(className || "");
-                    return !inline && match ? (
-                      <SyntaxHighlighter
-                        language={match[1]}
-                        PreTag="div"
-                        {...props}
-                        style={github}
-                        showLineNumbers={true}
-                        wrapLongLines={true}
-                      >
-                        {String(children).replace(/\n$/, "")}
-                      </SyntaxHighlighter>
-                    ) : (
-                      <code className={className} {...props}>
-                        {children}
-                      </code>
-                    );
-                  },
+              <ErrorBoundary
+                FallbackComponent={mdErrorHandler}
+                onReset={() => {
+                  setMd((prevMd) => prevMd.slice(0, prevMd.length - 1));
                 }}
-              />
+              >
+                <ReactMarkDown
+                  className="markdown-body"
+                  children={md}
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
+                  components={{
+                    code({ inline, className, children, ...props }) {
+                      const match = /language-(\w+)/.exec(className || "");
+                      return !inline && match ? (
+                        <SyntaxHighlighter
+                          language={match[1]}
+                          PreTag="div"
+                          {...props}
+                          style={github}
+                          showLineNumbers={true}
+                          wrapLongLines={true}
+                        >
+                          {String(children).replace(/\n$/, "")}
+                        </SyntaxHighlighter>
+                      ) : (
+                        <code className={className} {...props}>
+                          {children}
+                        </code>
+                      );
+                    },
+                  }}
+                />
+              </ErrorBoundary>
             </div>
           </div>
         </Flex>
