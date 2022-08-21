@@ -17,11 +17,11 @@
     @media (prefers-color-scheme: dark) {
       color: white;
     }
-    font-size: 2em;
-    padding-top: 1.5rem;
-    padding-bottom: 0.2rem;
+    font-size: 1.5em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     @media (min-width: 480px) {
-      font-size: 2.5em;
+      font-size: 2em;
     }
 
     @media (min-width: 768px) {
@@ -40,8 +40,9 @@
     font-family: "IBMFlexSansKRBold";
 
     #underLine {
-      width: 1rem;
-      height: 1rem;
+      width: 0.4em;
+      height: 0.4em;
+
       background-color: red;
     }
   }
