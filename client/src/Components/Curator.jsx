@@ -98,8 +98,8 @@ export default function Curator() {
 
 const Card = (props) => (
   <>
-    <motion.div whileHover={{ scale: 1.05 }}>
-      <Flex column className="box">
+    <motion.div className="box" whileHover={{ scale: 1.05 }}>
+      <Flex column>
         <Link to={props.url}>
           <img
             src={props.image ?? Nothing}
