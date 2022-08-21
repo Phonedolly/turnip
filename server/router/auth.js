@@ -90,6 +90,7 @@ router.post('/login', async (req, res) => {
 })
 
 router.get('/silentRefresh', (req, res) => {
+  let verify = true;
   if (!req.cookies.refreshToken) {
     console.error(now() + "refreshToken Not Found")
     return res.status(200).json({ isSilentRefreshSucess: false })
@@ -98,9 +99,13 @@ router.get('/silentRefresh', (req, res) => {
     (error, decoded) => {
       if (error) {
         console.error(now() + "refreshToken verify failed")
-        return res.status(200).json({ isSilentRefreshSucess: false })
+        res.status(200).json({ isSilentRefreshSucess: false })
+        verify = false;
       }
     })
+  if (!verify) {
+    return;
+  }
   const accessToken = jwt.sign(
     { id: redisClient.get(req.cookies.refreshToken) },
     process.env.ACCESS_TOKEN_SECRET,
@@ -116,7 +121,6 @@ router.get('/silentRefresh', (req, res) => {
   if (process.env.NODE_ENV === 'dev') {
     console.log("success refresh tokens")
   }
-
 })
 
 router.get('/check', isLoggedIn, (req, res) => {

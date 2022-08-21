@@ -30,7 +30,7 @@ const runner = () => {
           })
 
       if (process.env.NODE_ENV === 'dev') {
-        console.log("sitemapCache updated");
+        console.log(now() + "sitemapCache updated");
       }
     })
 }

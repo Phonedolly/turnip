@@ -77,8 +77,7 @@ const deleteBlacklist = async (imageBlacklist) => {
   const deleteCommand = new DeleteObjectsCommand(params);
   await s3.send(deleteCommand)
     .then((res) => {
-      console.log('성공')
-      console.log(res)
+      console.log('쓰지 않는 사진 삭제 성공')
     }, (err) => {
       console.error(now() + '에러')
       console.error(err)

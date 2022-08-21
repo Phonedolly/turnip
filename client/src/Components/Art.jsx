@@ -54,7 +54,7 @@ export default function Art(props) {
     }
     getContent();
     setLoginInfo();
-  }, [params]);
+  }, [params.postURL]);
 
   return (
     <>

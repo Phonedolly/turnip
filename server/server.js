@@ -8,14 +8,19 @@ const redis = require('redis')
 const { S3Client } = require('@aws-sdk/client-s3')
 const { format } = require('date-fns-tz');
 
+
+/* initialize date function */
+exports.now = () => format(Date.now(), "yyyy-MM-dd hh:mm.ss") + ": ";
+
+
 if (process.env.NODE_ENV === 'production') {
   dotenv.config({ path: path.join(__dirname, '../.env.production') });
-  console.log("MODE: PRODUCTION");
+  console.log(exports.now() + "MODE: PRODUCTION");
 } else if (process.env.NODE_ENV === 'dev') {
   dotenv.config({ path: path.join(__dirname, '../.env.dev') });
-  console.log("MODE: DEVELOPMENT");
+  console.log(exports.now() + "MODE: DEVELOPMENT");
 } else {
-  throw new Error('process.env.NDOE_ENV is not set');
+  throw new Error(exports.now() + 'process.env.NDOE_ENV is not set');
 }
 
 const app = express();
@@ -43,8 +48,6 @@ const s3 = new S3Client({
 
 exports.s3 = s3;
 
-/* initialize date function */
-exports.now = () => format(Date.now(), "yyyy-MM-dd hh:mm.ss");
 
 /* initialize routers*/
 const api = require('./router/api');
