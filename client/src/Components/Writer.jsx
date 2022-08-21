@@ -11,6 +11,8 @@ import rehypeRaw from "rehype-raw";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { ErrorBoundary } from "react-error-boundary";
 
+import useUnload from "./BeforeUnload";
+
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 import { onGetAuth, onSilentRefresh } from "../Util/LoginTools";
@@ -212,6 +214,11 @@ export default function Writer(props) {
       );
   };
 
+  useUnload((e) => {
+    e.preventDefault();
+    e.returnValue = "";
+  });
+
   const mdErrorHandler = ({ error, resetErrorBoundary }) => {
     return (
       <div role="alert">
@@ -237,9 +244,8 @@ export default function Writer(props) {
     const tempData = JSON.parse(localStorage.getItem("tempData"));
     if (tempData) {
       setTitle(tempData.title);
-      console.log(tempData);
-      setImages(images);
-      setMd(md);
+      setImages(tempData.images);
+      setMd(tempData.md);
 
       alert("임시 저장 데이터를 불러왔습니다");
     } else {
