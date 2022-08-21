@@ -1,4 +1,4 @@
-const { redisClient } = require('../server')
+const { redisClient, now } = require('../server')
 
 const postTimeAlignmentor = require('./postTimeAlilgnmentor')
 
