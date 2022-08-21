@@ -62,10 +62,7 @@ export default function Writer(props) {
               isThumb: eachImage.imageLocation === res.data.thumbnailURL,
             };
 
-            setImages((images) => {
-              const newCond = images.concat(imageData);
-              return newCond;
-            });
+            setImages((prevImages) => prevImages.concat(imageData));
           });
 
           /* 썸네일이지만 본문에 쓰이지 않은 이미지를 images에 추가 */
@@ -227,6 +224,33 @@ export default function Writer(props) {
     );
   };
 
+  const saveTempData = () => {
+    localStorage.setItem(
+      "tempData",
+      JSON.stringify({ title: title, images: images, md: md })
+    );
+    console.log({ title: title, images: images, md: md });
+    alert("임시 저장 되었습니다");
+  };
+
+  const LoadTempData = () => {
+    const tempData = JSON.parse(localStorage.getItem("tempData"));
+    if (tempData) {
+      setTitle(tempData.title);
+      console.log(tempData);
+      setImages(images);
+      setMd(md);
+
+      alert("임시 저장 데이터를 불러왔습니다");
+    } else {
+      alert("저장된 데이터가 없습니다");
+    }
+  };
+  const removeTempData = () => {
+    localStorage.removeItem("tempData");
+    alert("임시 저장 데이터를 지웠습니다.");
+  };
+
   /* https://velog.io/@hwanieee/textarea-%EC%9E%90%EB%8F%99-%EB%86%92%EC%9D%B4-%EC%A1%B0%EC%A0%88
    */
   const autoResizeTextarea = () => {
@@ -260,6 +284,18 @@ export default function Writer(props) {
                 }
               }}
             />
+            <button onClick={saveTempData} className="writer-button">
+              임시 저장
+            </button>
+            <button onClick={LoadTempData} className="writer-button small-text">
+              임시 저장 불러오기
+            </button>
+            <button
+              onClick={removeTempData}
+              className="writer-button small-text"
+            >
+              임시 데이터 지우기
+            </button>
             <button onClick={handleUpload} className="writer-button">
               업로드
             </button>
