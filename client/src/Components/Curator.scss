@@ -4,10 +4,13 @@
 
 .container {
   display: grid;
-  grid-template-columns: 1fr;
-  column-gap: 2em;
+  padding: 1em 0;
+  column-gap: 3.5em;
+  row-gap: 3em;
+
   text-decoration-line: none;
   margin: 0 auto;
+  grid-template-columns: 1fr;
   @media (min-width: 480px) {
   }
 
@@ -25,7 +28,7 @@
 .box {
   width: 100%;
   max-width: 30em;
-  margin: 1em auto;
+  margin: 0 auto;
   border-radius: 10px;
   background-color: var(--gray-200);
   box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 16px 0px;
@@ -115,9 +118,6 @@
     }
   }
 }
-.box:hover {
-  opacity: 0.8;
-}
 
 .postDate {
   font-size: 0.9em !important;
@@ -148,7 +148,13 @@
   align-self: center;
   border: none;
   border-radius: 10px;
+  @media (prefers-color-scheme: dark) {
+    background-color: #30363d;
+    color: white;
+  }
 }
 .moreButton:hover {
-  background-color: var(--gray-300);
+  @media (prefers-color-scheme: dark) {
+    background-color: var(--gray-900);
+  }
 }

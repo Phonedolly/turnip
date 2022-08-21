@@ -1,12 +1,18 @@
 @import url("./Font.scss");
 @import url("./Variable.scss");
-#header {
+.header {
   max-width: 30rem;
   width: 100%;
   height: 5em;
-  //   background-color: #faac6a; // https://color.adobe.com/color-theme_スクリーンショット-2022-07-25-13-color-theme-20369388
+  z-index: 999;
   text-decoration-line: none;
   #headerText {
+    padding-left: 5%;
+    background-color: rgba(255, 255, 255, 0.7);
+    @media (prefers-color-scheme: dark) {
+      background-color: rgba(0, 0, 0, 0.17);
+    }
+
     color: black;
     @media (prefers-color-scheme: dark) {
       color: white;
@@ -39,4 +45,10 @@
       background-color: red;
     }
   }
+}
+
+.scroll {
+  position: sticky;
+  top: 0;
+  backdrop-filter: saturate(180%) blur(20px);
 }

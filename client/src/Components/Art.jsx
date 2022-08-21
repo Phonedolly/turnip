@@ -58,8 +58,8 @@ export default function Art(props) {
 
   return (
     <>
+      <Header />
       <div className="App">
-        <Header />
         <div className="markdown-container">
           <ReactMarkDown
             className="markdown-body"

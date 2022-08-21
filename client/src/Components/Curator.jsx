@@ -2,6 +2,7 @@ import Flex from "@react-css/flex";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 import { getState, saveState } from "./stateSaver";
 
@@ -67,8 +68,8 @@ export default function Curator() {
 
   return (
     <>
+      <Header scroll={true} />
       <div className="App">
-        <Header />
         <div className="container">
           {sitemap.map((each) => {
             return (
@@ -97,16 +98,18 @@ export default function Curator() {
 
 const Card = (props) => (
   <>
-    <Flex column className="box">
-      <Link to={props.url}>
-        <img
-          src={props.image ?? Nothing}
-          alt="썸네일"
-          className="postThumb"
-        ></img>
-        <h2 className="postTitle">{props.title}</h2>
-        <p className="postTitle postDate">{props.postDate}</p>
-      </Link>
-    </Flex>
+    <motion.div whileHover={{ scale: 1.05 }}>
+      <Flex column className="box">
+        <Link to={props.url}>
+          <img
+            src={props.image ?? Nothing}
+            alt="썸네일"
+            className="postThumb"
+          ></img>
+          <h2 className="postTitle">{props.title}</h2>
+          <p className="postTitle postDate">{props.postDate}</p>
+        </Link>
+      </Flex>
+    </motion.div>
   </>
 );
