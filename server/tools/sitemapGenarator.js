@@ -17,7 +17,9 @@ const runner = async () => {
       console.error(err)
     }
   })
-  console.log("sitemap refreshed")
+  if (process.env.NDOE_ENV === 'dev') {
+    console.log("sitemap refreshed")
+  }
 }
 const sitemapGenarator = () => {
   return setInterval(runner, process.env.SITEMAP_REFRESH_TIME)

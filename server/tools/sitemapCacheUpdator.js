@@ -19,8 +19,14 @@ const runner = () => {
       }
 
       multi.exec()
-        .then((multiResult) => { console.log(multiResult) },
-          (multiError) => { console.log(multiError) })
+        .then((multiResult) => {
+          if (process.env.NODE_ENV === 'dev') {
+            console.log(multiResult)
+          }
+        },
+          (multiError) => {
+            console.error(multiError)
+          })
 
       console.log("sitemapCache updated");
     })
@@ -30,7 +36,9 @@ const runner = () => {
 function sitemapCacheUpdator(useInstantRun) {
   if (useInstantRun) {
     runner()
-    console.log("sitemap instantly updated")
+    if (process.env.NDOE_ENV === 'dev') {
+      console.log("sitemap instantly updated")
+    }
   } else {
     setInterval(runner, process.env.SITEMAP_CACHE_REFRESH_TIME)
   }

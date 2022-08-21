@@ -87,7 +87,6 @@ router.get('/post/:postURL', async (req, res) => {
     return res.send(JSON.parse(cache))
   }
 
-  console.log(req.params.postURL)
   Post.findOne({ postURL: req.params.postURL })
     .then((result) => {
       res.send(result)

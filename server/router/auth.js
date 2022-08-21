@@ -27,10 +27,8 @@ const createHashedPassword = (plainPassword) =>
 
 const makePasswordHashed = (userId, plainPassword, res) =>
   new Promise(async (resolve, reject) => {
-    console.log(userId, plainPassword);
     const salt = await User.findOne({ id: userId })
       .then((result) => {
-        console.log(result);
         if (!result) {
           console.error("없는 정보")
 
@@ -38,7 +36,6 @@ const makePasswordHashed = (userId, plainPassword, res) =>
         }
         return result.salt
       });
-    console.log(salt)
     crypto.pbkdf2(plainPassword, salt, 9999, 64, 'sha512', (err, key) => {
       if (err) reject(err);
       resolve(key.toString('base64'));
@@ -59,7 +56,6 @@ const isLoggedIn = async (req, res, next) => {
       console.error(error)
       return res.status(200).send({ isAuthSuccess: false });
     } else {
-      console.log("verify sucess");
       next()
     }
   })
@@ -125,8 +121,6 @@ router.get('/check', isLoggedIn, (req, res) => {
 })
 
 router.get('/logout', isLoggedIn, async (req, res) => {
-  console.log(req.headers.authorization.split(" ")[1])
-
   await redisClient.setEx(req.headers.authorization.split(" ")[1],
     process.env.ACCESS_TOKEN_BLACKLIST_EXPIRE_TIME, 'logout')
   res.clearCookie('refreshToken');

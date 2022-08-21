@@ -42,7 +42,6 @@ const isPostExists = async (req, res, next) => {
 }
 
 router.post('/uploadImage', upload.single('img'), function (req, res, next) {
-  console.log(req.body)
   res.json({ imageLocation: req.file.location, imageName: req.file.key })
 })
 
@@ -67,8 +66,6 @@ const deleteBlacklist = async (imageBlacklist) => {
   if (imageBlacklist.length === 0) {
     return
   }
-  console.log(imageBlacklist)
-  console.log(11)
   const params = {
     Bucket: process.env.S3_BUCKET,
     Delete: {
@@ -78,8 +75,6 @@ const deleteBlacklist = async (imageBlacklist) => {
   }
 
   const deleteCommand = new DeleteObjectsCommand(params);
-  console.log('222')
-  console.log(imageBlacklist)
   await s3.send(deleteCommand)
     .then((res) => {
       console.log('성공')
