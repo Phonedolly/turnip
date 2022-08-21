@@ -21,8 +21,8 @@ import "./Writer.scss";
 export default function Writer(props) {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
   const [_id, set_id] = useState("");
-  const [titleValue, setTitleValue] = useState("");
-  const [newTitleValue, setNewTitleValue] = useState("");
+  const [title, setTitle] = useState("");
+  const [newTitle, setNewTitle] = useState("");
   const [thumbURL, setThumbURL] = useState("");
   const [md, setMd] = useState("");
   const [images, setImages] = useState([]);
@@ -51,8 +51,8 @@ export default function Writer(props) {
       await axios.get("/api/post/" + params.postURL).then(
         (res) => {
           set_id(res.data._id);
-          setTitleValue(res.data.title);
-          setNewTitleValue(res.data.title);
+          setTitle(res.data.title);
+          setNewTitle(res.data.title);
           setMd(res.data.content);
           setThumbURL(() => res.data.thumbnailURL);
 
@@ -180,7 +180,7 @@ export default function Writer(props) {
   };
 
   const handleUpload = async () => {
-    if (!titleValue) {
+    if (!title) {
       alert("제목이 없습니다");
       return;
     }
@@ -202,8 +202,8 @@ export default function Writer(props) {
     axios
       .post(`/api/publish/${props.isEdit ? "edit" : ""}`, {
         _id: _id,
-        title: titleValue,
-        newTitle: props.isEdit ? newTitleValue : null,
+        title: title,
+        newTitle: props.isEdit ? newTitle : null,
         content: md,
         thumbnailURL: thumbURL,
         imageWhitelist: imageWhitelist,
@@ -244,12 +244,12 @@ export default function Writer(props) {
             <input
               placeholder="제목"
               className="writer-input"
-              value={props.isEdit ? newTitleValue : titleValue}
+              value={props.isEdit ? newTitle : title}
               onInput={(e) => {
                 if (props.isEdit) {
-                  setNewTitleValue(e.target.value);
+                  setNewTitle(e.target.value);
                 } else {
-                  setTitleValue(e.target.value);
+                  setTitle(e.target.value);
                 }
               }}
             />
