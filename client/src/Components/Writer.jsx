@@ -14,7 +14,7 @@ import useUnload from "./BeforeUnload";
 
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
-import { onGetAuth, onSilentRefresh, onLoginSuccess } from "../Util/LoginTools";
+import { onGetAuth, onSilentRefresh } from "../Util/LoginTools";
 
 import "./Writer.scss";
 
@@ -56,7 +56,7 @@ export default function Writer(props) {
           setMd(res.data.content);
           setThumbURL(() => res.data.thumbnailURL);
 
-          res.data.images?.map((eachImage) => {
+          res.data.images?.forEach((eachImage) => {
             const imageData = {
               imageLocation: eachImage.imageLocation,
               imageName: eachImage.imageName,
@@ -101,7 +101,7 @@ export default function Writer(props) {
     if (params.postURL) {
       getMd();
     }
-  }, []);
+  }, [params.postURL]);
 
   useUnload((e) => {
     e.preventDefault();
