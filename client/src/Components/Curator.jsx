@@ -1,7 +1,7 @@
 import Flex from "@react-css/flex";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { getState, saveState } from "./stateSaver";
 
@@ -11,7 +11,6 @@ import Footer from "./Footer";
 import Nothing from "./nothing.jpg";
 
 export default function Curator() {
-  const location = useLocation();
   const [sitemap, setSitemap] = useState([]);
   const [moreSitemapCount, setMoreSitemapCount] = useState(0);
   const [canMoreSitemap, setCanMoreSitemap] = useState(true);

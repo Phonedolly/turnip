@@ -8,7 +8,7 @@ import rehypeRaw from "rehype-raw";
 import SyntaxHighlighter from "react-syntax-highlighter";
 
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { onGetAuth, onSilentRefresh, onLoginSuccess } from "../Util/LoginTools";
+import { onGetAuth, onSilentRefresh } from "../Util/LoginTools";
 
 // import "./Art.scss";
 import "./GitHubMarkdownToMe.scss";

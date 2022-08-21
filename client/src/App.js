@@ -1,7 +1,4 @@
-import { BrowserRouter, Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-
-import { onGetAuth, onSilentRefresh, onLoginSuccess } from './Util/LoginTools';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import './App.scss';
 import Art from './Components/Art'
@@ -9,38 +6,14 @@ import Art from './Components/Art'
 import Writer from './Components/Writer';
 import Curator from './Components/Curator';
 import { Login } from './Components/Login';
-import NotFound from './Components/NotFound';
-
-import axios from 'axios';
-
-
 
 function App() {
-  const [isLoggedIn, setLoggedIn] = useState("PENDING");
 
-  useEffect(() => {
-    document.querySelector("title").innerHTML = "Stardue64"
-    async function setLoginInfo() {
-      await onSilentRefresh().then(() => {
-        onGetAuth()
-          .then(
-            () => {
-              setLoggedIn("YES");
-            }
-            , () => {
-              setLoggedIn("NO")
-            })
-      }, () => { })
-    }
-    setLoginInfo();
-
-  }, [])
-
-  const logout = async () => {
-    await axios.get('/api/auth/logout');
-    setLoggedIn(false);
-    window.location.reload()
-  }
+  // const logout = async () => {
+  //   await axios.get('/api/auth/logout');
+  //   setLoggedIn(false);
+  //   window.location.reload()
+  // }
 
   return (
     <>
