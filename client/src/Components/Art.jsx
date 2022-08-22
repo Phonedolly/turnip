@@ -28,7 +28,7 @@ export default function Art(props) {
         (res) => {
           setTimeout(() => {
             setMd(res.data.content);
-          }, 200);
+          }, 500);
 
           document.querySelector("title").innerHTML = res.data.title;
         },
