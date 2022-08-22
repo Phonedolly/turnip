@@ -12,10 +12,22 @@ export default function Header(props) {
       className={location.pathname === "/" ? "header scroll" : "header"}
       to="/"
     >
-      <Flex id="headerText" flexDirection="row" justifyContent="start">
-        <div>Stardue64</div>
-        <div id="underLine" />
-      </Flex>
+      <motion.div
+        initial={{
+          y: window.innerHeight / 2,
+          opacity: 0,
+        }}
+        animate={{ y: "0", opacity: 1 }}
+        exit={{
+          y: -(window.innerHeight / 2),
+          opacity: 0,
+        }}
+      >
+        <Flex id="headerText" flexDirection="row" justifyContent="start">
+          <div>Stardue64</div>
+          <div id="underLine" />
+        </Flex>
+      </motion.div>
     </Link>
   );
 }

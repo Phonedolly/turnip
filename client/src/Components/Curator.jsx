@@ -1,15 +1,14 @@
-import Flex from "@react-css/flex";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import Flex from "@react-css/flex";
 
-import { getState, saveState } from "./stateSaver";
+import { getState, saveState } from "..//Hooks/stateSaver";
 
 import Footer from "./Footer";
-import Nothing from "./nothing.jpg";
 
 import "./Curator.scss";
+import { Card } from "./Card";
+import { useLocation } from "react-router-dom";
 
 export default function Curator() {
   const [sitemap, setSitemap] = useState([]);
@@ -17,32 +16,24 @@ export default function Curator() {
   const [canMoreSitemap, setCanMoreSitemap] = useState(true);
   const { scrollY } = getState("Feed") ?? 0;
   const [fetched, setFetched] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     axios.get("/api/getSitemap").then((res) => {
       setSitemap(res.data);
-
       setTimeout(() => {
         setFetched(true);
-      }, 500);
+      }, 400);
+      if (scrollY && location.pathname === "/") {
+        setTimeout(() => {
+          window.scroll({
+            behavior: "smooth",
+            top: scrollY,
+          });
+        }, 600);
+      }
     });
-  }, []);
-
-  useEffect(() => {
-    function setScroll() {
-      setTimeout(() => {
-        window.scroll({
-          behavior: "smooth",
-          top: scrollY,
-        });
-      }, 50);
-    }
-    if (scrollY && fetched) {
-      // setScroll();
-    }
-  }, [fetched, scrollY]);
-
-  useEffect(() => {}, [sitemap]);
+  }, [scrollY]);
 
   /* Scroll Restoration */
   /* Source: https://stackoverflow.com/questions/71292957/react-router-v6-preserve-scroll-position */
@@ -52,8 +43,9 @@ export default function Curator() {
     const save = () => {
       saveState("Feed", { scrollY: window.scrollY });
     };
-    save();
-    document.addEventListener("scroll", save);
+    setTimeout(() => {
+      document.addEventListener("scroll", save);
+    }, 2000);
 
     return () => document.removeEventListener("scroll", save);
   }, []);
@@ -107,33 +99,3 @@ export default function Curator() {
     );
   }
 }
-
-const Card = (props) => (
-  <>
-    <motion.div
-      className="box"
-      initial={{
-        y: window.innerHeight / 2,
-        opacity: 0,
-      }}
-      animate={{ y: "0", opacity: 1 }}
-      exit={{
-        y: window.innerHeight / 2,
-        opacity: 0,
-      }}
-      whileHover={{ scale: 1.05 }}
-    >
-      <Flex column>
-        <Link to={props.url}>
-          <img
-            src={props.image ?? Nothing}
-            alt="썸네일"
-            className="postThumb"
-          ></img>
-          <h2 className="postTitle">{props.title}</h2>
-          <p className="postTitle postDate">{props.postDate}</p>
-        </Link>
-      </Flex>
-    </motion.div>
-  </>
-);

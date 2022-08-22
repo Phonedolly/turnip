@@ -22,12 +22,14 @@ export default function Art(props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     function getContent() {
       axios.get("/api/post/" + params.postURL).then(
         (res) => {
           setTimeout(() => {
             setMd(res.data.content);
+            setTimeout(() => {
+              window.scroll({ top: 0 });
+            }, 100);
           }, 500);
 
           document.querySelector("title").innerHTML = res.data.title;
