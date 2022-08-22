@@ -106,7 +106,6 @@ export default function Writer(props) {
     formData.append("filename", e.target.files[0].name);
     formData.append("img", e.target.files[0]);
 
-    console.log(formData);
     axios
       .post("/api/publish/uploadImage", formData, {
         headers: {
@@ -236,7 +235,6 @@ export default function Writer(props) {
       "tempData",
       JSON.stringify({ title: title, images: images, md: md })
     );
-    console.log({ title: title, images: images, md: md });
     alert("임시 저장 되었습니다");
   };
 

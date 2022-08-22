@@ -40,7 +40,6 @@ export default function Curator() {
     if (scrollY && fetched) {
       // setScroll();
     }
-    console.log("setLoaded");
   }, [fetched, scrollY]);
 
   useEffect(() => {}, [sitemap]);

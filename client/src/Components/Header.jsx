@@ -6,9 +6,7 @@ import { useEffect } from "react";
 
 export default function Header(props) {
   const location = useLocation();
-  useEffect(() => {
-    console.log(location.pathname);
-  }, []);
+  useEffect(() => {}, []);
   return (
     <Link
       className={location.pathname === "/" ? "header scroll" : "header"}
