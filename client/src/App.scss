@@ -29,12 +29,14 @@ body {
 }
 
 .App {
-  margin: 0 auto;
-  max-width: var(--document-width-desktop);
-  padding-left: 5vw;
-  padding-right: 5vw;
-
+  width: 100%;
   @media (prefers-color-scheme: dark) {
     background-color: #0d1117;
   }
+}
+.container {
+  margin: 0 auto;
+
+  padding-left: 5vw;
+  padding-right: 5vw;
 }

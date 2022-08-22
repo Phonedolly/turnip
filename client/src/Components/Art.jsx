@@ -6,26 +6,30 @@ import ReactMarkDown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import SyntaxHighlighter from "react-syntax-highlighter";
+import { motion } from "framer-motion";
 
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { onGetAuth, onSilentRefresh } from "../Util/LoginTools";
 
-// import "./Art.scss";
+import "./Art.scss";
 import "./GitHubMarkdownToMe.scss";
-import Header from "./Header";
 import Footer from "./Footer";
 
 export default function Art(props) {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
-  const params = useParams();
   const [md, setMd] = useState(null);
+  const params = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     function getContent() {
       axios.get("/api/post/" + params.postURL).then(
         (res) => {
-          setMd(res.data.content);
+          setTimeout(() => {
+            setMd(res.data.content);
+          }, 200);
+
           document.querySelector("title").innerHTML = res.data.title;
         },
         (err) => {
@@ -56,11 +60,18 @@ export default function Art(props) {
     setLoginInfo();
   }, [params.postURL]);
 
-  return (
-    <>
-      <Header />
-      <div className="App">
-        <div className="markdown-container">
+  if (md)
+    return (
+      <>
+        <motion.div
+          className="markdown-container"
+          initial={{ y: window.innerHeight / 2, opacity: 0 }}
+          animate={{ y: "0", opacity: 1 }}
+          exit={{
+            y: window.innerHeight / 2,
+            opacity: 0,
+          }}
+        >
           <ReactMarkDown
             className="markdown-body"
             children={md}
@@ -88,7 +99,7 @@ export default function Art(props) {
               },
             }}
           />
-        </div>
+        </motion.div>
         {isLoggedIn === "YES" && (
           <button
             onClick={() => {
@@ -99,7 +110,6 @@ export default function Art(props) {
           </button>
         )}
         <Footer />
-      </div>
-    </>
-  );
+      </>
+    );
 }

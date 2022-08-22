@@ -6,40 +6,54 @@ import { motion } from "framer-motion";
 
 import { getState, saveState } from "./stateSaver";
 
-import "./Curator.scss";
-import Header from "./Header";
 import Footer from "./Footer";
 import Nothing from "./nothing.jpg";
+
+import "./Curator.scss";
 
 export default function Curator() {
   const [sitemap, setSitemap] = useState([]);
   const [moreSitemapCount, setMoreSitemapCount] = useState(0);
   const [canMoreSitemap, setCanMoreSitemap] = useState(true);
   const { scrollY } = getState("Feed") ?? 0;
+  const [fetched, setFetched] = useState(false);
 
   useEffect(() => {
     axios.get("/api/getSitemap").then((res) => {
       setSitemap(res.data);
+
+      setTimeout(() => {
+        setFetched(true);
+      }, 500);
     });
   }, []);
 
+  useEffect(() => {
+    function setScroll() {
+      setTimeout(() => {
+        window.scroll({
+          behavior: "smooth",
+          top: scrollY,
+        });
+      }, 50);
+    }
+    if (scrollY && fetched) {
+      // setScroll();
+    }
+    console.log("setLoaded");
+  }, [fetched, scrollY]);
+
+  useEffect(() => {}, [sitemap]);
+
   /* Scroll Restoration */
   /* Source: https://stackoverflow.com/questions/71292957/react-router-v6-preserve-scroll-position */
-  useEffect(() => {
-    if (scrollY) {
-      setTimeout(() => {
-        window.scrollTo(0, scrollY);
-      }, 100);
-    }
-  }, [scrollY]);
+  useEffect(() => {}, [scrollY]);
 
   useEffect(() => {
     const save = () => {
-      saveState("Feed", { scrollY: window.pageYOffset });
+      saveState("Feed", { scrollY: window.scrollY });
     };
-
     save();
-
     document.addEventListener("scroll", save);
 
     return () => document.removeEventListener("scroll", save);
@@ -66,11 +80,10 @@ export default function Curator() {
     );
   };
 
-  return (
-    <>
-      <Header scroll={true} />
-      <div className="App">
-        <div className="container">
+  if (fetched) {
+    return (
+      <>
+        <div className="curator-container">
           {sitemap.map((each) => {
             return (
               <Card
@@ -91,14 +104,26 @@ export default function Curator() {
           </Flex>
         )}
         <Footer />
-      </div>
-    </>
-  );
+      </>
+    );
+  }
 }
 
 const Card = (props) => (
   <>
-    <motion.div className="box" whileHover={{ scale: 1.05 }}>
+    <motion.div
+      className="box"
+      initial={{
+        y: window.innerHeight / 2,
+        opacity: 0,
+      }}
+      animate={{ y: "0", opacity: 1 }}
+      exit={{
+        y: window.innerHeight / 2,
+        opacity: 0,
+      }}
+      whileHover={{ scale: 1.05 }}
+    >
       <Flex column>
         <Link to={props.url}>
           <img

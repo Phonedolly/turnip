@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 import './App.scss';
 import Art from './Components/Art'
@@ -6,6 +6,8 @@ import Art from './Components/Art'
 import Writer from './Components/Writer';
 import Curator from './Components/Curator';
 import { Login } from './Components/Login';
+import AnimatedRoutes from './Components/AnimatedRoutes';
+import Header from './Components/Header';
 
 function App() {
 
@@ -17,15 +19,12 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Curator />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/post/:postURL" element={<Art />}></Route>
-          <Route path="/post/:postURL/edit" element={<Writer isEdit={true} />} />
-          <Route path="/writer" element={<Writer />} ></Route>
-        </Routes>
-      </BrowserRouter>
+      <div className="App">
+        <BrowserRouter>
+          <Header />
+          <AnimatedRoutes />
+        </BrowserRouter>
+      </div>
     </>
   );
 }

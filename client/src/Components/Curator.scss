@@ -2,14 +2,15 @@
 @import url("./Color.scss");
 @import url("Variable.scss");
 
-.container {
+.curator-container {
   display: grid;
-  padding: 1em 0;
+  padding: 1em 5vw;
   column-gap: 3.5em;
   row-gap: 3em;
+  margin: 0 auto;
+  max-width: var(--document-width-desktop);
 
   text-decoration-line: none;
-  margin: 0 auto;
   grid-template-columns: 1fr;
   @media (min-width: 480px) {
   }
