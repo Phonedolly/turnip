@@ -76,18 +76,20 @@ export default function Writer(props) {
             }
           });
           if (!thereIsThumbAndMd) {
-            const token = res.data.thumbnailURL.split("/");
+            const token = res.data.thumbnailURL?.split("/");
 
-            setImages((images) => {
-              const newCond = [
-                {
-                  imageLocation: res.data.thumbnailURL,
-                  imageName: token[token.length - 1],
-                  isThumb: true,
-                },
-              ].concat(images);
-              return newCond;
-            });
+            if (token) {
+              setImages((images) => {
+                const newCond = [
+                  {
+                    imageLocation: res.data.thumbnailURL,
+                    imageName: token[token.length - 1],
+                    isThumb: true,
+                  },
+                ].concat(images);
+                return newCond;
+              });
+            }
           }
         },
         (err) => {
