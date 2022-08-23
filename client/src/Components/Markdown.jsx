@@ -37,9 +37,11 @@ export const Markdown = (props) => {
         /* https://stackoverflow.com/questions/66941072/how-to-parse-embeddable-links-from-markdown-and-render-custom-react-components */
         a: ({ inline, className, children, ...props }) => {
           if (props.href.startsWith("https://twitter.com")) {
-            <TwitterTweetEmbed
-              tweetId={props.href.split("/")[5].split("?")[0]}
-            />; // Render Twitter links with custom component
+            return (
+              <TwitterTweetEmbed
+                tweetId={props.href.split("/")[5].split("?")[0]}
+              />
+            ); // Render Twitter links with custom component
           } else if (props.href.startsWith("https://youtu.be")) {
             return (
               <div className="video-container">
