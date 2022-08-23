@@ -92,7 +92,9 @@ router.post('/login', async (req, res) => {
 router.get('/silentRefresh', (req, res) => {
   let verify = true;
   if (!req.cookies.refreshToken) {
-    console.error(now() + "refreshToken Not Found")
+    if (process.env.NODE_ENV === 'dev') {
+      console.error(now() + "refreshToken Not Found")
+    }
     return res.status(200).json({ isSilentRefreshSucess: false })
   }
   jwt.verify(req.cookies.refreshToken, process.env.REFRESH_TOKEN_SECRET,
