@@ -18,6 +18,7 @@ import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { onGetAuth, onSilentRefresh } from "../Util/LoginTools";
 
 import "./Writer.scss";
+import { Markdown } from "./Markdown";
 
 export default function Writer(props) {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
@@ -350,33 +351,7 @@ export default function Writer(props) {
                   setMd((prevMd) => prevMd.slice(0, prevMd.length - 1));
                 }}
               >
-                <ReactMarkDown
-                  className="markdown-body"
-                  children={md}
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeRaw]}
-                  components={{
-                    code({ inline, className, children, ...props }) {
-                      const match = /language-(\w+)/.exec(className || "");
-                      return !inline && match ? (
-                        <SyntaxHighlighter
-                          language={match[1]}
-                          PreTag="div"
-                          {...props}
-                          style={github}
-                          showLineNumbers={true}
-                          wrapLongLines={true}
-                        >
-                          {String(children).replace(/\n$/, "")}
-                        </SyntaxHighlighter>
-                      ) : (
-                        <code className={className} {...props}>
-                          {children}
-                        </code>
-                      );
-                    },
-                  }}
-                />
+                <Markdown md={md} />
               </ErrorBoundary>
             </div>
           </div>
