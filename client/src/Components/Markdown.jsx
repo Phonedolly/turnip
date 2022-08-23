@@ -5,6 +5,7 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { TwitterTweetEmbed } from "react-twitter-embed";
 
+import "./Youtube.scss";
 export const Markdown = (props) => {
   return (
     <ReactMarkDown
@@ -34,14 +35,43 @@ export const Markdown = (props) => {
         },
         /* Twitter Embed Support */
         /* https://stackoverflow.com/questions/66941072/how-to-parse-embeddable-links-from-markdown-and-render-custom-react-components */
-        a: (props) => {
-          return props.href.startsWith("https://twitter.com") ? (
+        a: ({ inline, className, children, ...props }) => {
+          if (props.href.startsWith("https://twitter.com")) {
             <TwitterTweetEmbed
               tweetId={props.href.split("/")[5].split("?")[0]}
-            /> // Render Twitter links with custom component
-          ) : (
-            <a href={props.href}>{props.children}</a> // All other links
-          );
+            />; // Render Twitter links with custom component
+          } else if (props.href.startsWith("https://youtu.be")) {
+            return (
+              <div className="video-container">
+                <iframe
+                  src={
+                    "https://www.youtube.com/embed/" + props.href.split("/")[3]
+                  }
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            );
+          } else if (props.href.startsWith("https://www.youtube.com")) {
+            return (
+              <div className="video-container">
+                <iframe
+                  src={
+                    "https://www.youtube.com/embed/" +
+                    props.href.split("/")[3].split("=")[1]
+                  }
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            );
+          } else {
+            return <a href={props.href}>{props.children}</a>; // All other links
+          }
         },
       }}
     />
