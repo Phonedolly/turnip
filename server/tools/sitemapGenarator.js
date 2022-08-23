@@ -4,12 +4,11 @@ const axios = require('axios');
 const Post = require('../schemas/post');
 
 const runner = async () => {
-  const prevData = fs.readFileSync(path.join(__dirname, '../../client/build/sitemap.txt'))
+  const prevData = fs.readFileSync(path.join(__dirname, '../../client/build/sitemap.txt'), { encoding: 'utf-8' })
   const bulkData = await Post.find({})
-  let content = ""
   let sitemapUpdated = false;
 
-  content = bulkData.reduce((acc, cur, index) => {
+  const content = bulkData.reduce((acc, cur, index) => {
     return acc.concat(process.env.WEBSITE_URL + '/post/' + cur.postURL + '\n')
   }, "")
 
