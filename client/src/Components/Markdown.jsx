@@ -72,7 +72,7 @@ export const Markdown = (props) => {
               </div>
             );
           } else {
-            return <a href={props.href}>{props.children}</a>; // All other links
+            return <a {...props}>{children}</a>; // All other links
           }
         },
       }}
