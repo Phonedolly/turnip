@@ -56,22 +56,24 @@ export const Markdown = (props) => {
                 ></iframe>
               </div>
             );
-          } else if (props.href.startsWith("https://www.youtube.com")) {
-            return (
-              <div className="video-container">
-                <iframe
-                  src={
-                    "https://www.youtube.com/embed/" +
-                    props.href.split("/")[3].split("=")[1]
-                  }
-                  title="YouTube video player"
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-                ></iframe>
-              </div>
-            );
-          } else {
+          }
+          // else if (props.href.startsWith("https://www.youtube.com")) {
+          //   return (
+          //     <div className="video-container">
+          //       <iframe
+          //         src={
+          //           "https://www.youtube.com/embed/" +
+          //           props.href.split("/")[3].split("=")[1]
+          //         }
+          //         title="YouTube video player"
+          //         frameborder="0"
+          //         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          //         allowfullscreen
+          //       ></iframe>
+          //     </div>
+          //   );
+          // }
+          else {
             return <a {...props}>{children}</a>; // All other links
           }
         },
