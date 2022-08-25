@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Flex from "@react-css/flex";
 
-import Nothing from "./nothing.jpg";
+import Nothing from "../Images/nothing.jpg";
 export const Card = (props) => (
   <>
     <motion.div

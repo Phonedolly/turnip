@@ -8,26 +8,35 @@ export default function Header(props) {
   const location = useLocation();
   useEffect(() => {}, []);
   return (
-    <Link
+    <Flex
       className={location.pathname === "/" ? "header scroll" : "header"}
-      to="/"
+      row
+      justifySpaceBetween
+      alignItems="center"
     >
-      <motion.div
-        initial={{
-          y: window.innerHeight / 2,
-          opacity: 0,
-        }}
-        animate={{ y: "0", opacity: 1 }}
-        exit={{
-          y: -(window.innerHeight / 2),
-          opacity: 0,
-        }}
-      >
-        <Flex id="headerText" flexDirection="row" justifyContent="start">
-          <div>Stardue64</div>
-          <div id="underLine" />
-        </Flex>
-      </motion.div>
-    </Link>
+      <Link to="/" className="header-link">
+        <motion.div
+          initial={{
+            y: window.innerHeight / 2,
+            opacity: 0,
+          }}
+          animate={{ y: "0", opacity: 1 }}
+          exit={{
+            y: -(window.innerHeight / 2),
+            opacity: 0,
+          }}
+        >
+          <Flex flexDirection="row" justifyContent="start" className="icon">
+            <div className="headerText">Stardue64</div>
+            <div className="underLine" />
+          </Flex>
+        </motion.div>
+      </Link>
+      <motion.button
+        className="search-icon"
+        whileHover={{ scale: 1.3 }}
+        whileTap={{ scale: 0.9 }}
+      ></motion.button>
+    </Flex>
   );
 }
