@@ -48,10 +48,10 @@ router.post('/uploadImage', upload.single('img'), function (req, res, next) {
 const titleLinkManufacturer = (req, res, next) => {
   try {
     if (req.body.newTitle) {
-      req.body.postURL = req.body.newTitle.replace(/ /gi, '-').replace(/\./gi, '').replace(/,/gi, '').replace(/'/gi, '').replace(/“/gi, '"').replace(/”/gi, '"').replace(/‘/gi, "'").replace(/’/gi, "'").replace(/%/gi, '');
+      req.body.postURL = req.body.newTitle.replace(/ /gi, '-').replace(/\./gi, '').replace(/,/gi, '').replace(/'/gi, '').replace(/“/gi, '"').replace(/”/gi, '"').replace(/‘/gi, "'").replace(/’/gi, "'").replace(/%/gi, '').replace(/\//gi, '-');
 
     } else {
-      req.body.postURL = req.body.title.replace(/ /gi, '-').replace(/\./gi, '').replace(/,/gi, '').replace(/'/gi, '').replace(/“/gi, '"').replace(/”/gi, '"').replace(/‘/gi, "'").replace(/’/gi, "'").replace(/%/gi, '');
+      req.body.postURL = req.body.title.replace(/ /gi, '-').replace(/\./gi, '').replace(/,/gi, '').replace(/'/gi, '').replace(/“/gi, '"').replace(/”/gi, '"').replace(/‘/gi, "'").replace(/’/gi, "'").replace(/%/gi, '').replace(/\//gi, '-');
     }
     next()
   } catch (error) {
