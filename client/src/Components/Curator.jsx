@@ -17,7 +17,7 @@ export default function Curator(props) {
         setSitemap(res.data);
         setTimeout(() => {
           setFetched(true);
-        }, 200);
+        }, 400);
 
         const scrollY = sessionStorage.getItem("scrollY") ?? 0;
         if (scrollY) {
@@ -26,7 +26,7 @@ export default function Curator(props) {
               behavior: "smooth",
               top: scrollY,
             });
-          }, 500);
+          }, 600);
         }
       });
     }
