@@ -2,8 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Flex from "@react-css/flex";
 
-import { getState, saveState } from "../Util/sessionStorageSaver";
-
 import Footer from "./Footer";
 
 import "./Curator.scss";
@@ -21,20 +19,18 @@ export default function Curator() {
     if (!fetched) {
       axios.get("/api/getSitemap").then((res) => {
         setSitemap(res.data);
-
         setTimeout(() => {
           setFetched(true);
-        }, 400);
+        }, 100);
 
         const scrollY = sessionStorage.getItem("scrollY") ?? 0;
-        console.log("scrollY: " + scrollY.toString());
         if (scrollY && location.pathname === "/") {
           setTimeout(() => {
             window.scroll({
               behavior: "smooth",
               top: scrollY,
             });
-          }, 600);
+          }, 300);
         }
       });
     } else {
@@ -45,10 +41,9 @@ export default function Curator() {
   /* Source: https://stackoverflow.com/questions/71292957/react-router-v6-preserve-scroll-position */
   useEffect(() => {
     const save = () => {
-      console.log(window.scrollY);
       setTimeout(() => {
         sessionStorage.setItem("scrollY", window.scrollY);
-      }, 50);
+      }, 100);
     };
 
     document.addEventListener("scroll", save);
