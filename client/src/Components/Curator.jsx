@@ -14,11 +14,10 @@ export default function Curator(props) {
   useEffect(() => {
     if (!fetched) {
       axios.get("/api/getSitemap").then((res) => {
-        sessionStorage.setItem("sitemap", res.data);
         setSitemap(res.data);
         setTimeout(() => {
           setFetched(true);
-        }, 100);
+        }, 200);
 
         const scrollY = sessionStorage.getItem("scrollY") ?? 0;
         if (scrollY) {
@@ -27,7 +26,7 @@ export default function Curator(props) {
               behavior: "smooth",
               top: scrollY,
             });
-          }, 300);
+          }, 500);
         }
       });
     }
