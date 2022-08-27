@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Flex from "@react-css/flex";
 
-import { getState, saveState } from "..//Hooks/stateSaver";
+import { getState, saveState } from "../Util/sessionStorageSaver";
 
 import Footer from "./Footer";
 
@@ -14,7 +14,6 @@ export default function Curator() {
   const [sitemap, setSitemap] = useState([]);
   const [moreSitemapCount, setMoreSitemapCount] = useState(0);
   const [canMoreSitemap, setCanMoreSitemap] = useState(true);
-  const { scrollY } = getState("Feed") ?? 0;
   const [fetched, setFetched] = useState(false);
   const location = useLocation();
 
@@ -22,9 +21,13 @@ export default function Curator() {
     if (!fetched) {
       axios.get("/api/getSitemap").then((res) => {
         setSitemap(res.data);
+
         setTimeout(() => {
           setFetched(true);
         }, 400);
+
+        const scrollY = sessionStorage.getItem("scrollY") ?? 0;
+        console.log("scrollY: " + scrollY.toString());
         if (scrollY && location.pathname === "/") {
           setTimeout(() => {
             window.scroll({
@@ -34,20 +37,21 @@ export default function Curator() {
           }, 600);
         }
       });
+    } else {
     }
-  }, [scrollY]);
+  }, []);
 
   /* Scroll Restoration */
   /* Source: https://stackoverflow.com/questions/71292957/react-router-v6-preserve-scroll-position */
-  useEffect(() => {}, [scrollY]);
-
   useEffect(() => {
     const save = () => {
-      saveState("Feed", { scrollY: window.scrollY });
+      console.log(window.scrollY);
+      setTimeout(() => {
+        sessionStorage.setItem("scrollY", window.scrollY);
+      }, 50);
     };
-    setTimeout(() => {
-      document.addEventListener("scroll", save);
-    }, 2000);
+
+    document.addEventListener("scroll", save);
 
     return () => document.removeEventListener("scroll", save);
   }, []);
