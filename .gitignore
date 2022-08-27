@@ -2,6 +2,7 @@
 data/
 .env*
 ecosystem.config.js
+client/public/index.html
 
 # Logs
 logs
