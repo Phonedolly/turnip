@@ -56,7 +56,7 @@ router.get('/getSitemap/more/:moreIndex', async (req, res) => {
   const moreIndex = req.params.moreIndex;
 
   /* 최신 순으로 한 요청당 20개씩. 20개 이상이 더 존재하는지 확인하기 위해 21개 조회 */
-  Post.find({}).sort({ "_id": -1 }).skip(20 * (moreIndex + 1)).limit(21)
+  Post.find({}).sort({ '_id': -1 }).skip(20 * (moreIndex + 1)).limit(21)
     .then((result) => {
       let canMoreSitemap = true;
       if (result.length <= 20) {
@@ -79,7 +79,15 @@ router.get('/getSitemap/more/:moreIndex', async (req, res) => {
     })
 });
 
+router.post('/search', async (req, res) => {
+  const query = req.body.query;
 
+  const result = await Post
+    .find({ $or: [{ title: new RegExp(query) }, { content: new RegExp(query) }] })
+    .sort({ '_id': -1 })
+
+  res.send(result);
+})
 
 router.get('/post/:postURL', async (req, res) => {
   /* 캐시가 있는지 확인 */

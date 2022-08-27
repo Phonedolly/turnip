@@ -1,12 +1,11 @@
-import "./Header.scss";
 import Flex from "@react-css/flex";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+
+import "./Header.scss";
 
 export default function Header(props) {
   const location = useLocation();
-  useEffect(() => {}, []);
   return (
     <Flex
       className={location.pathname === "/" ? "header scroll" : "header"}
@@ -35,7 +34,8 @@ export default function Header(props) {
       <motion.button
         className="search-icon"
         whileHover={{ scale: 1.3 }}
-        whileTap={{ scale: 0.9 }}
+        whileTap={{ scale: 1.0 }}
+        onClick={props.openSearchModal}
       ></motion.button>
     </Flex>
   );

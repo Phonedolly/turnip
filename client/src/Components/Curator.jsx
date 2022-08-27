@@ -2,29 +2,26 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Flex from "@react-css/flex";
 
-import Footer from "./Footer";
-
 import "./Curator.scss";
 import { Card } from "./Card";
-import { useLocation } from "react-router-dom";
 
-export default function Curator() {
+export default function Curator(props) {
   const [sitemap, setSitemap] = useState([]);
   const [moreSitemapCount, setMoreSitemapCount] = useState(0);
   const [canMoreSitemap, setCanMoreSitemap] = useState(true);
   const [fetched, setFetched] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     if (!fetched) {
       axios.get("/api/getSitemap").then((res) => {
+        sessionStorage.setItem("sitemap", res.data);
         setSitemap(res.data);
         setTimeout(() => {
           setFetched(true);
         }, 100);
 
         const scrollY = sessionStorage.getItem("scrollY") ?? 0;
-        if (scrollY && location.pathname === "/") {
+        if (scrollY) {
           setTimeout(() => {
             window.scroll({
               behavior: "smooth",
@@ -33,9 +30,8 @@ export default function Curator() {
           }, 300);
         }
       });
-    } else {
     }
-  }, []);
+  }, [fetched]);
 
   /* Scroll Restoration */
   /* Source: https://stackoverflow.com/questions/71292957/react-router-v6-preserve-scroll-position */
@@ -95,7 +91,6 @@ export default function Curator() {
             </button>
           </Flex>
         )}
-        <Footer />
       </>
     );
   }
