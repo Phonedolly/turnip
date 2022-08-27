@@ -9,17 +9,17 @@ body::-webkit-scrollbar {
 
 body::-webkit-scrollbar-thumb {
   height: 30%;
-  background: rgb(118, 118, 118);
+  background: rgb(133, 133, 133);
 
   border-radius: 10px;
 }
 
 body::-webkit-scrollbar-track {
-  background: #c2c2c217; /*스크롤바 뒷 배경 색상*/
+  background: #c2c2c263; /*스크롤바 뒷 배경 색상*/
 }
 
 body::-webkit-scrollbar-thumb:hover {
-  background: rgb(113, 113, 113);
+  background: rgb(160, 160, 160);
 }
 
 body {
