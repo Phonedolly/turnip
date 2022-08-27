@@ -19,20 +19,22 @@ export default function Curator() {
   const location = useLocation();
 
   useEffect(() => {
-    axios.get("/api/getSitemap").then((res) => {
-      setSitemap(res.data);
-      setTimeout(() => {
-        setFetched(true);
-      }, 400);
-      if (scrollY && location.pathname === "/") {
+    if (!fetched) {
+      axios.get("/api/getSitemap").then((res) => {
+        setSitemap(res.data);
         setTimeout(() => {
-          window.scroll({
-            behavior: "smooth",
-            top: scrollY,
-          });
-        }, 600);
-      }
-    });
+          setFetched(true);
+        }, 400);
+        if (scrollY && location.pathname === "/") {
+          setTimeout(() => {
+            window.scroll({
+              behavior: "smooth",
+              top: scrollY,
+            });
+          }, 600);
+        }
+      });
+    }
   }, [scrollY]);
 
   /* Scroll Restoration */
