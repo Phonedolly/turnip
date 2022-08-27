@@ -10,7 +10,6 @@ import { onGetAuth, onSilentRefresh } from "../Util/LoginTools";
 
 import "./Art.scss";
 import "./GitHubMarkdownToMe.scss";
-import Footer from "./Footer";
 
 export default function Art(props) {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
@@ -82,7 +81,6 @@ export default function Art(props) {
             수정하기
           </button>
         )}
-        <Footer />
       </>
     );
 }
