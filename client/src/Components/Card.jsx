@@ -26,7 +26,7 @@ export const Card = (props) => (
             className="postThumb"
           ></img>
           <h2 className="postTitle">{props.title}</h2>
-          <p className="postTitle postDate">{props.postDate}</p>
+          <p className=" postDate">{props.postDate}</p>
         </Link>
       </Flex>
     </motion.div>

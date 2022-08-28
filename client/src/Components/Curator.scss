@@ -85,7 +85,7 @@
   }
 
   .postTitle {
-    font-family: "IBMFlexSansKRBold";
+    font-family: "Spoqa Han Sans Neo";
     text-decoration-line: none;
     font-size: 1em;
     color: black;
@@ -121,17 +121,21 @@
 }
 
 .postDate {
-  font-size: 0.9em !important;
-  color: #6f7378 !important;
+  font-family: "Spoqa Han Sans Neo";
+  font-size: 0.75em;
+  font-weight: bold;
+  color: #6f7378;
+  padding-left: 1rem;
+  padding-right: 1rem;
   @media (prefers-color-scheme: dark) {
-    color: #6f7378 !important;
+    color: #6f7378;
   }
   @media (min-width: 480px) {
-    font-size: 1.1em;
+    font-size: 0.9em;
   }
 
   @media (min-width: 768px) {
-    font-size: 1.3em;
+    font-size: 1.1em;
   }
 
   @media (min-width: 1024px) {

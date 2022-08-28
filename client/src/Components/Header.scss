@@ -16,9 +16,9 @@
     font-size: 2em;
   }
 
-  @media (min-width: 768px) {
-    font-size: 3em;
-  }
+  // @media (min-width: 768px) {
+  //   font-size: 3em;
+  // }
 
   @media (min-width: 1024px) {
   }
@@ -34,8 +34,8 @@
     // margin: 0.5em auto;
 
     .headerText {
-      font-family: "IBMFlexSansKRBold";
-
+      font-family: "Spoqa Han Sans Neo";
+      font-weight: bold;
       color: black;
       @media (prefers-color-scheme: dark) {
         color: white;
