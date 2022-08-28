@@ -40,7 +40,7 @@
   flex-direction: column;
 }
 
-.modal > section > .search-result {
+.modal > section > .search-result-list {
   max-height: 50vh;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -52,7 +52,7 @@
   background-color: var(--gray-300);
   border-radius: 10px;
   padding: 0.5em 1em;
-  margin: 0.5em 0;
+  margin: 1.1em 1.2em;
   list-style: none;
   font-weight: bold;
   align-items: center;

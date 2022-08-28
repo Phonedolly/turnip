@@ -68,7 +68,7 @@ export default function SearchModal({ isModalOpen, closeModal }) {
                     <strong>해당 게시글의 제목이나 내용</strong>이 입력한 내용을
                     포함하고 있습니다
                   </p>
-                  <div className="search-result">
+                  <div className="search-result-list">
                     {searchContent.map((eachSearchItem) => (
                       <motion.li
                         initial={{
@@ -83,6 +83,8 @@ export default function SearchModal({ isModalOpen, closeModal }) {
                           closeModal();
                           navigate(`/post/${eachSearchItem.postURL}`);
                         }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 1.0 }}
                       >
                         <img src={eachSearchItem.thumbnailURL} />
                         <p>{eachSearchItem.title}</p>
@@ -91,7 +93,13 @@ export default function SearchModal({ isModalOpen, closeModal }) {
                   </div>
                 </>
               )}
-              <button onClick={closeModal}>닫기</button>
+              <motion.button
+                onClick={closeModal}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 1.0 }}
+              >
+                닫기
+              </motion.button>
             </motion.section>
           </motion.div>
         )}
