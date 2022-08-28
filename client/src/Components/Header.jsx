@@ -27,12 +27,19 @@ export default function Header(props) {
             </Flex>
           </motion.div>
         </Link>
-        <motion.button
-          className="search-icon"
-          whileHover={{ scale: 1.5 }}
-          whileTap={{ scale: 1.0 }}
-          onClick={props.openSearchModal}
-        ></motion.button>
+        <div className="menu-icons">
+          {/* <motion.button
+            className="menu-icon info-icon"
+            whileHover={{ scale: 1.5 }}
+            whileTap={{ scale: 1.0 }}
+          /> */}
+          <motion.button
+            className="menu-icon search-icon"
+            whileHover={{ scale: 1.5 }}
+            whileTap={{ scale: 1.0 }}
+            onClick={props.openSearchModal}
+          />
+        </div>
       </div>
     </div>
   );

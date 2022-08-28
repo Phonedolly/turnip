@@ -77,15 +77,36 @@
         background-color: red;
       }
     }
-
-    .search-icon {
+    .menu-icons {
+    }
+    .menu-icon {
       height: 2.5em;
       width: 2.5em;
       border: none;
+      margin: 1em;
       background-size: cover;
       background-color: transparent;
       background-repeat: no-repeat;
       cursor: pointer;
+      /* image credit:
+      https://fonts.google.com/icons?icon.query=search&icon.set=Material+Icons
+      */
+      background-image: url("../Images/search_black_24dp.svg");
+      @media (prefers-color-scheme: dark) {
+        background-image: url("../Images/search_white_24dp.svg");
+      }
+    }
+
+    .info-icon {
+      /* image credit:
+      https://fonts.google.com/icons?icon.query=search&icon.set=Material+Icons
+      */
+      background-image: url("../Images/info_black_24dp.svg");
+      @media (prefers-color-scheme: dark) {
+        background-image: url("../Images/info_white_24dp.svg");
+      }
+    }
+    .search-icon {
       /* image credit:
       https://fonts.google.com/icons?icon.query=search&icon.set=Material+Icons
       */
