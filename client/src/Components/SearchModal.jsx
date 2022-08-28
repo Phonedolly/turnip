@@ -21,7 +21,6 @@ export default function SearchModal({ isModalOpen, closeModal }) {
       if (res.data.length === 0) {
         return;
       }
-      console.log(res.data);
       if (res.data) {
         setIsAvailable(true);
         setSearchContent(res.data);
@@ -59,7 +58,7 @@ export default function SearchModal({ isModalOpen, closeModal }) {
                     포함하고 있습니다
                   </p>
                   <div className="search-result">
-                    {searchContent.map((eachSearchItem, n) => (
+                    {searchContent.map((eachSearchItem) => (
                       <motion.li
                         initial={{
                           y: "-0.5em",
