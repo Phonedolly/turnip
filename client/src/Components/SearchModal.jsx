@@ -43,7 +43,18 @@ export default function SearchModal({ isModalOpen, closeModal }) {
             }}
             onClick={closeModal}
           >
-            <section onClick={(e) => e.stopPropagation()}>
+            <motion.section
+              onClick={(e) => e.stopPropagation()}
+              initial={{
+                opacity: 0,
+                y: window.innerHeight / 2,
+              }}
+              animate={{ y: "0", opacity: 1 }}
+              exit={{
+                opacity: 0,
+                y: window.innerHeight / 2,
+              }}
+            >
               <header>원하는 제목이나 내용을 입력해보세요</header>
               <input
                 value={inputText}
@@ -81,7 +92,7 @@ export default function SearchModal({ isModalOpen, closeModal }) {
                 </>
               )}
               <button onClick={closeModal}>닫기</button>
-            </section>
+            </motion.section>
           </motion.div>
         )}
       </AnimatePresence>
