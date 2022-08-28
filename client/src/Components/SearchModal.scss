@@ -16,7 +16,7 @@
 }
 
 .modal > section {
-  width: 50%;
+  margin: auto 10em;
   max-width: var(--document-width-desktop);
 
   background-color: var(--gray-200);
@@ -36,6 +36,8 @@
 }
 .modal > section {
   font-family: "Spoqa Han Sans Neo";
+  display: flex;
+  flex-direction: column;
 }
 
 .modal > section > .search-result {
@@ -44,14 +46,27 @@
   overflow-x: hidden;
 }
 
-.modal > section > div > li {
+.search-item {
+  display: flex;
+  flex-direction: row;
   background-color: var(--gray-300);
   border-radius: 10px;
   padding: 0.5em 1em;
-  margin: 0.3em 0;
+  margin: 0.5em 0;
   list-style: none;
   font-weight: bold;
+  align-items: center;
+
   cursor: pointer;
+  p {
+    padding-left: 1em;
+  }
+  img {
+    height: 4em;
+    width: 7em;
+    object-fit: cover;
+    border-radius: 10px;
+  }
 }
 
 .modal > section > button {
@@ -59,7 +74,7 @@
   margin-top: 1.5em;
   padding: 0.5em 1em 0.5em 1em;
   font-size: 1em;
-  align-self: center;
+  align-self: flex-end;
   border: none;
   border-radius: 10px;
 

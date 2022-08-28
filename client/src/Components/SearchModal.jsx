@@ -1,3 +1,4 @@
+import Flex from "@react-css/flex";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -65,17 +66,16 @@ export default function SearchModal({ isModalOpen, closeModal }) {
                           opacity: 0,
                         }}
                         animate={{ y: "0", opacity: 1 }}
+                        className="search-item"
+                        onClick={() => {
+                          setIsAvailable(false);
+                          setInputText("");
+                          closeModal();
+                          navigate(`/post/${eachSearchItem.postURL}`);
+                        }}
                       >
-                        <a
-                          onClick={() => {
-                            setIsAvailable(false);
-                            setInputText("");
-                            closeModal();
-                            navigate(`/post/${eachSearchItem.postURL}`);
-                          }}
-                        >
-                          {eachSearchItem.title}
-                        </a>
+                        <img src={eachSearchItem.thumbnailURL} />
+                        <p>{eachSearchItem.title}</p>
                       </motion.li>
                     ))}
                   </div>
