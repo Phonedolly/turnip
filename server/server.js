@@ -58,13 +58,16 @@ connect();
 /* sitemapGenerator */
 if (process.env.NODE_ENV === 'production') {
   const sitemapGenarator = require('./tools/sitemapGenarator')
-  const sitemapGeneratorTimerId = sitemapGenarator()
+  sitemapGenarator()
 }
-
 
 /* sitemapCacheUpdator */
 const sitemapCacheUpdator = require('./tools/sitemapCacheUpdator')
 sitemapCacheUpdator();
+
+/* unusedS3ResourceCleaner */
+const unusedS3ResourceCleaner = require('./tools/unusedS3ResourceCleaner');
+// unusedS3ResourceCleaner();
 
 
 app.use(cookieParser(process.env.JWT_SECRET));
