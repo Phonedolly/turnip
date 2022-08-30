@@ -3,7 +3,25 @@ const path = require('path');
 const axios = require('axios');
 const Post = require('../schemas/post');
 
+const sitemapReader = (offset) => {
+  return fs.readFileSync(path.join(__dirname, `../../client/build/sitemap${offset}.txt`), { encoding: 'utf-8' });
+}
+
+const writer = (content, offset) => {
+  fs.writeFileSync(path.join(__dirname, `../../client/build/sitemap${offset}.txt`), content)
+}
+
 const runner = async () => {
+  const mongoBulkData = await Post.find({})
+  const numOfOffset = Math.ceil(mongoBulkData / 1000)
+
+  for (let i = 0; i < numOfOffset; i++) {
+    const prevData = sitemapReader(i);
+    const content = mongoBulkData.slice(i, mongoBulkData.length % 1000)
+  }
+
+
+
   const prevData = fs.readFileSync(path.join(__dirname, '../../client/build/sitemap.txt'), { encoding: 'utf-8' })
   const bulkData = await Post.find({})
   let sitemapUpdated = false;
