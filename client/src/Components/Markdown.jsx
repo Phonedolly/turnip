@@ -36,7 +36,10 @@ export const Markdown = (props) => {
         /* Twitter Embed Support */
         /* https://stackoverflow.com/questions/66941072/how-to-parse-embeddable-links-from-markdown-and-render-custom-react-components */
         a: ({ inline, className, children, ...props }) => {
-          if (props.href.startsWith("https://twitter.com")) {
+          if (
+            props.href.startsWith("https://twitter.com") &&
+            !props.href.startsWith("https://twitter.com/search?q=")
+          ) {
             return (
               <TwitterTweetEmbed
                 tweetId={props.href.split("/")[5].split("?")[0]}
