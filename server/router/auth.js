@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
-const redis = require('redis')
 const crypto = require('crypto')
 
 const { redisClient, now } = require('../server')
@@ -25,13 +24,12 @@ const createHashedPassword = (plainPassword) =>
     });
   });
 
-const makePasswordHashed = (userId, plainPassword, res) =>
+const makePasswordHashed = (userId, plainPassword) =>
   new Promise(async (resolve, reject) => {
     const salt = await User.findOne({ id: userId })
       .then((result) => {
         if (!result) {
           console.error(now() + "없는 정보")
-
           return "NOT_VALID"
         }
         return result.salt
@@ -62,10 +60,9 @@ const isLoggedIn = async (req, res, next) => {
 }
 
 router.post('/login', async (req, res) => {
-
-  const hashed = (await makePasswordHashed(req.body.id, req.body.password, res))
+  const hashed = (await makePasswordHashed(req.body.id, req.body.password))
   const origin = await User.findOne({ id: req.body.id })
-    .then(res => res?.password,
+    .then((res) => res?.password,
       (err) => { console.error(now() + "비밀번호 에러"); })
 
   const compareResult = hashed === origin
@@ -95,19 +92,20 @@ router.get('/silentRefresh', (req, res) => {
     if (process.env.NODE_ENV === 'dev') {
       console.error(now() + "refreshToken Not Found")
     }
-    return res.status(200).json({ isSilentRefreshSucess: false })
+    return res.json({ isSilentRefreshSucess: false })
   }
   jwt.verify(req.cookies.refreshToken, process.env.REFRESH_TOKEN_SECRET,
     (error, decoded) => {
       if (error) {
         console.error(now() + "refreshToken verify failed")
-        res.status(200).json({ isSilentRefreshSucess: false })
+        res.json({ isSilentRefreshSucess: false })
         verify = false;
       }
     })
   if (!verify) {
     return;
   }
+
   const accessToken = jwt.sign(
     { id: redisClient.get(req.cookies.refreshToken) },
     process.env.ACCESS_TOKEN_SECRET,
@@ -126,33 +124,33 @@ router.get('/silentRefresh', (req, res) => {
 })
 
 router.get('/check', isLoggedIn, (req, res) => {
-  res.status(200).send({ isAuthSuccess: true })
+  res.send({ isAuthSuccess: true })
 })
 
 router.get('/logout', isLoggedIn, async (req, res) => {
   await redisClient.setEx(req.headers.authorization.split(" ")[1],
     process.env.ACCESS_TOKEN_BLACKLIST_EXPIRE_TIME, 'logout')
   res.clearCookie('refreshToken');
-  return res.status(200).send();
+  return res.send('Logout Success');
 
 
 });
 
 router.post('/createUser', async (req, res) => {
   if (req.body.token !== process.env.ACCOUNT_CREATION_TOKEN) {
-    res.status(404).send()
+    res.status(404).send("Invalid Action")
   }
   passwordHashed = await createHashedPassword(req.body.password)
   User.create({ id: req.body.id, password: passwordHashed.password, salt: passwordHashed.salt })
     .then(result => {
       console.log("유저 생성 성공");
       console.log(result);
-      res.send("sucesss")
+      res.send("sucesss to create user")
     },
       (error) => {
         console.error("유저 생성 실패")
         console.error(error);
-        res.send("error creating user")
+        res.send("failed to create user")
       })
 })
 
