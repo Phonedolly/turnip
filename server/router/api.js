@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router();
-const { utcToZonedTime, format } = require('date-fns-tz')
 const { redisClient, now } = require('../server')
 
 const auth = require('./auth')
@@ -12,7 +11,6 @@ const Post = require('../schemas/post');
 
 router.use('/auth', auth)
 router.use('/publish', createdPost)
-
 
 router.get('/', (req, res) => {
   res.send({ test: 'hi' })
@@ -26,13 +24,12 @@ router.get('/getSitemap', async (req, res) => {
       console.log("Use Cache to getSitemap");
     }
     return res.send(cache.map((each) => {
-      const parse = JSON.parse(each)
-      return Object.assign({}, { title: parse.title, thumbnailURL: parse.thumbnailURL ?? null, postURL: parse.postURL, postDate: parse.postDate })
+      const eachParsed = JSON.parse(each)
+      return Object.assign({}, { title: eachParsed.title, thumbnailURL: eachParsed.thumbnailURL ?? null, postURL: eachParsed.postURL, postDate: eachParsed.postDate })
     }))
   }
 
   console.log('캐시 가져오기 실패')
-
   console.log("Not use Cache to getSitemap")
   Post.find({}).sort({ "_id": -1 }).limit(20)
     .then((result) => {
@@ -46,11 +43,9 @@ router.get('/getSitemap', async (req, res) => {
     }, (err) => {
       console.error(err);
       console.error(now() + "get sitemap error");
-      res.statusCode = 500;
       res.status(500).send();
     })
 });
-
 
 router.get('/getSitemap/more/:moreIndex', async (req, res) => {
   const moreIndex = req.params.moreIndex;
@@ -66,16 +61,12 @@ router.get('/getSitemap/more/:moreIndex', async (req, res) => {
       else {
         timeAlignedResult = postTimeAlignmentor(result.slice(0, 19))
       }
-
-      /* UTC(mongodb) to local time */
-
-      res.send({ canMoreSitemap, morePosts: timeAlignedResult })
+      return res.send({ canMoreSitemap, morePosts: timeAlignedResult })
 
     }, (err) => {
       console.error(err);
-      console.error(now() + "get sitemap error");
-      res.statusCode = 500;
-      res.status(500).send();
+      console.error(now() + "failed to get more sitemap");
+      return res.status(500).send();
     })
 });
 
