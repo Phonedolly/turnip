@@ -4,8 +4,9 @@ import Flex from "@react-css/flex";
 
 import "./Curator.scss";
 import { Card } from "./Card";
+import CommonButton from "./CommonButton";
 
-export default function Curator(props) {
+export default function Curator() {
   const [sitemap, setSitemap] = useState([]);
   const [moreSitemapCount, setMoreSitemapCount] = useState(0);
   const [canMoreSitemap, setCanMoreSitemap] = useState(true);
@@ -85,9 +86,7 @@ export default function Curator(props) {
         </div>
         {canMoreSitemap && (
           <Flex column>
-            <button className="moreButton" onClick={handleMorePosts}>
-              더보기
-            </button>
+            <CommonButton onClick={handleMorePosts}>더보기</CommonButton>
           </Flex>
         )}
       </>

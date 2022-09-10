@@ -3,6 +3,7 @@ import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import CommonInput from "./CommonInput";
 
 import "./SearchModal.scss";
 
@@ -56,7 +57,7 @@ export default function SearchModal({ isModalOpen, closeModal }) {
               }}
             >
               <header>원하는 제목이나 내용을 입력해보세요</header>
-              <input
+              <CommonInput
                 value={inputText}
                 onChange={(e) => {
                   setInputText(e.target.value);

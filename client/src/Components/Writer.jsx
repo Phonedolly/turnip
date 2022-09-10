@@ -4,21 +4,17 @@ import { nanoid } from "nanoid";
 import { useEffect } from "react";
 
 import { useState } from "react";
-import ReactMarkDown from "react-markdown";
 import { useNavigate, Navigate, useParams } from "react-router-dom";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
-import SyntaxHighlighter from "react-syntax-highlighter";
 import { ErrorBoundary } from "react-error-boundary";
 
 import useUnload from "./BeforeUnload";
 
-import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
-
 import { onGetAuth, onSilentRefresh } from "../Util/LoginTools";
 
+import "./Common.scss";
 import "./Writer.scss";
 import { Markdown } from "./Markdown";
+import CommonInput from "./CommonInput";
 
 export default function Writer(props) {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
@@ -279,9 +275,8 @@ export default function Writer(props) {
       <>
         <Flex column className="writer-container">
           <Flex row justifySpaceBetween>
-            <input
+            <CommonInput
               placeholder="제목"
-              className="writer-input"
               value={props.isEdit ? newTitle : title}
               onInput={(e) => {
                 if (props.isEdit) {
@@ -290,18 +285,19 @@ export default function Writer(props) {
                   setTitle(e.target.value);
                 }
               }}
+              style={{ width: "60%" }}
             />
             <button onClick={saveTempData} className="writer-button">
               임시 저장
             </button>
             <button onClick={LoadTempData} className="writer-button small-text">
-              임시 저장 불러오기
+              임시 저장<br></br>불러오기
             </button>
             <button
               onClick={removeTempData}
               className="writer-button small-text"
             >
-              임시 데이터 지우기
+              임시 데이터<br></br>지우기
             </button>
             <button onClick={handleUpload} className="writer-button">
               업로드

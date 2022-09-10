@@ -10,8 +10,9 @@ import { onGetAuth, onSilentRefresh } from "../Util/LoginTools";
 
 import "./Art.scss";
 import "./GitHubMarkdownToMe.scss";
+import CommonButton from "./CommonButton";
 
-export default function Art(props) {
+export default function Art() {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
   const [md, setMd] = useState(null);
   const params = useParams();
@@ -31,28 +32,17 @@ export default function Art(props) {
           document.querySelector("title").innerHTML = res.data.title;
         },
         (err) => {
-          setMd("ERROR");
+          setMd("데이터를 불러오는데 실패했습니다");
         }
       );
     }
 
     async function setLoginInfo() {
-      onSilentRefresh().then(
-        () => {
-          onGetAuth().then(
-            () => {
-              setLoggedIn("YES");
-            },
-            () => {
-              setLoggedIn("NO");
-            }
-          );
-        },
-        () => {
-          setLoggedIn("NO");
-          return;
-        }
-      );
+      if ((await onSilentRefresh()) && (await onGetAuth())) {
+        setLoggedIn("YES");
+      } else {
+        setLoggedIn("NO");
+      }
     }
     getContent();
     setLoginInfo();
@@ -71,16 +61,16 @@ export default function Art(props) {
           }}
         >
           <Markdown md={md} />
+          {isLoggedIn === "YES" && (
+            <CommonButton
+              onClick={() => {
+                navigate("/post/" + params.postURL + "/edit");
+              }}
+            >
+              수정하기
+            </CommonButton>
+          )}
         </motion.div>
-        {isLoggedIn === "YES" && (
-          <button
-            onClick={() => {
-              navigate("/post/" + params.postURL + "/edit");
-            }}
-          >
-            수정하기
-          </button>
-        )}
       </>
     );
 }

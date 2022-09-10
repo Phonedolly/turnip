@@ -1,5 +1,4 @@
 @import url("./Color.scss");
-//@import url("./Art.scss");
 .writer-container {
   width: 90%;
   margin: 0 auto;
@@ -7,7 +6,6 @@
 }
 .inputMdArea {
   width: 90%;
-
   border: none;
   padding: 1em;
   border-radius: 7px;
@@ -19,18 +17,6 @@
   font-family: "Cascadia Mono", "맑은 고딕", monospace;
   line-height: 1.5;
 }
-input {
-  height: 3em;
-  font-size: 1em;
-  border: none;
-  padding: 0 1em;
-
-  border-radius: 7px;
-  background-color: var(--gray-300);
-  resize: none;
-  margin-top: 1em;
-  // margin-right: 1em;
-}
 
 .writer-button {
   width: 8em;
@@ -39,7 +25,6 @@ input {
   font-size: 1em;
   border: none;
   border-radius: 7px;
-
   background-color: var(--gray-600);
 }
 .writer-button:hover {
@@ -47,7 +32,9 @@ input {
 }
 
 .small-text {
-  width: 15em;
+  width: 10em;
+  font-size: 0.9em;
+  align-self: center;
 }
 
 .inputMdArea:focus,
