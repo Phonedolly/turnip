@@ -1,19 +1,19 @@
 import axios from 'axios'
 
-export const onSilentRefresh = () => {
-  return new Promise((resolve, reject) => {
+export const onSilentRefresh = () =>
+  new Promise((resolve, reject) => {
     axios
       .get("/api/auth/silentRefresh")
       .then((res) => {
         if (res.data.isSilentRefreshSuccess) {
           onLoginSuccess(res)
-          resolve()
+          resolve(true)
         } else {
-          reject()
+          reject(false)
         }
       })
   })
-};
+
 
 export const onLoginSuccess = (response) => {
   const { accessToken } = response.data;
@@ -34,9 +34,9 @@ export const onGetAuth = () =>
     axios.get('/api/auth/check')
       .then((res) => {
         if (res.data.isAuthSuccess) {
-          resolve()
+          resolve(true)
         } else {
-          reject()
+          reject(false)
         }
       })
   })
