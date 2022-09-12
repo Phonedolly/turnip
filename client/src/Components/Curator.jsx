@@ -1,37 +1,65 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Flex from "@react-css/flex";
+import { useNavigate, useParams } from "react-router-dom";
 
 import "./Curator.scss";
 import { Card } from "./Card";
 import CommonButton from "./CommonButton";
 
 export default function Curator() {
+  const params = useParams();
+  const navigate = useNavigate();
   const [sitemap, setSitemap] = useState([]);
-  const [moreSitemapCount, setMoreSitemapCount] = useState(0);
-  const [canMoreSitemap, setCanMoreSitemap] = useState(true);
+  const [moreSitemapCount, setMoreSitemapCount] = useState(
+    params.moreSitemapCount ? Number(params.moreSitemapCount) : 0
+  );
+  const [canLoadMoreSitemap, setCanLoadMoreSitemap] = useState(true);
   const [fetched, setFetched] = useState(false);
 
   useEffect(() => {
+    document.querySelector("title").innerHTML = "Stardue64";
     if (!fetched) {
-      axios.get("/api/getSitemap").then((res) => {
-        setSitemap(res.data);
-        setTimeout(() => {
-          setFetched(true);
-        }, 600);
-
-        const scrollY = sessionStorage.getItem("scrollY") ?? 0;
-        if (scrollY) {
+      axios
+        .get(
+          `/api/getSitemap/${
+            params.moreSitemapCount ? Number(params.moreSitemapCount) : 0
+          }`
+        )
+        .then((res) => {
+          setSitemap(res.data.sitemap);
+          setCanLoadMoreSitemap(res.data.canLoadMoreSitemap);
           setTimeout(() => {
-            window.scroll({
-              behavior: "smooth",
-              top: scrollY,
-            });
-          }, 700);
-        }
-      });
+            setFetched(true);
+          }, 600);
+
+          const scrollY = sessionStorage.getItem("scrollY") ?? 0;
+          if (scrollY) {
+            setTimeout(() => {
+              window.scroll({
+                behavior: "smooth",
+                top: scrollY,
+              });
+            }, 700);
+          }
+        });
     }
   }, [fetched]);
+
+  useEffect(() => {
+    if (!fetched) {
+      return;
+    }
+    sessionStorage.removeItem("scrollY");
+    if (moreSitemapCount === 0) {
+      navigate(`/`);
+    } else {
+      navigate(`/${moreSitemapCount}`);
+    }
+
+    window.scroll({
+      top: 0,
+    });
+  }, [moreSitemapCount]);
 
   /* Scroll Restoration */
   /* Source: https://stackoverflow.com/questions/71292957/react-router-v6-preserve-scroll-position */
@@ -46,27 +74,6 @@ export default function Curator() {
 
     return () => document.removeEventListener("scroll", save);
   }, []);
-
-  const handleMorePosts = () => {
-    if (!canMoreSitemap) {
-      return;
-    }
-    axios.get("/api/getSitemap/more/" + moreSitemapCount).then(
-      (res) => {
-        const morePosts = res.data.morePosts;
-        setMoreSitemapCount(() => moreSitemapCount + 1);
-        setSitemap((prev) => {
-          return prev.concat(morePosts);
-        });
-        if (res.data.canMoreSitemap === false) {
-          setCanMoreSitemap(() => false);
-        }
-      },
-      () => {
-        alert("데이터 로드 실패");
-      }
-    );
-  };
 
   if (fetched) {
     return (
@@ -84,10 +91,25 @@ export default function Curator() {
             );
           })}
         </div>
-        {canMoreSitemap && (
-          <Flex column>
-            <CommonButton onClick={handleMorePosts}>더보기</CommonButton>
-          </Flex>
+        {!!(canLoadMoreSitemap || moreSitemapCount) && (
+          <div className="buttom-navigator">
+            {moreSitemapCount > 0 && (
+              <CommonButton
+                style={{ marginTop: "2em" }}
+                onClick={() => setMoreSitemapCount((prev) => prev - 1)}
+              >
+                이전
+              </CommonButton>
+            )}
+            {!!canLoadMoreSitemap && (
+              <CommonButton
+                onClick={() => setMoreSitemapCount((prev) => prev + 1)}
+                style={{ marginTop: "2em" }}
+              >
+                다음
+              </CommonButton>
+            )}
+          </div>
         )}
       </>
     );

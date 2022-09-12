@@ -6,26 +6,26 @@ import "./Header.scss";
 
 export default function Header(props) {
   const location = useLocation();
+  let headerClassName;
+
+  if (location.pathname === "/") {
+    headerClassName = "header scroll";
+  } else if (
+    location.pathname.endsWith("/edit") &&
+    location.pathname.split("/").length === 4
+  ) {
+    headerClassName = "header not-visible-header";
+  } else {
+    headerClassName = "header";
+  }
   return (
-    <div className={location.pathname === "/" ? "header scroll" : "header"}>
+    <div className={headerClassName}>
       <div className="header-content">
         <Link to="/" className="header-link">
-          <motion.div
-            initial={{
-              y: window.innerHeight / 2,
-              opacity: 0,
-            }}
-            animate={{ y: "0", opacity: 1 }}
-            exit={{
-              y: -(window.innerHeight / 2),
-              opacity: 0,
-            }}
-          >
-            <Flex flexDirection="row" justifyContent="start" className="icon">
-              <div className="headerText">Stardue64</div>
-              <div className="underLine" />
-            </Flex>
-          </motion.div>
+          <Flex flexDirection="row" justifyContent="start" className="icon">
+            <div className="headerText">Stardue128</div>
+            <div className="underLine" />
+          </Flex>
         </Link>
         <div className="menu-icons">
           {/* <motion.button

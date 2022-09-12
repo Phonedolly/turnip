@@ -24,6 +24,8 @@ export default function Writer(props) {
   const [thumbURL, setThumbURL] = useState("");
   const [md, setMd] = useState("");
   const [images, setImages] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
   const params = useParams();
   useEffect(() => {
@@ -52,6 +54,10 @@ export default function Writer(props) {
           setTitle(res.data.title);
           setNewTitle(res.data.title);
           setMd(res.data.content);
+          console.log(categories);
+          if (res.data.category) {
+            setSelectedCategory(res.data.category);
+          }
           setThumbURL(() => res.data.thumbnailURL);
 
           res.data.images?.forEach((eachImage) => {
@@ -94,7 +100,15 @@ export default function Writer(props) {
       );
     }
 
+    async function getCategories() {
+      const data = (await axios.get("/api/category/getCategories")).data
+        .categories;
+      setCategories(data);
+      setSelectedCategory(data[0]._id);
+    }
+
     setLoginInfo();
+    getCategories();
     if (params.postURL) {
       getMd();
     }
@@ -199,6 +213,7 @@ export default function Writer(props) {
         thumbnailURL: thumbURL,
         imageWhitelist: imageWhitelist,
         imageBlacklist: imageBlacklist,
+        category: selectedCategory,
       })
       .then(
         (res) => {
@@ -207,7 +222,7 @@ export default function Writer(props) {
         },
         (err) => {
           console.error(err);
-          console.error("ERROR");
+          console.error("Post Upload Error");
         }
       );
   };
@@ -299,6 +314,18 @@ export default function Writer(props) {
             >
               임시 데이터<br></br>지우기
             </button>
+            <select
+              onChange={(e) => {
+                console.log(e.target.value);
+                setSelectedCategory(e.target.value);
+              }}
+            >
+              {categories?.map((eachCategory) => (
+                <option key={eachCategory._id} value={eachCategory._id}>
+                  {eachCategory.name}
+                </option>
+              ))}
+            </select>
             <button onClick={handleUpload} className="writer-button">
               업로드
             </button>
