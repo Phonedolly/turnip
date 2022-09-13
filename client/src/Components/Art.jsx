@@ -10,10 +10,13 @@ import { onGetAuth, onSilentRefresh } from "../Util/LoginTools";
 
 import "./Art.scss";
 import "./GitHubMarkdownToMe.scss";
+import CommonButton from "./CommonButton";
 
-export default function Art(props) {
+export default function Art() {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
   const [md, setMd] = useState(null);
+  const [bgImageURL, setBgImageURL] = useState("");
+  const [title, setTitle] = useState("");
   const params = useParams();
   const navigate = useNavigate();
 
@@ -22,6 +25,8 @@ export default function Art(props) {
       axios.get("/api/post/" + params.postURL).then(
         (res) => {
           setTimeout(() => {
+            setBgImageURL(res.data.thumbnailURL);
+            setTitle(res.data.title);
             setMd(res.data.content);
             setTimeout(() => {
               window.scroll({ top: 0 });
@@ -31,28 +36,19 @@ export default function Art(props) {
           document.querySelector("title").innerHTML = res.data.title;
         },
         (err) => {
-          setMd("ERROR");
+          setMd("데이터를 불러오는데 실패했습니다");
         }
       );
     }
 
     async function setLoginInfo() {
-      onSilentRefresh().then(
-        () => {
-          onGetAuth().then(
-            () => {
-              setLoggedIn("YES");
-            },
-            () => {
-              setLoggedIn("NO");
-            }
-          );
-        },
-        () => {
+      try {
+        if ((await onSilentRefresh()) && (await onGetAuth())) {
+          setLoggedIn("YES");
+        } else {
           setLoggedIn("NO");
-          return;
         }
-      );
+      } catch (err) {}
     }
     getContent();
     setLoginInfo();
@@ -62,7 +58,6 @@ export default function Art(props) {
     return (
       <>
         <motion.div
-          className="markdown-container"
           initial={{ y: window.innerHeight / 2, opacity: 0 }}
           animate={{ y: "0", opacity: 1 }}
           exit={{
@@ -70,17 +65,22 @@ export default function Art(props) {
             opacity: 0,
           }}
         >
-          <Markdown md={md} />
+          <div className="common-container">
+            <div className="art-hero">
+              <h1>{title}</h1>
+            </div>
+            <Markdown md={md} />
+          </div>
+          {isLoggedIn === "YES" && (
+            <CommonButton
+              onClick={() => {
+                navigate("/post/" + params.postURL + "/edit");
+              }}
+            >
+              수정하기
+            </CommonButton>
+          )}
         </motion.div>
-        {isLoggedIn === "YES" && (
-          <button
-            onClick={() => {
-              navigate("/post/" + params.postURL + "/edit");
-            }}
-          >
-            수정하기
-          </button>
-        )}
       </>
     );
 }

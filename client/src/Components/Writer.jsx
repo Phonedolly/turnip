@@ -4,21 +4,17 @@ import { nanoid } from "nanoid";
 import { useEffect } from "react";
 
 import { useState } from "react";
-import ReactMarkDown from "react-markdown";
 import { useNavigate, Navigate, useParams } from "react-router-dom";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
-import SyntaxHighlighter from "react-syntax-highlighter";
 import { ErrorBoundary } from "react-error-boundary";
 
 import useUnload from "./BeforeUnload";
 
-import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
-
 import { onGetAuth, onSilentRefresh } from "../Util/LoginTools";
 
+import "./Common.scss";
 import "./Writer.scss";
 import { Markdown } from "./Markdown";
+import CommonInput from "./CommonInput";
 
 export default function Writer(props) {
   const [isLoggedIn, setLoggedIn] = useState("PENDING");
@@ -28,6 +24,8 @@ export default function Writer(props) {
   const [thumbURL, setThumbURL] = useState("");
   const [md, setMd] = useState("");
   const [images, setImages] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
   const params = useParams();
   useEffect(() => {
@@ -56,6 +54,10 @@ export default function Writer(props) {
           setTitle(res.data.title);
           setNewTitle(res.data.title);
           setMd(res.data.content);
+          console.log(categories);
+          if (res.data.category) {
+            setSelectedCategory(res.data.category);
+          }
           setThumbURL(() => res.data.thumbnailURL);
 
           res.data.images?.forEach((eachImage) => {
@@ -98,7 +100,15 @@ export default function Writer(props) {
       );
     }
 
+    async function getCategories() {
+      const data = (await axios.get("/api/category/getCategories")).data
+        .categories;
+      setCategories(data);
+      setSelectedCategory(data[0]._id);
+    }
+
     setLoginInfo();
+    getCategories();
     if (params.postURL) {
       getMd();
     }
@@ -203,6 +213,7 @@ export default function Writer(props) {
         thumbnailURL: thumbURL,
         imageWhitelist: imageWhitelist,
         imageBlacklist: imageBlacklist,
+        category: selectedCategory,
       })
       .then(
         (res) => {
@@ -211,7 +222,7 @@ export default function Writer(props) {
         },
         (err) => {
           console.error(err);
-          console.error("ERROR");
+          console.error("Post Upload Error");
         }
       );
   };
@@ -279,9 +290,8 @@ export default function Writer(props) {
       <>
         <Flex column className="writer-container">
           <Flex row justifySpaceBetween>
-            <input
+            <CommonInput
               placeholder="제목"
-              className="writer-input"
               value={props.isEdit ? newTitle : title}
               onInput={(e) => {
                 if (props.isEdit) {
@@ -290,19 +300,32 @@ export default function Writer(props) {
                   setTitle(e.target.value);
                 }
               }}
+              style={{ width: "60%" }}
             />
             <button onClick={saveTempData} className="writer-button">
               임시 저장
             </button>
             <button onClick={LoadTempData} className="writer-button small-text">
-              임시 저장 불러오기
+              임시 저장<br></br>불러오기
             </button>
             <button
               onClick={removeTempData}
               className="writer-button small-text"
             >
-              임시 데이터 지우기
+              임시 데이터<br></br>지우기
             </button>
+            <select
+              onChange={(e) => {
+                console.log(e.target.value);
+                setSelectedCategory(e.target.value);
+              }}
+            >
+              {categories?.map((eachCategory) => (
+                <option key={eachCategory._id} value={eachCategory._id}>
+                  {eachCategory.name}
+                </option>
+              ))}
+            </select>
             <button onClick={handleUpload} className="writer-button">
               업로드
             </button>

@@ -146,20 +146,12 @@
   }
 }
 
-.moreButton {
-  margin-top: 1.5em;
-  padding: 1em 2em 1em 2em;
-  font-size: 1em;
-  align-self: center;
-  border: none;
-  border-radius: 10px;
-  @media (prefers-color-scheme: dark) {
-    background-color: #30363d;
-    color: white;
-  }
-}
-.moreButton:hover {
-  @media (prefers-color-scheme: dark) {
-    background-color: var(--gray-900);
+.buttom-navigator {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  column-gap: 2em;
+  button {
+    width: 6em;
   }
 }

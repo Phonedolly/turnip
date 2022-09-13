@@ -3,6 +3,8 @@ import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+import CommonInput from "./CommonInput";
 
 import "./SearchModal.scss";
 
@@ -56,7 +58,7 @@ export default function SearchModal({ isModalOpen, closeModal }) {
               }}
             >
               <header>원하는 제목이나 내용을 입력해보세요</header>
-              <input
+              <CommonInput
                 value={inputText}
                 onChange={(e) => {
                   setInputText(e.target.value);
@@ -71,12 +73,7 @@ export default function SearchModal({ isModalOpen, closeModal }) {
                   <div className="search-result-list">
                     {searchContent.map((eachSearchItem) => (
                       <motion.li
-                        initial={{
-                          y: "-0.5em",
-                          opacity: 0,
-                        }}
-                        animate={{ y: "0", opacity: 1 }}
-                        className="search-item"
+                        className="common-list-item search-item"
                         onClick={() => {
                           setIsAvailable(false);
                           setInputText("");
@@ -85,6 +82,7 @@ export default function SearchModal({ isModalOpen, closeModal }) {
                         }}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 1.0 }}
+                        key={uuidv4()}
                       >
                         <img src={eachSearchItem.thumbnailURL} />
                         <p>{eachSearchItem.title}</p>
