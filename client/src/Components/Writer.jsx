@@ -54,7 +54,6 @@ export default function Writer(props) {
           setTitle(res.data.title);
           setNewTitle(res.data.title);
           setMd(res.data.content);
-          console.log(categories);
           if (res.data.category) {
             setSelectedCategory(res.data.category);
           }
