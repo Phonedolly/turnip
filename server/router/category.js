@@ -11,6 +11,9 @@ router.get('/getCategories', async (req, res) => {
 })
 
 router.post('/createCategory', async (req, res) => {
+    if (!req.body.name) {
+        return res.status(500).send({ result: "Name is not supplied" })
+    }
     const isDuplicated = !!(await Category.findOne({ name: req.body.name }));
     if (isDuplicated) {
         return res.status(500).send({ result: "Duplicated Category Name!" })
@@ -27,7 +30,7 @@ router.post('/updateCategories', async (req, res) => {
     console.log(req.body);
     req.body.categories.map(async (eachCategory, plus) => {
         await Category.updateOne({ _id: eachCategory._id }, {
-            index: categoryLength + plus
+            index: categoryLength + plus + 1
         })
     })
 
