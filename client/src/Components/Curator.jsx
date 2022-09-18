@@ -17,7 +17,7 @@ export default function Curator(props) {
   const [fetched, setFetched] = useState(false);
 
   useEffect(() => {
-    document.querySelector("title").innerHTML = "Stardue128";
+    document.querySelector("title").innerHTML = "Stardue64";
     if (!fetched) {
       if (props.mode === "recent-navigator") {
         axios
