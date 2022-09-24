@@ -1,4 +1,7 @@
 import ReactMarkDown from "react-markdown";
+import RemarkMathPlugin from "remark-math";
+import { BlockMath, InlineMath } from "react-katex";
+import "katex/dist/katex.min.css";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import SyntaxHighlighter from "react-syntax-highlighter";
@@ -11,9 +14,41 @@ export const Markdown = (props) => {
     <ReactMarkDown
       className="markdown-body"
       children={props.md}
-      remarkPlugins={[remarkGfm]}
+      remarkPlugins={[remarkGfm, RemarkMathPlugin]}
       rehypePlugins={[rehypeRaw]}
       components={{
+        div: ({ className, children, ...props }) => {
+          if (className === "math math-display") {
+            return (
+              <div
+                style={{
+                  overflow: "hidden",
+                }}
+              >
+                <div style={{ overflow: "auto" }}>
+                  <BlockMath>{children[0]}</BlockMath>
+                </div>
+              </div>
+            );
+          } else {
+            return (
+              <div className={className} {...props}>
+                {children}
+              </div>
+            );
+          }
+        },
+        span: ({ className, children, ...props }) => {
+          if (className === "math math-inline") {
+            return <InlineMath>{children[0]}</InlineMath>;
+          } else {
+            return (
+              <span className={className} {...props}>
+                {children}
+              </span>
+            );
+          }
+        },
         code({ inline, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || "");
           return !inline && match ? (
@@ -36,16 +71,20 @@ export const Markdown = (props) => {
         /* Twitter Embed Support */
         /* https://stackoverflow.com/questions/66941072/how-to-parse-embeddable-links-from-markdown-and-render-custom-react-components */
         a: ({ inline, className, children, ...props }) => {
+          console.log(className);
           if (
             props.href.startsWith("https://twitter.com") &&
-            !props.href.startsWith("https://twitter.com/search?q=")
+            className === "embed"
           ) {
             return (
               <TwitterTweetEmbed
                 tweetId={props.href.split("/")[5].split("?")[0]}
               />
             ); // Render Twitter links with custom component
-          } else if (props.href.startsWith("https://youtu.be")) {
+          } else if (
+            props.href.startsWith("https://youtu.be") &&
+            className === "embed"
+          ) {
             return (
               <div className="video-container">
                 <iframe
@@ -59,25 +98,30 @@ export const Markdown = (props) => {
                 ></iframe>
               </div>
             );
-          }
-          // else if (props.href.startsWith("https://www.youtube.com")) {
-          //   return (
-          //     <div className="video-container">
-          //       <iframe
-          //         src={
-          //           "https://www.youtube.com/embed/" +
-          //           props.href.split("/")[3].split("=")[1]
-          //         }
-          //         title="YouTube video player"
-          //         frameborder="0"
-          //         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          //         allowfullscreen
-          //       ></iframe>
-          //     </div>
-          //   );
-          // }
-          else {
-            return <a {...props}>{children}</a>; // All other links
+          } else if (
+            props.href.startsWith("https://www.youtube.com") &&
+            className === "embed"
+          ) {
+            return (
+              <div className="video-container">
+                <iframe
+                  src={
+                    "https://www.youtube.com/embed/" +
+                    props.href.split("/")[3].split("=")[1]
+                  }
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            );
+          } else {
+            return (
+              <a {...props} inline={inline}>
+                {children}
+              </a>
+            ); // All other links
           }
         },
       }}
