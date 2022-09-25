@@ -12,37 +12,16 @@
   bottom: 0;
   left: 0;
   z-index: 9999;
-  backdrop-filter: saturate(180%) blur(20px);
+  // backdrop-filter: saturate(180%) blur(70px);
 }
 
-.modal > section {
-  font-family: "Spoqa Han Sans Neo";
-  display: flex;
-  flex-direction: column;
-  margin: auto 0;
-  @media (min-width: 480px) {
-    margin: auto 2em;
-  }
-  @media (min-width: 768px) {
-    margin: auto 10em;
-  }
-  max-width: var(--document-width-desktop);
 
-  // background-color: var(--gray-200);
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 16px 0px;
-  border-radius: 13px;
-  padding: 2em;
-  @media (prefers-color-scheme: dark) {
-    background-color: rgba(30, 30, 30, 0.8);
-  }
-}
 
 .modal > section > header {
   font-family: "Spoqa Han Sans Neo";
   font-weight: bold;
-  font-size: x-large;
-  margin-bottom: 1.3em;
+  font-size: 1.25em;
+  margin-bottom: 0.5em;
   @media (prefers-color-scheme: dark) {
     color: white;
   }

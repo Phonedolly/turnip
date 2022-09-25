@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import CommonInput from "./CommonInput";
 
 import "./CommonModal.scss";
+import "./SearchModal.scss"
 
 export default function SearchModal({ isModalOpen, closeModal }) {
   const [inputText, setInputText] = useState("");
@@ -29,32 +30,40 @@ export default function SearchModal({ isModalOpen, closeModal }) {
       }
     });
   }, [inputText]);
+  useState(() => {
+    if (!isModalOpen) {
+      setInputText("");
+    }
+  }, [isModalOpen]);
 
   return (
     <>
       <AnimatePresence>
         {isModalOpen && (
-          <motion.div
+          <div
             className={isModalOpen ? "modal open" : "modal"}
-            initial={{
-              opacity: 0,
+            onClick={() => {
+              setInputText("");
+              closeModal();
             }}
-            animate={{ y: "0", opacity: 1 }}
-            exit={{
-              opacity: 0,
-            }}
-            onClick={closeModal}
           >
             <motion.section
+              className="search-modal"
+              layout
               onClick={(e) => e.stopPropagation()}
               initial={{
                 opacity: 0,
                 y: window.innerHeight / 2,
               }}
-              animate={{ y: "0", opacity: 1 }}
+              animate={{
+                y: 0,
+                opacity: 1,
+                transition: { ease: "anticipate", duration: 0.5 },
+              }}
               exit={{
                 opacity: 0,
                 y: window.innerHeight / 2,
+                transition: { ease: "anticipate", duration: 0.5 },
               }}
             >
               <header>원하는 제목이나 내용을 입력해보세요</header>
@@ -91,15 +100,15 @@ export default function SearchModal({ isModalOpen, closeModal }) {
                   </div>
                 </>
               )}
-              <motion.button
+              {/* <motion.button
                 onClick={closeModal}
                 whileHover={{ scale: 1.2 }}
                 whileTap={{ scale: 1.0 }}
               >
                 닫기
-              </motion.button>
+              </motion.button> */}
             </motion.section>
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>

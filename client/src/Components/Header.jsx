@@ -13,13 +13,16 @@ import CategoryModal from "./CategoryModal";
 export default function Header(props) {
   const location = useLocation();
   const [categories, setCategories] = useState([]);
+  const [numsOfPosts, setNumsOfPosts] = useState([]);
   const [headerClassName, setHeaderClassName] = useState("");
 
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
   const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
 
   const openSearchModal = () => {
+    sessionStorage.setItem("scrollYWhenModal", window.scrollY);
     setSearchModalOpen(true);
+
     document.body.style.cssText = `
     position: fixed; 
     top: -${window.scrollY}px;
@@ -29,10 +32,12 @@ export default function Header(props) {
   const closeSearchModal = () => {
     setSearchModalOpen(false);
     document.body.style.cssText = "";
-    window.scrollTo(0, parseInt(window.scrollY || "0", 10) * -1);
+    console.log(sessionStorage.getItem("scrollYWhenModal"));
+    window.scrollTo(0, sessionStorage.getItem("scrollYWhenModal"));
   };
 
   const openCategoryModal = () => {
+    sessionStorage.setItem("scrollYWhenModal", window.scrollY);
     setCategoryModalOpen(true);
     document.body.style.cssText = `
     position: fixed; 
@@ -43,12 +48,18 @@ export default function Header(props) {
   const closeCategoryModal = () => {
     setCategoryModalOpen(false);
     document.body.style.cssText = "";
-    window.scrollTo(0, parseInt(window.scrollY || "0", 10) * -1);
+    window.scrollTo(0, sessionStorage.getItem("scrollYWhenModal"));
   };
 
   useLayoutEffect(() => {
     axios.get("/api/category/getCategories").then((res) => {
       setCategories(res.data.categories);
+    });
+  }, []);
+
+  useLayoutEffect(() => {
+    axios.get("/api/category/getAllCategoryLength").then((res) => {
+      setNumsOfPosts(res.data);
     });
   }, []);
 
@@ -74,7 +85,7 @@ export default function Header(props) {
         <div className="header-content">
           <Link to="/" className="header-link">
             <Flex flexDirection="row" justifyContent="start" className="icon">
-              <div className="headerText">Stardue64</div>
+              <div className="headerText">Stardue128</div>
               <div className="underLine" />
             </Flex>
           </Link>
@@ -91,7 +102,10 @@ export default function Header(props) {
                   <motion.div
                     className="menu-category"
                     key={uuidv4()}
-                    whileHover={{ scale: 1.1 }}
+                    whileHover={{
+                      transition: { ease: "linear", duration: 0.2 },
+                      scale: 1.2,
+                    }}
                     whileTap={{ scale: 1.0 }}
                   >
                     <Link
@@ -125,6 +139,7 @@ export default function Header(props) {
         isModalOpen={isCategoryModalOpen}
         closeModal={closeCategoryModal}
         categories={categories}
+        numsOfPosts={numsOfPosts}
       />
       <SearchModal
         isModalOpen={isSearchModalOpen}
