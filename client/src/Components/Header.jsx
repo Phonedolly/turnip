@@ -85,7 +85,7 @@ export default function Header(props) {
         <div className="header-content">
           <Link to="/" className="header-link">
             <Flex flexDirection="row" justifyContent="start" className="icon">
-              <div className="headerText">Stardue128</div>
+              <div className="headerText">Stardue64</div>
               <div className="underLine" />
             </Flex>
           </Link>

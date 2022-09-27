@@ -19,7 +19,7 @@ export default function Curator(props) {
   const [fetched, setFetched] = useState(false);
 
   useLayoutEffect(() => {
-    document.querySelector("title").innerHTML = "Stardue128";
+    document.querySelector("title").innerHTML = "Stardue64";
   }, []);
 
   useEffect(() => {
