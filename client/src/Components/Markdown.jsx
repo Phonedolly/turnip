@@ -8,17 +8,37 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { TwitterTweetEmbed } from "react-twitter-embed";
 
-import "./Youtube.scss";
+import youtubeStyles from "./Youtube.module.scss";
+import markdownStyles from "./GitHubMarkdownToMe.module.scss";
+
+import { Card } from "./Card";
+
 export const Markdown = (props) => {
   return (
     <ReactMarkDown
-      className="markdown-body"
+      className={markdownStyles.markdownBody}
       children={props.md}
       remarkPlugins={[remarkGfm, RemarkMathPlugin]}
       rehypePlugins={[rehypeRaw]}
       components={{
         div: ({ className, children, ...props }) => {
-          if (className === "math math-display") {
+          if (className === "image-viewer") {
+            return <div className={markdownStyles.imageViewer}>{children}</div>;
+          } else if (className === "slider-viewer") {
+            return (
+              <div className={markdownStyles.sliderViewer}>{children}</div>
+            );
+          } else if (className === "link-box") {
+            return (
+              <Card
+                title={children[1].props.children[0]}
+                ogLinkSummary={children[3].props.children[0]}
+                ogLinkRepresentativeUrl={children[5].props.children[0]}
+                ogLinkURL={children[7].props.children[0]}
+                ogThumbnail={children[9]?.props.children[0]}
+              />
+            );
+          } else if (className === "math math-display") {
             return (
               <div
                 style={{
@@ -35,6 +55,21 @@ export const Markdown = (props) => {
               <div className={className} {...props}>
                 {children}
               </div>
+            );
+          }
+        },
+        p: ({ className, children, ...props }) => {
+          if (className === "picture-comment") {
+            return (
+              <p className={markdownStyles.pictureComment} {...props}>
+                {children}
+              </p>
+            );
+          } else {
+            return (
+              <p className={className} {...props}>
+                {children}
+              </p>
             );
           }
         },
@@ -71,7 +106,6 @@ export const Markdown = (props) => {
         /* Twitter Embed Support */
         /* https://stackoverflow.com/questions/66941072/how-to-parse-embeddable-links-from-markdown-and-render-custom-react-components */
         a: ({ inline, className, children, ...props }) => {
-          console.log(className);
           if (
             props.href.startsWith("https://twitter.com") &&
             className === "embed"
@@ -86,7 +120,7 @@ export const Markdown = (props) => {
             className === "embed"
           ) {
             return (
-              <div className="video-container">
+              <div className={youtubeStyles.videoContainer}>
                 <iframe
                   src={
                     "https://www.youtube.com/embed/" + props.href.split("/")[3]
@@ -103,7 +137,7 @@ export const Markdown = (props) => {
             className === "embed"
           ) {
             return (
-              <div className="video-container">
+              <div className={youtubeStyles.videoContainer}>
                 <iframe
                   src={
                     "https://www.youtube.com/embed/" +
@@ -118,7 +152,7 @@ export const Markdown = (props) => {
             );
           } else {
             return (
-              <a {...props} inline={inline}>
+              <a className={className} {...props} inline={inline}>
                 {children}
               </a>
             ); // All other links

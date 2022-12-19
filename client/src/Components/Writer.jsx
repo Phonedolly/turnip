@@ -1,7 +1,7 @@
 import Flex from "@react-css/flex";
 import axios from "axios";
 import { nanoid } from "nanoid";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 
 import { useState } from "react";
 import { useNavigate, Navigate, useParams } from "react-router-dom";
@@ -28,7 +28,7 @@ export default function Writer(props) {
   const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
   const params = useParams();
-  useEffect(() => {
+  useLayoutEffect(() => {
     async function setLoginInfo() {
       await onSilentRefresh().then(
         () => {},
@@ -50,7 +50,6 @@ export default function Writer(props) {
     async function getMd() {
       await axios.get("/api/post/" + params.postURL).then(
         (res) => {
-          console.log(res.data);
           set_id(res.data._id);
           setTitle(res.data.title);
           setNewTitle(res.data.title);
@@ -66,7 +65,6 @@ export default function Writer(props) {
               imageName: eachImage.imageName,
               isThumb: eachImage.imageLocation === res.data.thumbnailURL,
             };
-
             setImages((prevImages) => prevImages.concat(imageData));
           });
 
@@ -109,12 +107,35 @@ export default function Writer(props) {
       }
     }
 
+    async function importArticle() {
+      const naverArticle = await axios
+        .post("/api/import", {
+          clubID: params.clubID,
+          articleNumber: params.articleNumber,
+        })
+        .then(({ data }) => ({
+          importTitle: data.title,
+          images: data.images,
+          mdContent: data.mdContent,
+        }))
+        .then(({ importTitle, mdContent, images }) => {
+          setTitle(() => importTitle);
+          images.forEach((image, index) => {
+            image.isThumb = index === 0 ? true : false;
+            setImages((prevImages) => prevImages.concat(image));
+          });
+          setMd(mdContent);
+        });
+    }
+
     setLoginInfo();
     getCategories();
     if (props.isEdit) {
       getMd();
+    } else if (props.isImport) {
+      importArticle();
     }
-  }, [params.postURL, props.isEdit]);
+  }, [params.postURL, props.isEdit, props.isImport, props.importURL]);
 
   const handleImageInput = async (e) => {
     const formData = new FormData();
@@ -173,7 +194,6 @@ export default function Writer(props) {
   };
 
   const handleSetTab = (e) => {
-    console.log(e.keyCode);
     if (e.keyCode === 9) {
       e.preventDefault();
       let val = e.target.value;
@@ -318,7 +338,6 @@ export default function Writer(props) {
             </button>
             <select
               onChange={(e) => {
-                console.log(e.target.value);
                 setSelectedCategory(e.target.value);
               }}
               defaultValue={selectedCategory}
