@@ -33,7 +33,7 @@ router.post('/uploadImage', imageUploader.single('img'), (req, res) => {
 const titleLinkManufacturer = (req, res, next) => {
   try {
     if (req.body.newTitle) {
-      req.body.postURL = req.body.newTitle.replace(/ /gi, '-').replace(/\./gi, '').replace(/,/gi, '').replace(/'/gi, '').replace(/“/gi, '"').replace(/”/gi, '"').replace(/‘/gi, "'").replace(/’/gi, "'").replace(/%/gi, '').replace(/\//gi, '-').replace(/?/gi, '').replace(/\(/gi, '').replace(/\)/gi, '');
+      req.body.postURL = req.body.newTitle.replace(/ /gi, '-').replace(/\./gi, '').replace(/,/gi, '').replace(/'/gi, '').replace(/“/gi, '"').replace(/”/gi, '"').replace(/‘/gi, "'").replace(/’/gi, "'").replace(/%/gi, '').replace(/\//gi, '-').replace(/\?/gi, '').replace(/\(/gi, '').replace(/\)/gi, '');
 
     } else {
       req.body.postURL = req.body.title.replace(/ /gi, '-').replace(/\./gi, '').replace(/,/gi, '').replace(/'/gi, '').replace(/“/gi, '"').replace(/”/gi, '"').replace(/‘/gi, "'").replace(/’/gi, "'").replace(/%/gi, '').replace(/\//gi, '-').replace(/\?/gi, '').replace(/\(/gi, '').replace(/\)/gi, '');
