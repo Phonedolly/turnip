@@ -8,7 +8,7 @@ const connect = () => {
     
     mongoose.set('strictQuery', true)
     mongoose.connect('mongodb://' + process.env.MONGO_USER + ':' + process.env.MONGO_PW + '@localhost:27017/admin', {
-        dbName: 'stardue128',
+        dbName: 'stardue64',
         useNewUrlParser: true,
     }, (err) => {
         if (err) {
